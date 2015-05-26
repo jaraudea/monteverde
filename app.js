@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expressHbs = require('express-handlebars');
+var envAuthApi = require('./routes/api/envauth');
 
 var app = express();
 
@@ -23,6 +24,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // routes
+app.get('/api/service/envauth', envAuthApi.getAll);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
