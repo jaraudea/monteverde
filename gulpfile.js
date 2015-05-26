@@ -160,7 +160,7 @@ gulp.task('build:templates', tasks.build.templates);
  */
 gulp.task('default', [
     'build:bootstrap',
-    'build:maincss',
+    'build:csslibraries',
     'build:styles',
     'build:templates',
     'build:libraries',
