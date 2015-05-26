@@ -12,14 +12,15 @@ var src = './src',
   path = require('path'),
   sass = require('gulp-sass'),
   minifyCSS = require('gulp-minify-css'),
-  app = express(),
+  // app = express(),
+  // express = require('express'),
   livereload = require('gulp-livereload'),
   tasks;
 
 tasks = {
   server : {
     startExpress : function () {
-    // here the Expressjs server startup      
+      require('./server')   
     },
     startMongo : function () {
     // here the Mongod server startup
@@ -61,10 +62,10 @@ tasks = {
       }
     },
     templates: function () {
-      gulp.src(src + '/modules/**/*.jade')
-        .pipe(jade())
-        .pipe(gulp.dest(dist + '/views/'))
-        .pipe(livereload());
+      // gulp.src(src + '/modules/**/*.jade')
+      //   .pipe(jade())
+      //   .pipe(gulp.dest(dist + '/views/'))
+      //   .pipe(livereload());
     },
     styles: {
       modules: function () {
@@ -77,17 +78,26 @@ tasks = {
           .pipe(gulp.dest(dist + '/stylesheets/'))
           .pipe(livereload());
       },
-      bootstrap: function () {
+      libraries: function () {
         gulp.src([
-            // nodeModules + '/zurb-foundation-5/scss/normalize.scss',
-            // nodeModules + '/zurb-foundation-5/scss/foundation.scss'
+            nodeModules + '/font-awesome/scss/font-awesome.scss',
+            nodeModules + '/bootstrap/dist/css/bootstrap.css'
           ])
           .pipe(sourcemaps.init())
-          .pipe(concat('bootstrap.min.css'))
+          .pipe(concat('libraries.min.css'))
           .pipe(sass())
-          .pipe(minifyCSS())
+          // .pipe(minifyCSS())
           .pipe(sourcemaps.write())
-          .pipe(gulp.dest(dist + '/stylesheets/'));
+          .pipe(gulp.dest(dist + '/stylesheets'));
+      },
+      copyFonts : function () {
+        gulp.src([
+            nodeModules + '/font-awesome/fonts/**/*',
+            nodeModules + '/bootstrap/fonts/**/*'
+          ])
+          .pipe(gulp.dest(
+            dist + '/stylesheets/fonts'
+          ))
       },
       maincss: function () {
         gulp.src(src + '/styles/*.sass')
@@ -115,10 +125,14 @@ gulp.task('build:modules', tasks.build.js.modules);
 gulp.task('build:libraries', tasks.build.js.vendors);
 
 /**
+ * copy fonts
+ */
+gulp.task('copy:fonts', tasks.build.styles.copyFonts);
+/**
  * Sets css
  */
 gulp.task('build:bootstrap', tasks.build.styles.bootstrap);
-gulp.task('build:maincss', tasks.build.styles.maincss);
+gulp.task('build:csslibraries', tasks.build.styles.libraries);
 gulp.task('build:styles', tasks.build.styles.modules);
 
 /**
@@ -145,13 +159,14 @@ gulp.task('build:templates', tasks.build.templates);
  * Gulp grouped tasks
  */
 gulp.task('default', [
-    'build:foundation',
-    'build:parking',
+    'build:bootstrap',
+    'build:maincss',
     'build:styles',
     'build:templates',
     'build:libraries',
-    'build:modules',
-    'watch'
+    'copy:fonts'
+    // 'build:modules',
+    // 'watch'
   ]);
 
 
