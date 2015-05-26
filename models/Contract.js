@@ -1,11 +1,11 @@
-var mongoose = require('mongoose'),
+var mongoose = require('../data/db'),
   Schema = mongoose.Schema;
 
 var contractSchema = new Schema({
   contractNumber: String,
   contractDate: Date,
   endDate: Date,
-  serviceType: [{ type: Schema.Types.ObjectId, ref: 'ServiceType' }], //revisar 
+  serviceType: [{ type: Schema.Types.ObjectId, ref: 'ServiceType' }],
   client: { 
     nit: String,
     companyName: String,

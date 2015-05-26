@@ -1,4 +1,4 @@
-var mongoose = require('../data/db');
+var mongoose = require('../data/db'),
   Schema = mongoose.Schema;
 
 var envAuthSchema = new Schema({

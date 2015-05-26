@@ -1,12 +1,12 @@
-var mongoose = require('mongoose'),
+var mongoose = require('../data/db'),
   Schema = mongoose.Schema;
 
 var employeeSchema = new Schema({
-  id: String,
+  personalId: String,
   name: String,
   phone: String,
   email: String,
-  position: String,
+  position: { type: Schema.Types.ObjectId, ref: 'CompanyPosition' },
   startDate: Date
 });
 

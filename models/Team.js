@@ -1,8 +1,9 @@
-var mongoose = require('mongoose'),
+var mongoose = require('../data/db'),
   Schema = mongoose.Schema;
 
 var teamSchema = new Schema({
   code: String,
+  name: String,
   lider: { type: Schema.Types.ObjectId, ref: 'Employee' }
 });
 
