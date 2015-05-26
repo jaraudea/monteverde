@@ -1,10 +1,10 @@
 {
-  "name": "monteverde",
-  "version": "0.0.1",
-  "description": "Application targeted to handle monteverde service.",
-  "private": true,
+  "name": "Monteverde",
+  "version": "1.0.0",
+  "description": "Monteverde WEB App",
+  "main": "index.js",
   "scripts": {
-    "start": "node ./bin/www"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "body-parser": "~1.12.0",
@@ -17,20 +17,16 @@
     "serve-favicon": "~2.2.0",
     "socket.io": "~1.3.5"
   },
-  "main": "server.js",
-  "author": "Sophye",
-  "contributors": [
-    {
-      "name": "Anderson Jaramillo",
-      "email": "",
-      "url": ""
-    },
-    {
-      "name": "Daniel Silva",
-      "email": "",
-      "url": "http://www.dniskav.com/"
-    }
-  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jaraudea/monteverde.git"
+  },
+  "author": "jaraudea",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jaraudea/monteverde/issues"
+  },
+  "homepage": "https://github.com/jaraudea/monteverde",
   "devDependencies": {
     "mongoose": "^4.0.2",
     "bson": "~0.2.19"
