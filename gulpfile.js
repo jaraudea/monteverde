@@ -164,8 +164,8 @@ gulp.task('default', [
     'build:styles',
     'build:templates',
     'build:libraries',
-    'copy:fonts'
-    // 'build:modules',
+    'copy:fonts',
+    'build:modules'
     // 'watch'
   ]);
 
