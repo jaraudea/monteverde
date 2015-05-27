@@ -5,6 +5,9 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expressHbs = require('express-handlebars');
+
+var main = require('./routes/index');
+
 var envAuthApi = require('./routes/api/environmentalauthority');
 var svcTypeApi = require('./routes/api/servicetype');
 var zoneApi = require('./routes/api/zone');
@@ -32,6 +35,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // routes
+/*VIEW*/
+app.get('/', main.index);
+
+/*API*/
 /*GET*/
 app.get('/api/service/environmentalauthorities', envAuthApi.getAll);
 app.get('/api/service/servicetypes', svcTypeApi.getAll);
