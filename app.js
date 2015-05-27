@@ -13,6 +13,7 @@ var specieApi = require('./routes/api/specie');
 var contractApi = require('./routes/api/contract')
 var teamApi = require('./routes/api/team')
 var employeeApi = require('./routes/api/employee')
+var configServiceApi = require('./routes/api/configservice')
 
 var app = express();
 
@@ -40,6 +41,15 @@ app.get('/api/service/species', specieApi.getAll);
 app.get('/api/service/contracts', contractApi.getAll);
 app.get('/api/service/employees', employeeApi.getAll);
 app.get('/api/service/teams', teamApi.getAll);
+app.get('/api/service/configservice/:code', configServiceApi.getByCode);
+
+/*POST*/
+app.post('/api/service/configservice/:code', configServiceApi.create);
+
+/*PUT*/
+app.put('/api/service/configservice/:code', configServiceApi.update);
+
+/*DELETE*/
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
