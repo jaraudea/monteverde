@@ -30,7 +30,7 @@ tasks = {
     // here the watches
     gulp.watch([src + '/javascripts/*.js', src + '/modules/**/*.js'], ['build:modules']);
     gulp.watch([src + '/modules/**/*.sass'], ['build:styles']);
-    gulp.watch([src + '/styles/*.sass'], ['build:parking']);
+    gulp.watch([src + '/styles/*.sass', src + '/styles/*.scss'], ['build:parking']);
   },
     build: {
     js: {
@@ -100,9 +100,9 @@ tasks = {
           ))
       },
       maincss: function () {
-        gulp.src(src + '/styles/*.sass')
+        gulp.src(src + '/styles/*.scss')
           .pipe(sourcemaps.init())
-          .pipe(concat('parking.min.css'))
+          .pipe(concat('monteverde.min.css'))
           .pipe(sass())
           .pipe(minifyCSS())
           .pipe(sourcemaps.write())
@@ -131,7 +131,7 @@ gulp.task('copy:fonts', tasks.build.styles.copyFonts);
 /**
  * Sets css
  */
-gulp.task('build:bootstrap', tasks.build.styles.bootstrap);
+gulp.task('build:maincss', tasks.build.styles.maincss);
 gulp.task('build:csslibraries', tasks.build.styles.libraries);
 gulp.task('build:styles', tasks.build.styles.modules);
 
