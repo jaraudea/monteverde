@@ -1,16 +1,19 @@
 var app = require('./app');
 var http = require('http');
+var socketio = require('socket.io')
 
 /**
  * Create HTTP server.
  */
 var server = http.createServer(app);
-var io = require('socket.io')(server);
+
+var io = socketio.listen(server);
 
 io.on('connection', ioConnection);
 
 function ioConnection(socket) {
 	global.socket = socket;
+  console.log(io.sockets)
   global.sockets = io.sockets;
 };
 
