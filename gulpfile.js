@@ -14,6 +14,7 @@ var src = './src',
   minifyCSS = require('gulp-minify-css'),
   // app = express(),
   // express = require('express'),
+  hbsRender = require('gulp-handlebars-render'),
   livereload = require('gulp-livereload'),
   tasks;
 
@@ -28,15 +29,17 @@ tasks = {
   },
   watch : function () {
     // here the watches
+    livereload.listen();
     gulp.watch([src + '/javascripts/*.js', src + '/modules/**/*.js'], ['build:modules']);
     gulp.watch([src + '/modules/**/*.sass'], ['build:styles']);
+    gulp.watch(['views/layouts/template.hbs', src + '/modules/**/*.hbs'], ['build:templates']);
     gulp.watch([src + '/styles/*.sass', src + '/styles/*.scss'], ['build:maincss']);
   },
     build: {
     js: {
       modules: function () {
         var modules = getModules(src + '/modules/');
-        modules.unshift(src + '/javascripts/*.js');
+        modules.unshift(src + '/monteverdeApp.js');
 
         gulp.src(modules)
           .pipe(sourcemaps.init())
@@ -62,10 +65,10 @@ tasks = {
       }
     },
     templates: function () {
-      // gulp.src(src + '/modules/**/*.jade')
-      //   .pipe(jade())
-      //   .pipe(gulp.dest(dist + '/views/'))
-      //   .pipe(livereload());
+      gulp.src(src + '/modules/**/*.hbs')
+         .pipe(hbsRender())
+         .pipe(gulp.dest(dist + '/views/'))
+         .pipe(livereload());
     },
     styles: {
       modules: function () {
