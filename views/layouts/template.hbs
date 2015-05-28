@@ -54,14 +54,16 @@
               
               <nav class="col-sm-2">
                 <ul class="nav btn-group-vertical">
-                  <li class="btn btn-default"><a href="#">Item1</a></li>
-                  <li class="btn btn-default"><a href="#">Item2</a></li>
-                  <li class="btn btn-default"><a href="#">Item3</a></li>
-                  <li class="btn btn-default"><a href="#">Item4</a></li>
+                  <li class="btn btn-default"><a href="/#/createSvc">Crear Servicio</a></li>
+                  <li class="btn btn-default"><a href="/#/reportSvc">Reportar Servicio</a></li>
+                  <li class="btn btn-default"><a href="/#/runtSvc">Ejecutar Servicio</a></li>
+                  <li class="btn btn-default"><a href="/#/scheduleSvc">Programar Servicio</a></li>
                 </ul>
               </nav>
               <div class="col-sm-10">
-                {{{body}}}
+                <div ui-view>
+                  {{{body}}}
+                </div>
               </div>
             
             </div>
