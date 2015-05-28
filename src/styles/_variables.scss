@@ -1,8 +1,7 @@
 // Variables
-// 
+// --------------------------
 
-$tColor : "#ff00ab";
-
-.title {
-  color : $tColor;
-}
+$roundedTop : 5px 5px 0 0;
+$roundedBottom : 0 0 5px 5px;
+$borderColor : #ccc;
+$tColor : #ff00ab;
