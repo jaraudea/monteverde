@@ -1,8 +1,0 @@
-{ "__v" : 0, "_id" : { "$oid" : "54fa08a2c4c6561c364bae4f" }, "active" : true, "email" : "fkrugger@springwood.die", "name" : "Fredy Kruger", "plate" : "n16thmr", "pwd" : "666666", "role" : 15, "type" : "bike", "visible" : true }
-{ "__v" : 0, "_id" : { "$oid" : "54fa08d5c4c6561c364bae50" }, "active" : true, "email" : "jvoorhees@cristallake.bld", "name" : "Jason Voorhees", "plate" : "d3v1l", "pwd" : "666999", "role" : 15, "type" : "car", "visible" : true }
-{ "__v" : 0, "_id" : { "$oid" : "54fa093ec4c6561c364bae51" }, "active" : true, "email" : "ibathory@transilvania.me", "name" : "Isabel Bathory", "plate" : "bl00dr", "pwd" : "123456", "role" : 15, "type" : "car", "visible" : true }
-{ "__v" : 0, "_id" : { "$oid" : "54fdf7e98a86e344106706a6" }, "active" : false, "email" : "cmanson@usakiller.me", "name" : "Charles Manson", "plate" : "m4dn3s", "pwd" : "555678", "role" : 15, "type" : "car", "visible" : true }
-{ "__v" : 0, "_id" : { "$oid" : "552e7c2ecd5ec1d1305c4f9f" }, "active" : true, "email" : "mmayers@helo.wen", "name" : "Michale Myers", "plate" : "2l4s3r", "pwd" : "666", "role" : 15, "type" : "bike", "visible" : true }
-{ "name" : "er", "plate" : "Y", "type" : "car", "email" : "r@r", "pwd" : "y", "role" : 15, "_id" : { "$oid" : "552eaf3f15f460a547027fca" }, "__v" : 0 }
-{ "name" : "Daniel Silva", "plate" : "qly59d", "type" : "bike", "email" : "d@s.c", "pwd" : "d", "role" : 1, "active" : true, "visible" : true, "_id" : { "$oid" : "552eb10036d0c0a759af8854" }, "__v" : 0 }
-
