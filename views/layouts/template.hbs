@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Monteverde</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/stylesheets/libraries.min.css">
+        <link rel="stylesheet" href="/stylesheets/monteverde.min.css">
+
+    </head>
+    <body ng-app="monteverde">
+
+      <div class="container-fluid panel panel-default main-app">
+
+        <header class="row">
+
+          <div class="col-sm-2">
+            <div class="navbar-text navbar-left">
+              <img src="http://placehold.it/200x200" alt="logo">
+            </div>
+          </div>
+
+          <div class="col-sm-10">
+            <h1>Monteverde</h1>
+          </div>
+
+        </header>
+
+        <div class="row ">
+
+          <div class="col-sm-10">
+            <span class="navbar-text navbar-left">Usuario: {{user}}</span>
+          </div>
+          <div class="col-sm-2">
+            <a href="#" class="btn btn-default">Cerrar Sesi&oacute;n</a>
+          </div>
+        
+        </div>
+        <div class="row ">
+
+          <div class="col-sm-12">
+            <div class="alert alert-success" role="alert">
+              sucesful dummy message 
+            </div>
+          </div>  
+          
+          <div class="row">
+            
+            <nav class="col-sm-2">
+              <ul class="nav btn-group-vertical">
+                <li class="btn btn-default"><a href="/#/createSvc">Crear Servicio</a></li>
+                <li class="btn btn-default"><a href="/#/reportSvc">Reportar Servicio</a></li>
+                <li class="btn btn-default"><a href="/#/runtSvc">Ejecutar Servicio</a></li>
+                <li class="btn btn-default"><a href="/#/scheduleSvc">Programar Servicio</a></li>
+              </ul>
+            </nav>
+            <div class="col-sm-10">
+              <div ui-view>
+                {{{body}}}
+              </div>
+            </div>
+            
+            </div>
+        </div>
+      </div>
+
+      <script src="/javascripts/vendors/libraries.js"></script>
+      <script src="/javascripts/all.min.js"></script>
+    </body>
+</html>
+
+
