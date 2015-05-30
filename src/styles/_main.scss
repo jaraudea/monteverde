@@ -1,0 +1,17 @@
+.main-app {
+  margin: 2%;
+}
+
+.rounded-gray {
+  border: 1px solid $borderColor;
+  &.top {
+    border-radius: $roundedTop;
+  }
+  &.bottom {
+    border-radius: $roundedBottom;
+  }
+}
+
+.control-label.double-line {
+  padding-top: 0;
+}

@@ -46,6 +46,9 @@
     "gulp-sourcemaps": "^1.5.2",
     "gulp-uglify": "^1.2.0",
     "mongoose": "^4.0.2",
-    "path": "^0.11.14"
+    "path": "^0.11.14",
+    "i": "~0.3.3",
+    "npm": "~2.10.1",
+    "gulp-handlebars-render": "0.0.1"
   }
 }
