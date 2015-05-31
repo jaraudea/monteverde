@@ -1,0 +1,89 @@
+<div class="container-fluid">
+  <form action="" class="form-horizontal">
+    <div class="form-group row">
+      <label for="contract" class="control-label col-sm-1">Contrato: </label>
+      <div class="col-sm-2">
+        <select name="contract" id="contract" class="form-control">
+          <option value="">Cxxxxx</option>
+          <option value="">Cxxxxx</option>
+          <option value="">Cxxxxx</option>
+        </select>
+      </div>
+
+      <label for="serviceType" class="control-label col-sm-1 double-line">Tipo de Servicio: </label>
+      <div class="col-sm-2">
+        <select name="serviceType" id="serviceType" class="form-control" placeholder="seleccione" ng-model="serviceType">
+          <option value="" selected disabled>Seleccione</option>
+          <option value="1">Tala y Poda</option>
+          <option value="2">Zonas Verdes</option>
+        </select>
+      </div>
+
+      <label for="zone" class="control-label col-sm-1">Zona: </label>
+      <div class="col-sm-2">
+        <select name="zone" id="zone" class="form-control">
+          <option value="">Cxxxxx</option>
+          <option value="">Cxxxxx</option>
+          <option value="">Cxxxxx</option>
+        </select>
+      </div>
+
+      <label for="zone" class="control-label col-sm-1">Fecha: </label>
+      <div class="col-sm-2">
+        <input type="date" class="form-control" name="scheduleDate" id="scheduleDate">
+      </div>
+    </div>      
+  </form>
+  
+  <div class="row">
+    <div class="col-sm-12">
+      <table ng-table="tableParams" class="table table-bordered">
+          <tr ng-repeat="service in $data">
+              <td data-title="'Lote'" sortable="'field'">
+                  {{service.field}}
+              </td>
+              <td data-title="'Cuadrilla'" sortable="'team'">
+                  {{service.team}}
+              </td>
+              <td data-title="'Estado'" sortable="'state'">
+                  {{service.state}}
+              </td>
+              <td data-title="'Opciones'">
+                  {{service.options}}
+              </td>
+          </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-3">
+      <h2>15%</h2>
+    </div>
+
+    <div class=" col-sm-9">
+      <form action="" class="form-horizontal contaner-fluid well well-lg">
+        <div class="form-group row">
+          <label for="field" class="control-label col-sm-1">Lote: </label>
+          <div class="col-sm-2">
+            <input class="form-control" type="text" id="field" name="field">
+          </div>        
+
+          <label for="team" class="control-label col-sm-1">Cuadrilla: </label>
+          <div class="col-sm-2">
+            <input class="form-control" type="text" id="team" name="team">
+          </div>        
+
+          <label for="vehicle" class="control-label col-sm-1">Vehiculo: </label>
+          <div class="col-sm-2">
+            <input class="form-control" type="text" id="vehicle" name="vehicle">
+          </div>        
+
+          <div class="col-sm-3">
+            <input class="form-control btn btn-success" type="submit" value="Adicionar lote">
+          </div>        
+        </div>        
+      </form>
+    </div>
+  </div>
+</div>  
