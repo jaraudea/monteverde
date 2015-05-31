@@ -3,6 +3,7 @@
 var monteverde = angular.module('monteverde', [
     'ui.router',
     'common.module',
+    'ngTable',
     // 'satellizer',
     'ngDialog'
   ]).config(function ( $urlRouterProvider, $stateProvider) {
