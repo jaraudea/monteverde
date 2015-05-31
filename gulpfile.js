@@ -32,7 +32,7 @@ tasks = {
     livereload.listen();
     gulp.watch([src + '/javascripts/*.js', src + '/modules/**/*.js'], ['build:modules']);
     gulp.watch([src + '/modules/**/*.sass'], ['build:styles']);
-    gulp.watch(['views/layouts/template.hbs', src + '/modules/**/*.hbs'], ['build:templates']);
+    gulp.watch(['views/layouts/template.hbs', src + '/modules/**/*.html'], ['build:templates']);
     gulp.watch([src + '/styles/*.sass', src + '/styles/*.scss'], ['build:maincss']);
   },
     build: {
@@ -65,8 +65,8 @@ tasks = {
       }
     },
     templates: function () {
-      gulp.src(src + '/modules/**/*.hbs')
-         .pipe(hbsRender())
+      gulp.src(src + '/modules/**/*.html')
+         // .pipe(hbsRender())
          .pipe(gulp.dest(dist + '/views/'))
          .pipe(livereload());
     },
@@ -83,15 +83,14 @@ tasks = {
       },
       libraries: function () {
         gulp.src([
-            nodeModules + '/font-awesome/scss/font-awesome.scss',
+            nodeModules + '/font-awesome/css/font-awesome.css',
             nodeModules + '/bootstrap/dist/css/bootstrap.css'
           ])
           .pipe(sourcemaps.init())
           .pipe(concat('libraries.min.css'))
-          .pipe(sass())
           // .pipe(minifyCSS())
           .pipe(sourcemaps.write())
-          .pipe(gulp.dest(dist + '/stylesheets'));
+          .pipe(gulp.dest(dist + '/stylesheets/libs/'));
       },
       copyFonts : function () {
         gulp.src([

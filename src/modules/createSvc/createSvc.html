@@ -1,0 +1,110 @@
+<form action="" class="form-horizontal container-fluid">
+  <div class="form-group row">
+
+    <label for="contract" class="control-label col-sm-1">Contrato: </label>
+    <div class="col-sm-2">
+      <select name="contract" id="contract" class="form-control">
+        <option value="">Cxxxxx</option>
+        <option value="">Cxxxxx</option>
+        <option value="">Cxxxxx</option>
+      </select>
+    </div>
+
+    <label for="serviceType" class="control-label col-sm-2">Tipo de Servicio: </label>
+    <div class="col-sm-2">
+      <select name="serviceType" id="serviceType" class="form-control" placeholder="seleccione" ng-model="serviceType">
+        <option value="" selected disabled>Seleccione</option>
+        <option value="1">Tala y Poda</option>
+        <option value="2">Zonas Verdes</option>
+      </select>
+    </div>
+
+    <label for="zone" class="control-label col-sm-2">Zona: </label>
+    <div class="col-sm-2">
+      <select name="zone" id="zone" class="form-control">
+        <option value="">Cxxxxx</option>
+        <option value="">Cxxxxx</option>
+        <option value="">Cxxxxx</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="code" class="control-label col-sm-1 double-line">C&oacute;digo / Radicado: </label>
+    <div class="col-sm-2">
+      <input class="form-control" type="text" id="code" name="code">
+    </div>
+
+    <label for="team" class="control-label col-sm-2">Cuadrilla: </label>
+    <div class="col-sm-2">
+      <select name="team" id="team" class="form-control">
+        <option value="">Cxxxxx</option>
+        <option value="">Cxxxxx</option>
+        <option value="">Cxxxxx</option>
+      </select>
+    </div>
+
+    <div ng-if="serviceType == 1">
+      <label for="envAuth" class="control-label col-sm-2">Autoridad Ambiental: </label>
+      <div class="col-sm-2">
+        <select name="envAuth" id="envAuth" class="form-control">
+          <option value="">Cxxxxx</option>
+          <option value="">Cxxxxx</option>
+          <option value="">Cxxxxx</option>
+        </select>
+      </div>
+    </div>
+
+    <div ng-if="serviceType == 2">
+      <label for="area" class="control-label col-sm-2">Area: </label>
+      <div class="col-sm-2">
+        <input class="form-control" type="text" id="area" name="area">
+      </div>
+    </div>
+
+  </div>
+
+  <div class="form-group row">
+  </div>
+
+  <div class="form-group row">
+    <label for="address" class="control-label col-sm-1">Dirección: </label>
+    <div class="col-sm-3">
+      <input class="form-control" type="text" id="address" name="address">
+    </div>
+
+    <label for="telephone" class="control-label col-sm-1">T&eacute;lefono: </label>
+    <div class="col-sm-2">
+      <input class="form-control" type="text" id="telephone" name="telephone">
+    </div>
+
+    <label for="unity" class="control-label col-sm-2">Unidad: </label>
+    <div class="col-sm-2">
+      <select name="unity" id="unity" class="form-control">
+        <option value="">Cxxxxx</option>
+        <option value="">Cxxxxx</option>
+        <option value="">Cxxxxx</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="description" class="control-label col-sm-1">Descripci&oacute;n: </label>
+    <div class="col-sm-6">
+      <textarea name="description" id="description" class="form-control col-sm-4" cols="30" rows="5"></textarea>
+    </div>
+
+    <label for="active" class="control-label col-sm-1">Activo: </label>
+    <div class="col-sm-3">
+      <input class="form-control checkbox" type="checkbox" id="active" name="active" ng-model="act">
+      <label for="active" class="fa fa-2x text-primary" ng-class="act ? 'fa-toggle-on' : 'fa-toggle-off'"></label>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <div class="col-sm-12 text-center">
+      <input class="btn btn-primary" type="submit" value="Guardar">
+      <input class="btn btn-warning" type="reset" value="Cancelar">
+    </div>
+  </div>
+</form>
