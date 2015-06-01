@@ -2,7 +2,7 @@
 
 'use strict';
 
-monteverde.controller('runSvcCtrl', function ($state, $scope, $filter, ngTableParams) {
+monteverde.controller('runSvcCtrl', function ($state, $scope, $filter, ngTableParams, AlertsFactory) {
   var data = [
       {field: "Moroni", team: 50, state: 1, options: 1},
       {field: "Tiancum", team: 43, state: 1, options: 1},
