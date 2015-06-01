@@ -23,6 +23,33 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $filter, ngTablePa
       {field: "Enos", team: 34, state: 1, options: 1}
   ];
 
+  $scope.fields = [
+      'A123',
+      'B456',
+      'C567',
+      'R342',
+      'Y565',
+      'L897'
+  ];
+
+  $scope.teams = [
+      'uno',
+      'dos',
+      'tres',
+      '1uno',
+      '2dos',
+      '3tres'
+  ];
+
+  $scope.vehicles = [
+      'abc 123',
+      'def 456',
+      'hij 789',
+      'qaz 147',
+      'wsx 258',
+      'rfv 369'
+  ];
+
   $scope.tableParams = new ngTableParams({
       page: 1,            // show first page
       count: 10           // count per page

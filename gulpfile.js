@@ -45,7 +45,7 @@ tasks = {
           .pipe(sourcemaps.init())
           .pipe(concat('all.min.js'))
           .pipe(annotate({single_quotes: true}))
-          .pipe(uglify())
+          // .pipe(uglify())
           .pipe(sourcemaps.write())
           .pipe(gulp.dest(dist + '/javascripts/'))
           .pipe(livereload());
@@ -53,6 +53,7 @@ tasks = {
       vendors: function () {
         gulp.src([
           nodeModules + '/angular/*.min.js',
+          nodeModules + '/angular-bootstrap/dist/*.min.js',
           nodeModules + '/angular-ui-router/release/*.min.js',
           nodeModules + '/satellizer/satellizer.min.js',
           nodeModules + '/ng-dialog/js/*.min.js',
@@ -67,9 +68,12 @@ tasks = {
     },
     templates: function () {
       gulp.src(src + '/modules/**/*.html')
-         // .pipe(hbsRender())
          .pipe(gulp.dest(dist + '/views/'))
          .pipe(livereload());
+    },
+    angularBootstrapTemplates : function () {
+      gulp.src(nodeModules + '/angular-bootstrap/template/**/*')
+        .pipe(gulp.dest(dist + '/template'))
     },
     styles: {
       modules: function () {
@@ -133,6 +137,10 @@ gulp.task('build:libraries', tasks.build.js.vendors);
  */
 gulp.task('copy:fonts', tasks.build.styles.copyFonts);
 /**
+ * copy angular ui templates
+ */
+gulp.task('copy:angular-ui-templates', tasks.build.angularBootstrapTemplates);
+/**
  * Sets css
  */
 gulp.task('build:maincss', tasks.build.styles.maincss);
@@ -170,6 +178,7 @@ gulp.task('default', [
     'build:libraries',
     'copy:fonts',
     'build:modules',
+    'copy:angular-ui-templates',
     'watch'
   ]);
 
