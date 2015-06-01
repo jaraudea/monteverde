@@ -50,6 +50,8 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $filter, ngTablePa
       'rfv 369'
   ];
 
+  $scope.percent = 25;
+
   $scope.tableParams = new ngTableParams({
       page: 1,            // show first page
       count: 10           // count per page
