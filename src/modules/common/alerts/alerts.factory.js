@@ -2,21 +2,21 @@
 'use strict';
 
 common.factory('AlertsFactory', function ($rootScope) {
-  var alerts = {};
+  var factory = {};
 
   $rootScope.alerts = [];
 
-  alerts.addAlert = function(type, msg) {
+  factory.addAlert = function(type, msg) {
     $rootScope.alerts.push({type: type, msg: msg});
   };
 
-  alerts.closeAlert = function(index) {
+  factory.closeAlert = function(index) {
     $rootScope.alerts.splice(index, 1);
   }; 
 
-  $rootScope.addAlert = alerts.addAlert;
+  $rootScope.addAlert = factory.addAlert;
 
-  $rootScope.closeAlert = alerts.closeAlert;
+  $rootScope.closeAlert = factory.closeAlert;
 
-  return alerts;
+  return factory;
 });

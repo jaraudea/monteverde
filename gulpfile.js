@@ -30,7 +30,7 @@ tasks = {
   watch : function () {
     // here the watches
     livereload.listen();
-    gulp.watch([src + '/javascripts/*.js', src + '/modules/**/*.js'], ['build:modules']);
+    gulp.watch([src + '/javascripts/*.js', src + '/modules/**/*.js', src + '/monteverdeApp.js'], ['build:modules']);
     gulp.watch([src + '/modules/**/*.sass'], ['build:styles']);
     gulp.watch(['views/layouts/template.hbs', src + '/modules/**/*.html'], ['build:templates']);
     gulp.watch([src + '/styles/*.sass', src + '/styles/*.scss'], ['build:maincss']);

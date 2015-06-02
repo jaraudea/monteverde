@@ -31,13 +31,13 @@
 
         </header>
 
-        <div class="row ">
+        <div class="row "  ng-if="userLogged">
 
           <div class="col-sm-10">
-            <span class="navbar-text navbar-left">Usuario: {{user}}</span>
+            <span class="navbar-text navbar-left">Usuario: \{{user}}</span>
           </div>
           <div class="col-sm-2">
-            <a href="#" class="btn btn-default">Cerrar Sesi&oacute;n</a>
+            <a href="#" class="btn btn-danger" ng-click="logout('login')">Cerrar Sesi&oacute;n</a>
           </div>
         
         </div>
@@ -51,16 +51,16 @@
         </div>  
           
         <div class="row ">           
-            <nav class="col-sm-2">
+            <nav class="col-sm-2" ng-if="userLogged">
               <ul class="nav btn-group-vertical">
-                <li class="btn btn-default"><a href="/#/createSvc">Crear Servicio</a></li>
-                <li class="btn btn-default"><a href="/#/reportSvc">Reportar Servicio</a></li>
-                <li class="btn btn-default"><a href="/#/runSvc">Ejecutar Servicio</a></li>
-                <li class="btn btn-default"><a href="/#/scheduleSvc">Programar Servicio</a></li>
+                <li class="btn btn-default"><a href ui-sref="createSvc">Crear Servicio</a></li>
+                <li class="btn btn-default"><a href ui-sref="reportSvc">Reportar Servicio</a></li>
+                <li class="btn btn-default"><a href ui-sref="runSvc">Ejecutar Servicio</a></li>
+                <li class="btn btn-default"><a href ui-sref="scheduleSvc">Programar Servicio</a></li>
               </ul>
             </nav>
 
-            <div class="col-sm-10">
+            <div ng-class="(userLogged) ? 'col-sm-10' : 'col-sm-12'">
               <div class="container-fluid">
                 <div class="row" ui-view >
                   {{{body}}}
