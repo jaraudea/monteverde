@@ -8,7 +8,7 @@ monteverde.controller ('loginCtrl', function ($scope, $state, $scope, $auth, Ale
 
     $auth.login(user)
       .then(function (data) {
-        // $state.go('home');
+        $state.go('createSvc');
       })
       .catch(function (response) {
         console.log('log fail',response)

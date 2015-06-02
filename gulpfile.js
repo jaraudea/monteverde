@@ -54,6 +54,7 @@ tasks = {
         gulp.src([
           nodeModules + '/angular/*.min.js',
           nodeModules + '/angular-bootstrap/dist/*.min.js',
+          nodeModules + '/angular-ui-switch/angular-ui-switch.js',
           nodeModules + '/angular-ui-router/release/*.min.js',
           nodeModules + '/satellizer/satellizer.min.js',
           nodeModules + '/ng-dialog/js/*.min.js',
@@ -89,6 +90,7 @@ tasks = {
       libraries: function () {
         gulp.src([
             nodeModules + '/font-awesome/css/font-awesome.css',
+            nodeModules + '/angular-ui-switch/angular-ui-switch.css',
             nodeModules + '/bootstrap/dist/css/bootstrap.css',
             nodeModules + '/ng-table/dist/ng-table.css'
           ])
