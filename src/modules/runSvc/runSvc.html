@@ -58,7 +58,7 @@
 
   <div class="row">
     <div class="col-sm-3">
-      <h2>15%</h2>
+      <h2>{{percent}}%</h2>
     </div>
 
     <div class=" col-sm-9">
@@ -66,17 +66,17 @@
         <div class="form-group row">
           <label for="field" class="control-label col-sm-1">Lote: </label>
           <div class="col-sm-2">
-            <input class="form-control" type="text" id="field" name="field">
+            <input class="form-control" type="text" name="field" ng-model="field" typeahead="field for field in fields | filter:$viewValue | limitTo:8" >
           </div>        
 
           <label for="team" class="control-label col-sm-1">Cuadrilla: </label>
           <div class="col-sm-2">
-            <input class="form-control" type="text" id="team" name="team">
+            <input class="form-control" type="text" name="team" ng-model="team" typeahead="team for team in teams | filter:$viewValue | limitTo:8">
           </div>        
 
           <label for="vehicle" class="control-label col-sm-1">Vehiculo: </label>
           <div class="col-sm-2">
-            <input class="form-control" type="text" id="vehicle" name="vehicle">
+            <input class="form-control" type="text" id="vehicle" name="vehicle" ng-model="vehicle" typeahead="vehicle for vehicle in vehicles | filter:$viewValue | limitTo:8">
           </div>        
 
           <div class="col-sm-3">
