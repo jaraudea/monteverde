@@ -3,7 +3,8 @@ var mongoose = require('../data/db'),
 
 var svcTypeSchema = new Schema({
   name: String,
-  active: Boolean
+  active: Boolean,
+  ngId: { type: Number, min: 1, max: 100 }
 });
 
 module.exports = mongoose.model('ServiceType', svcTypeSchema);

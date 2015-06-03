@@ -5,7 +5,8 @@ var monteverde = angular.module('monteverde', [
     'common.module',
     'ngTable',
     'satellizer',
-    'ngDialog'
+    'ngDialog',
+    'uiSwitch'
   ]
 );
 
@@ -15,11 +16,11 @@ monteverde.config(function ( $urlRouterProvider, $stateProvider, $authProvider) 
     $authProvider.baseUrl = "http://localhost:3000"
     $authProvider.loginUrl = "/login";
     $authProvider.signupUrl = "api/signup";
-    $authProvider.tokenName = "Bearer";
+    // $authProvider.tokenName = "Bearer";  
     $authProvider.tokenPrefix = "monteverde";
 
     // When no url finds a match redirect to /
-    $urlRouterProvider.otherwise('/reportSvc');
+    $urlRouterProvider.otherwise('/createSvc');
     
     // Setup the basic routes
     
