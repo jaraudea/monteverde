@@ -6,6 +6,7 @@ var configSvcSchema = new Schema({
   contract: { type: Schema.Types.ObjectId, ref: 'Contract' },
   serviceType: { type: Schema.Types.ObjectId, ref: 'ServiceType' },
   team: { type: Schema.Types.ObjectId, ref: 'Team' },
+  unit: { type: Schema.Types.ObjectId, ref: 'Unit' },
   envAuthority: { type: Schema.Types.ObjectId, ref: 'EnvironmentalAuthority'},
   description: String,
   active: Boolean,

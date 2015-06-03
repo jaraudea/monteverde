@@ -19,6 +19,9 @@ var specieApi = require('./routes/api/specie');
 var contractApi = require('./routes/api/contract')
 var teamApi = require('./routes/api/team')
 var employeeApi = require('./routes/api/employee')
+var unitApi = require('./routes/api/unit')
+var vehicleApi = require('./routes/api/vehicle')
+
 var configServiceApi = require('./routes/api/configservice')
 
 var tokenConfig = require('./token/config');
@@ -65,6 +68,8 @@ app.get('/api/service/species', specieApi.getAll);
 app.get('/api/service/contracts', contractApi.getAll);
 app.get('/api/service/employees', employeeApi.getAll);
 app.get('/api/service/teams', teamApi.getAll);
+app.get('/api/service/vehicles', vehicleApi.getAll);
+app.get('/api/service/units', unitApi.getAll);
 app.get('/api/service/configservice/:code', configServiceApi.getByCode);
 
 /*POST*/
