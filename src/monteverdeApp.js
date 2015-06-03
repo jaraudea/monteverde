@@ -15,7 +15,7 @@ monteverde.config(function ( $urlRouterProvider, $stateProvider, $authProvider) 
     $authProvider.baseUrl = "http://localhost:3000"
     $authProvider.loginUrl = "/login";
     $authProvider.signupUrl = "api/signup";
-    $authProvider.tokenName = "token";
+    $authProvider.tokenName = "Bearer";
     $authProvider.tokenPrefix = "monteverde";
 
     // When no url finds a match redirect to /
