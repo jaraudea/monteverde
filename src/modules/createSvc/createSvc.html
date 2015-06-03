@@ -1,30 +1,26 @@
-<form action="" class="form-horizontal container-fluid">
+<form class="form-horizontal container-fluid" name="createSvcForm" ng-submit="createSvcForm.$valid && createSvc.submitcreateSvc()">
   <div class="form-group row">
 
     <label for="contract" class="control-label col-sm-1">Contrato: </label>
     <div class="col-sm-2">
-      <select name="contract" id="contract" class="form-control">
-        <option value="">Cxxxxx</option>
-        <option value="">Cxxxxx</option>
-        <option value="">Cxxxxx</option>
+      <select name="contract" id="contract" class="form-control" ng-model="formData.mContract" ng-change="updateContractType(formData.mContract)">
+        <option value="" selected disabled>Seleccione</option>
+        <option value="{{$index + ':' + contract._id}}" ng-bind="contract.contractNumber"   ng-repeat="contract in controls.contracts"></option>
       </select>
     </div>
 
     <label for="serviceType" class="control-label col-sm-2">Tipo de Servicio: </label>
     <div class="col-sm-2">
-      <select name="serviceType" id="serviceType" class="form-control" placeholder="seleccione" ng-model="serviceType">
+      <select name="serviceType" id="serviceType" class="form-control" placeholder="seleccione" ng-model="formData.serviceType">
         <option value="" selected disabled>Seleccione</option>
-        <option value="1">Tala y Poda</option>
-        <option value="2">Zonas Verdes</option>
+        <option value="{{servTp.ngId}}" ng-bind="servTp.name"   ng-repeat="servTp in controls.serviceTypes"></option>
       </select>
     </div>
 
     <label for="zone" class="control-label col-sm-2">Zona: </label>
     <div class="col-sm-2">
-      <select name="zone" id="zone" class="form-control">
-        <option value="">Cxxxxx</option>
-        <option value="">Cxxxxx</option>
-        <option value="">Cxxxxx</option>
+      <select name="zone" id="zone" class="form-control" ng-model="formData.zone">
+        <option value="{{zone._id}}" ng-bind="zone.name" ng-repeat="zone in controls.zones"></option>
       </select>
     </div>
   </div>
@@ -32,22 +28,21 @@
   <div class="form-group row">
     <label for="code" class="control-label col-sm-1 double-line">C&oacute;digo / Radicado: </label>
     <div class="col-sm-2">
-      <input class="form-control" type="text" id="code" name="code">
+      <input class="form-control" type="text" id="code" name="code" ng-model="formData.code">
     </div>
 
     <label for="team" class="control-label col-sm-2">Cuadrilla: </label>
     <div class="col-sm-2">
-      <select name="team" id="team" class="form-control">
-        <option value="">Cxxxxx</option>
-        <option value="">Cxxxxx</option>
-        <option value="">Cxxxxx</option>
+      <select name="team" id="team" class="form-control" ng-model="formData.team">
+        <option value="" selected disabled>Seleccione</option>
+        <option value="{{team._id}}" ng-bind="team.name" ng-repeat="team in controls.teams"></option>
       </select>
     </div>
 
-    <div ng-if="serviceType == 1">
+    <div ng-if="formData.serviceType == 1">
       <label for="envAuth" class="control-label col-sm-2">Autoridad Ambiental: </label>
       <div class="col-sm-2">
-        <select name="envAuth" id="envAuth" class="form-control">
+        <select name="envAuth" id="envAuth" class="form-control" ng-model="formData.envAuth">
           <option value="">Cxxxxx</option>
           <option value="">Cxxxxx</option>
           <option value="">Cxxxxx</option>
@@ -55,10 +50,10 @@
       </div>
     </div>
 
-    <div ng-if="serviceType == 2">
+    <div ng-if="formData.serviceType == 2">
       <label for="area" class="control-label col-sm-2">Area: </label>
       <div class="col-sm-2">
-        <input class="form-control" type="text" id="area" name="area">
+        <input class="form-control" type="text" id="area" name="area" ng-model="formData.area">
       </div>
     </div>
 
@@ -70,20 +65,19 @@
   <div class="form-group row">
     <label for="address" class="control-label col-sm-1">Dirección: </label>
     <div class="col-sm-3">
-      <input class="form-control" type="text" id="address" name="address">
+      <input class="form-control" type="text" id="address" name="address" ng-model="formData.address">
     </div>
 
     <label for="telephone" class="control-label col-sm-1">T&eacute;lefono: </label>
     <div class="col-sm-2">
-      <input class="form-control" type="text" id="telephone" name="telephone">
+      <input class="form-control" type="text" id="telephone" name="telephone" ng-model="formData.telephone">
     </div>
 
     <label for="unity" class="control-label col-sm-2">Unidad: </label>
     <div class="col-sm-2">
-      <select name="unity" id="unity" class="form-control">
-        <option value="">Cxxxxx</option>
-        <option value="">Cxxxxx</option>
-        <option value="">Cxxxxx</option>
+      <select name="unit" id="unit" class="form-control" ng-model="formData.units">
+        <option value="" selected disabled>Seleccione</option>
+        <option value="{{unit._id}}" ng-bind="unit.name" ng-repeat="unit in controls.units"></option>
       </select>
     </div>
   </div>
@@ -91,12 +85,12 @@
   <div class="form-group row">
     <label for="description" class="control-label col-sm-1">Descripci&oacute;n: </label>
     <div class="col-sm-6">
-      <textarea name="description" id="description" class="form-control col-sm-4" cols="30" rows="5"></textarea>
+      <textarea name="description" id="description" class="form-control col-sm-4" cols="30" rows="5" ng-model="formData.description"></textarea>
     </div>
 
     <label for="active" class="control-label col-sm-1">Activo: </label>
     <div class="col-sm-3">
-      <switch id="active" name="active" ng-model="act" class="green small"></switch>
+      <switch id="active" name="active" ng-model="formData.act" class="green small"></switch>
     </div>
   </div>
 
