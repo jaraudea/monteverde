@@ -13,6 +13,7 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
     contracts : "/api/service/contracts",
     units : "/api/service/units",
     config : "/api/service/config/:code",
+    envAuths : "/api/service/environmentalauthorities",
     // POST
     create : "/api/service/configservice"
   };

@@ -1,33 +1,73 @@
 // create service controller
 'use strict';
 
-monteverde.controller('createSvcCtrl', function ($state, $scope, AlertsFactory, connectorService) {
-  var contractId = null;
+monteverde.controller('createSvcCtrl', function ($state, $scope, ngTableParams, AlertsFactory, connectorService) {
+  var contractId = null,
+      dataSpecieTable = [];
 
-  $scope.controls = {
-    zones : [],
-    unities : [],
-    serviceTypes : [],
-    contracts : [],
-    teams : [],
-    units : []
-  };
+  $scope.controls = {};
 
   $scope.formData = {};
     
+  $scope.addSpecie = function () {
+    dataSpecieTable.push(
+      {
+        kind : {
+          _id : '', 
+          name : 't'
+        }, 
+        task : {
+          _id : '', 
+          name : ''
+        }, 
+        quantity : 1, 
+        edit: true
+      }
+    );
+    $scope.tableParams.reload();
+  }
+    
+  $scope.SetupEspecie = function (specie, data) {
+    data = data.split(':');
+    specie._id = data[0];
+    specie.name = data[1];
+    console.log('specie:', dataSpecieTable);
+  }
+
+  $scope.removeSpecie = function (ndx) {
+    if (ndx > -1) {
+      dataSpecieTable.splice(ndx, 1);
+    };
+
+    $scope.tableParams.reload();
+  }
+
   this.submitcreateSvc = function () {
     var data = $scope.formData,
         contract = data.mContract.split(':')[1],
+
         code = data.code;
 
         delete data.mContract;
         data.contract = contract;
 
+        // add species and tasks
+        
+        for(ndx in dataSpecieTable) {
+          delete dataSpecieTable[ndx].edit
+        }
+
+        data.treeSpeciesByTask = dataSpecieTable;
 
     connectorService.setData(connectorService.ep.create, data)
-      .then(function (data) {
-        AlertsFactory.addAlert('success', 'Servicio creado, contrato: ' + code);
-      });
+      .then(
+        function (data) {
+          AlertsFactory.addAlert('success', 'Servicio creado, contrato: ' + code);
+          $state.go($state.current, {}, {reload: true});
+        },
+        function (err) {
+          AlertsFactory.addAlert('danger', 'Error al crear el servicio: ' + code);
+        });
   }
 
   $scope.updateContractType = function (ndx) {
@@ -38,51 +78,36 @@ monteverde.controller('createSvcCtrl', function ($state, $scope, AlertsFactory, 
   }
 
   var init = function () {
-    getZones();
-    getContracts();
-    getTeams();
-    getUnits();
+    dataGet('zones');
+    dataGet('contracts');
+    dataGet('teams');
+    dataGet('units');
+    dataGet('species');
+    dataGet('tasks');
+    dataGet('envAuths');
   }
 
-  // get zones
-  var getZones = function () {
-    connectorService.getData(connectorService.ep.zones)
+  // Method to GET data
+  var dataGet = function (type) {
+    connectorService.getData(connectorService.ep[type])
       .then(function (data) {
-        $scope.controls.zones = data;
+        $scope.controls[type] = data;
       });    
-  };
+  }
 
-  // get serviceTypes
-  var getServiceTypes = function () {
-    connectorService.getData(connectorService.ep.serviceTypes)
-      .then(function (data) {
-        $scope.controls.serviceTypes = data;
-      });    
-  };
+  // Eviroment authority table
+    $scope.tableParams = new ngTableParams({
+        page: 1,            // show first page
+        total: 1,
+        count: 500           // count per page
+    }, {
+        total: dataSpecieTable.length, // length of dataSpecieTable
+        getData: function ($defer, params) {
+            $defer.resolve(dataSpecieTable.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+        },
+        $scope : $scope
+    })
 
-  // get contracts
-  var getContracts = function () {
-    connectorService.getData(connectorService.ep.contracts)
-      .then(function (data) {
-        $scope.controls.contracts = data;
-      });    
-  };
-
-  // get teams
-  var getTeams = function () {
-    connectorService.getData(connectorService.ep.teams)
-      .then(function (data) {
-        $scope.controls.teams = data;
-      });    
-  };
-
-  // get units
-  var getUnits = function () {
-    connectorService.getData(connectorService.ep.units)
-      .then(function (data) {
-        $scope.controls.units = data;
-      });    
-  };
 
   init();
 });
