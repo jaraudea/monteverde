@@ -13,7 +13,7 @@
     <div class="col-sm-2">
       <select name="serviceType" id="serviceType" class="form-control" placeholder="seleccione" ng-model="formData.serviceType">
         <option value="" selected disabled>Seleccione</option>
-        <option value="{{servTp.ngId}}" ng-bind="servTp.name"   ng-repeat="servTp in controls.serviceTypes"></option>
+        <option value="{{servTp._id}}" ng-bind="servTp.name"   ng-repeat="servTp in controls.serviceTypes"></option>
       </select>
     </div>
 
@@ -39,18 +39,17 @@
       </select>
     </div>
 
-    <div ng-if="formData.serviceType == 1">
+    <div ng-if="formData.serviceType == '5563efda45051764c2e3da12'">
       <label for="envAuth" class="control-label col-sm-2">Autoridad Ambiental: </label>
       <div class="col-sm-2">
-        <select name="envAuth" id="envAuth" class="form-control" ng-model="formData.envAuth">
-          <option value="">Cxxxxx</option>
-          <option value="">Cxxxxx</option>
-          <option value="">Cxxxxx</option>
+          <select class="form-control" ng-model="formData.envAuth">
+          <option value="" selected disabled>Seleccione</option>
+          <option value="{{envAuth._id}}" ng-bind="envAuth.name" ng-repeat="envAuth in controls.envAuths"></option>
         </select>
       </div>
     </div>
 
-    <div ng-if="formData.serviceType == 2">
+    <div ng-if="formData.serviceType == '5563efe645051764c2e3da13'">
       <label for="area" class="control-label col-sm-2">Area: </label>
       <div class="col-sm-2">
         <input class="form-control" type="text" id="area" name="area" ng-model="formData.area">
@@ -92,6 +91,53 @@
     <div class="col-sm-3">
       <switch id="active" name="active" ng-model="formData.act" class="green small"></switch>
     </div>
+  </div>
+
+  <div class="form-group row">
+    <button type="button" ng-click="addSpecie()">Agregar Especie</button>  
+    <table ng-table="tableParams" class="table table-bordered table-striped">
+      <thead>
+          <tr>
+            <th class="col-sm-4">Especie</th>
+            <th class="col-sm-4">Tarea</th>
+            <th class="col-sm-2">Cantidad</th>
+            <th class="col-sm-2">Opciones</th>
+          </tr>
+        </thead>  
+        <tr ng-repeat="specie in $data">
+            <td data-title="'Especie'">
+                <span  ng-show="!specie.edit">{{specie.kind.name}}</span> 
+ 
+                <div ng-show="specie.edit">
+                  <select class="form-control" ng-model="specieList" ng-change="SetupEspecie(specie.kind, specieList)" value="{specie.kind._id}}">
+                    <option value="" selected disabled>Seleccione</option>
+                    <option value="{{specieItem._id + ':' + specieItem.name}}" ng-bind="specieItem.name"   ng-repeat="specieItem in controls.species"></option>
+                  </select>
+                </div>
+            </td>
+            <td data-title="'Tarea'">
+                <span ng-show="!specie.edit">{{specie.task.name}}</span>
+
+                <div ng-show="specie.edit">
+                  <select class="form-control" ng-model="taskList" ng-change="SetupEspecie(specie.task, taskList)">
+                    <option value="" selected disabled>Seleccione</option>
+                    <option value="{{task._id + ':' + task.name}}" ng-bind="task.name"   ng-repeat="task in controls.tasks"></option>
+                  </select>
+                </div>
+            </td>
+            <td data-title="'Cantidad'">
+                <span ng-if="!specie.edit">{{specie.quantity}}</span>
+                <div ng-if="specie.edit"><input class="form-control" type="number" ng-model="specie.quantity" /></div>
+            </td>
+            <td data-title="'Opciones'" class="col-sm-2">
+              <div class="btn-group" role="group" aria-label="">
+                <a ng-if="!specie.edit" href="" class="btn btn-primary" ng-click="specie.edit = true"><i class="fa fa-pencil fa-fw"></i></a>
+                <a ng-if="!specie.edit" href="" class="btn btn-danger" ng-click="removeSpecie($index)"><i class="fa fa-trash-o fa-fw"></i></a>
+                <a ng-if="specie.edit" href="" class="btn btn-success   " ng-click="specie.edit = false"><i class="fa fa-floppy-o fafw"></i></a>
+              </div>  
+            </td>
+        </tr>
+    </table>
   </div>
 
   <div class="form-group row">
