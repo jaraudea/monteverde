@@ -14,7 +14,7 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
     units : "/api/service/units",
     config : "/api/service/config/:code",
     // POST
-    create : "/login"
+    create : "/api/service/configservice"
   };
 
   socketFactory.on('notifyChanges', function (data) {

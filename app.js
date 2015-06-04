@@ -73,7 +73,7 @@ app.get('/api/service/units', unitApi.getAll);
 app.get('/api/service/configservice/:code', configServiceApi.getByCode);
 
 /*POST*/
-app.post('/api/service/configservice/:code', configServiceApi.create);
+app.post('/api/service/configservice', configServiceApi.create);
 
 /*PUT*/
 app.put('/api/service/configservice/:code', configServiceApi.update);
