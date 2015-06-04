@@ -23,6 +23,7 @@ var unitApi = require('./routes/api/unit')
 var vehicleApi = require('./routes/api/vehicle')
 
 var configServiceApi = require('./routes/api/configservice')
+var serviceApi = require('./routes/api/service')
 
 var tokenConfig = require('./token/config');
 
@@ -70,10 +71,16 @@ app.get('/api/service/employees', employeeApi.getAll);
 app.get('/api/service/teams', teamApi.getAll);
 app.get('/api/service/vehicles', vehicleApi.getAll);
 app.get('/api/service/units', unitApi.getAll);
-app.get('/api/service/configservice/:code', configServiceApi.getByCode);
+app.get('/api/service/configservice/:code?', configServiceApi.getByCode);
+app.get('/api/service/:scheduledDate?', serviceApi.getByScheduledDate);
+app.get('/api/service/:executedDate?', serviceApi.getByScheduledDate);
 
 /*POST*/
 app.post('/api/service/configservice', configServiceApi.create);
+app.post('/api/service/scheduleService', serviceApi.scheduleService);
+app.post('/api/service/executeService', serviceApi.executeService);
+app.post('/api/service/approveService', serviceApi.approveService);
+app.post('/api/service/disapproveService', serviceApi.disapproveService);
 
 /*PUT*/
 app.put('/api/service/configservice/:code', configServiceApi.update);

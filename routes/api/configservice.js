@@ -43,7 +43,8 @@ var pruningService = function(data, next) {
 }
 
 exports.getByCode = function(req, res, next) {
-  ConfigService.find({code: req.params.id}, function(err, configService) {
+  var query = isEmpty(req.query) ? {code: req.params.code} : req.query;
+  ConfigService.find(query, function(err, configService) {
     if (err) return next(err);
     if (!configService.id) return res.sendStatus(404);
     res.json(configService)
@@ -52,10 +53,13 @@ exports.getByCode = function(req, res, next) {
 
 exports.create = function(req, res, next) {
   var data = req.body;
-  console.log(data);
   res.sendStatus(200);
 };
 
 exports.update = function(req, res, next) {
   res.sendStatus(200);
 };
+
+var isEmpty = function(obj) {
+  return Object.keys(obj).length === 0;
+}
