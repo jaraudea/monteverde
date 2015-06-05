@@ -19,13 +19,13 @@ var grassService = function(data, next) {
 var pruningService = function(data, next) {
   var configService = {
     code: data.code,
-    contract: new ObjectId(data.contract),
-    serviceType: new ObjectId(data.serviceType),
-    team: new ObjectId(data.team),
-    unit: new ObjectId(data.units),
+    contract: data.contract,
+    serviceType: data.serviceType,
+    team: data.team,
+    unit: data.units,
     address: data.address,
     phone: data.telephone,
-    envAuthority: new ObjectId(data.envAuthority),
+    envAuthority: data.envAuthority,
     description: data.description,
     treeSpeciesByTask: [],
     active: data.active
@@ -33,8 +33,8 @@ var pruningService = function(data, next) {
 
   data.treeSpeciesByTask.forEach(function(item) {
     var treeSpecieByTask = {
-      specie: new ObjectId(item.specie), 
-      task: new ObjectId(item.task), 
+      specie: item.kind, 
+      task: item.task, 
       quantity: item.quantity
     };
     configService.treeSpeciesByTask.push(treeSpecieByTask);
