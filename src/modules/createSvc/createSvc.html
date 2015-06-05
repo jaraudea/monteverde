@@ -39,17 +39,17 @@
       </select>
     </div>
 
-    <div ng-if="formData.serviceType == '5563efda45051764c2e3da12'">
+    <div ng-if="formData.serviceType == '5563efe645051764c2e3da13'">
       <label for="envAuth" class="control-label col-sm-2">Autoridad Ambiental: </label>
       <div class="col-sm-2">
           <select class="form-control" ng-model="formData.envAuth">
-          <option value="" selected disabled>Seleccione</option>
-          <option value="{{envAuth._id}}" ng-bind="envAuth.name" ng-repeat="envAuth in controls.envAuths"></option>
-        </select>
+            <option value="" selected disabled>Seleccione</option>
+            <option value="{{envAuth._id}}" ng-bind="envAuth.name" ng-repeat="envAuth in controls.envAuths"></option>
+          </select>
       </div>
     </div>
 
-    <div ng-if="formData.serviceType == '5563efe645051764c2e3da13'">
+    <div ng-if="formData.serviceType == '5563efda45051764c2e3da12'">
       <label for="area" class="control-label col-sm-2">Area: </label>
       <div class="col-sm-2">
         <input class="form-control" type="text" id="area" name="area" ng-model="formData.area">
@@ -93,7 +93,7 @@
     </div>
   </div>
 
-  <div class="form-group row">
+  <div class="form-group row" ng-if="formData.serviceType == '5563efe645051764c2e3da13'">
     <button type="button" ng-click="addSpecie()">Agregar Especie</button>  
     <table ng-table="tableParams" class="table table-bordered table-striped">
       <thead>
