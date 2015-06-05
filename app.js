@@ -55,12 +55,6 @@ app.post('/login', login.authenticate);
 
 /*API*/
 /*GET*/
-app.get('/api/restricted', function (req, res) {
-  console.log('user ' + req.user.name + ' is calling /api/restricted');
-  res.json({
-    name: req.user.name
-  });
-});
 app.get('/api/service/environmentalauthorities', envAuthApi.getAll);
 app.get('/api/service/servicetypes', svcTypeApi.getAll);
 app.get('/api/service/zones', zoneApi.getAll);
@@ -71,19 +65,22 @@ app.get('/api/service/employees', employeeApi.getAll);
 app.get('/api/service/teams', teamApi.getAll);
 app.get('/api/service/vehicles', vehicleApi.getAll);
 app.get('/api/service/units', unitApi.getAll);
+app.get('/api/service/configservice/codes', configServiceApi.getAllConfigCodes);
 app.get('/api/service/configservice/:code?', configServiceApi.getByCode);
 app.get('/api/service/:scheduledDate?', serviceApi.getByScheduledDate);
 app.get('/api/service/:executedDate?', serviceApi.getByScheduledDate);
 
-/*POST*/
+/*POST*/  
 app.post('/api/service/configservice', configServiceApi.create);
 app.post('/api/service/scheduleService', serviceApi.scheduleService);
 app.post('/api/service/executeService', serviceApi.executeService);
-app.post('/api/service/approveService', serviceApi.approveService);
-app.post('/api/service/disapproveService', serviceApi.disapproveService);
 
 /*PUT*/
 app.put('/api/service/configservice/:code', configServiceApi.update);
+app.put('/api/service/scheduleService/:id', serviceApi.updateScheduledService);
+app.put('/api/service/executeService/:id', serviceApi.updateExecutedService);
+app.put('/api/service/approveService/:id', serviceApi.approveService);
+app.put('/api/service/disapproveService/:id', serviceApi.disapproveService);
 
 /*DELETE*/
 

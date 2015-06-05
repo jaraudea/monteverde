@@ -25,3 +25,11 @@ exports.approveService = function(req, res, next) {
 exports.disapproveService = function(req, res, next) {
   res.sendStatus(200);
 };
+
+exports.updateScheduledService = function(req, res, next) {
+  res.sendStatus(200);
+};
+
+exports.updateExecutedService = function(req, res, next) {
+  res.sendStatus(200);
+};
