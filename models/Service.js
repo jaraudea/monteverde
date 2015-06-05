@@ -12,7 +12,8 @@ var serviceSchema = new Schema({
   quantity: Number,
   description: String,
   nroViajes: Number,
-  status: { type: Schema.Types.ObjectId, ref: 'ServiceStatus' }
+  status: { type: Schema.Types.ObjectId, ref: 'ServiceStatus' },
+  disapproveNotes: String
 });
 
 module.exports = mongoose.model('Service', serviceSchema);

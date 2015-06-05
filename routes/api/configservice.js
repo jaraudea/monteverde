@@ -5,6 +5,7 @@ var grassService = function(data, next) {
     code: data.code,
     contract: data.contract,
     serviceType: data.serviceType,
+    zone: data.zone,
     team: data.team,
     unit: data.units,
     address: data.address,
@@ -21,6 +22,7 @@ var pruningService = function(data, next) {
     code: data.code,
     contract: data.contract,
     serviceType: data.serviceType,
+    zone: data.zone,
     team: data.team,
     unit: data.units,
     address: data.address,
@@ -60,7 +62,6 @@ exports.getByCode = function(req, res, next) {
 
 exports.create = function(req, res, next) {
   var data = req.body;
-  console.log(data);
   var confSvc;
   if (data.serviceType === '5563efda45051764c2e3da12') {
     confSvc = grassService(data);
