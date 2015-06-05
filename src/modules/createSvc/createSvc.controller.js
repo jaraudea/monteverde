@@ -8,6 +8,8 @@ monteverde.controller('createSvcCtrl', function ($state, $scope, ngTableParams, 
   $scope.controls = {};
 
   $scope.formData = {};
+
+  $scope.codes = [];
     
   $scope.addSpecie = function () {
     dataSpecieTable.push(
@@ -26,13 +28,6 @@ monteverde.controller('createSvcCtrl', function ($state, $scope, ngTableParams, 
     );
     $scope.tableParams.reload();
   }
-    
-  $scope.SetupEspecie = function (specie, data) {
-    data = data.split(':');
-    specie._id = data[0];
-    specie.name = data[1];
-    console.log('specie:', dataSpecieTable);
-  }
 
   $scope.removeSpecie = function (ndx) {
     if (ndx > -1) {
@@ -43,12 +38,10 @@ monteverde.controller('createSvcCtrl', function ($state, $scope, ngTableParams, 
   }
 
   this.submitcreateSvc = function () {
-    var data = $scope.formData,
-        contract = data.mContract.split(':')[1],
+    var data = $scope.formData
 
         code = data.code;
 
-        delete data.mContract;
         data.contract = contract;
 
         // add species and tasks
@@ -68,13 +61,6 @@ monteverde.controller('createSvcCtrl', function ($state, $scope, ngTableParams, 
         function (err) {
           AlertsFactory.addAlert('danger', 'Error al crear el servicio: ' + code);
         });
-  }
-
-  $scope.updateContractType = function (ndx) {
-    var servicesNdx = ndx.split(':')[0];
-    contractId = ndx.split(':')[1],
-
-    $scope.controls.serviceTypes = $scope.controls.contracts[servicesNdx].serviceType;
   }
 
   var init = function () {
