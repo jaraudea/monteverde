@@ -8,6 +8,8 @@ monteverde.controller('createSvcCtrl', function ($state, $scope, ngTableParams, 
   $scope.controls = {};
 
   $scope.formData = {};
+
+  $scope.codes = [];
     
   $scope.addSpecie = function () {
     dataSpecieTable.push(
@@ -26,13 +28,6 @@ monteverde.controller('createSvcCtrl', function ($state, $scope, ngTableParams, 
     );
     $scope.tableParams.reload();
   }
-    
-  $scope.SetupEspecie = function (specie, data) {
-    data = data.split(':');
-    specie._id = data[0];
-    specie.name = data[1];
-    console.log('specie:', dataSpecieTable);
-  }
 
   $scope.removeSpecie = function (ndx) {
     if (ndx > -1) {
@@ -43,12 +38,10 @@ monteverde.controller('createSvcCtrl', function ($state, $scope, ngTableParams, 
   }
 
   this.submitcreateSvc = function () {
-    var data = $scope.formData,
-        contract = data.mContract.split(':')[1],
+    var data = $scope.formData
 
         code = data.code;
 
-        delete data.mContract;
         data.contract = contract;
 
         // add species and tasks
@@ -70,12 +63,14 @@ monteverde.controller('createSvcCtrl', function ($state, $scope, ngTableParams, 
         });
   }
 
-  $scope.updateContractType = function (ndx) {
-    var servicesNdx = ndx.split(':')[0];
-    contractId = ndx.split(':')[1],
-
-    $scope.controls.serviceTypes = $scope.controls.contracts[servicesNdx].serviceType;
-  }
+  $scope.getServiceConfig = function (_id) {
+    dataGet('serviceConf', _id, function (data) {
+      console.log(_id, data);
+      $scope.formData = data[0];
+      dataSpecieTable = data[0].treeSpeciesByTask;
+      $scope.tableParams.reload();
+    });
+  };
 
   var init = function () {
     dataGet('zones');
@@ -85,13 +80,23 @@ monteverde.controller('createSvcCtrl', function ($state, $scope, ngTableParams, 
     dataGet('species');
     dataGet('tasks');
     dataGet('envAuths');
+    dataGet('codes', '', function (data) {
+      for (var ndx in data) {
+        $scope.codes.push(data[ndx].code);
+      };
+    });
   }
 
   // Method to GET data
-  var dataGet = function (type) {
-    connectorService.getData(connectorService.ep[type])
+  var dataGet = function (type, param, callback) {
+    var url = (typeof param !== 'undefined') ? connectorService.ep[type] + param : connectorService.ep[type];
+    connectorService.getData(url)
       .then(function (data) {
-        $scope.controls[type] = data;
+        if (typeof callback === 'function'){
+          callback(data);
+        } else {
+          $scope.controls[type] = data;
+        };
       });    
   }
 

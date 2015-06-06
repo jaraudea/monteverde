@@ -65,6 +65,20 @@ monteverde.config(function ( $urlRouterProvider, $stateProvider, $authProvider) 
 
 // app run
 monteverde.run(function ($rootScope, $location, $state, $auth) {
+
+  //some helpers
+  Array.prototype.findById = function(_id, spectedData) {
+    for (var ndx in this) {
+      var element = this[ndx];
+
+      if (element._id === _id) {
+        return element[spectedData];
+      }
+    };
+
+    return false;
+  }; 
+
   $rootScope.$on( '$stateChangeStart', function(e, toState  , toParams, fromState, fromParams) { 
     var isLogin = (toState.name === "login");
     
