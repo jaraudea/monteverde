@@ -51,3 +51,15 @@ textarea {
   font-size : 10px;
   white-space: nowrap;
 }
+
+// tables
+.table-fixed {
+  table-layout: fixed;
+  td {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    &.options {
+      width: 40px;
+    }
+  }
+}

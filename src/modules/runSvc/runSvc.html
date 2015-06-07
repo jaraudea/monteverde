@@ -86,7 +86,7 @@
   </div>
   
   <div class="form-group row"  flow-init="uploader">
-    <div class="col-sm-6">
+    <div class="col-sm-4">
       <label for="observations" class="control-label">Descripci&oacute;n: </label>
       <textarea class="form-control" cols="30" rows="5" ng-model="formData.observations"></textarea>
     </div>
@@ -100,15 +100,32 @@
       <input type="file" flow-btn />
     </div>
 
-    <div class="col-sm-2">
+    <div class="col-sm-3">
       <button type="button" ng-click="$flow.upload()">subir</button>  
-      <ul>
-        <li ng-repeat="img in $flow.files">
-          <a class="font-sm" href="" ng-click="open(img)">{{img.name}}</a>
-          <a href="" ng-click="img.cancel()"><i class="fa fa-times"></i></a>
-        </li>
-      </ul>
+      <table class="table table table-bordered table-fixed">
+        <tr  ng-repeat="img in $flow.files">
+          <td><a class="font-sm" href="" ng-click="open(img)">{{img.name}}</a></td>
+          <td class="options"><a href="" ng-click="img.cancel()" class="badge"><i class="fa fa-times"></i></a></td>
+        </tr>
+      </table>
     </div>
 
+    <div class="col-sm-3">
+      <h2 ng-bind="percent + '%'"></h2>
+    </div>
+  </div>
+    
+  <div class="form-group row">
+    <div class="col-sm-12 text-center">
+      <input class="btn btn-success" type="submit" value="Guardar Ejecucion">
+      <input class="btn btn-warning" type="reset" value="Limpiar">
+    </div>
+  </div>   
+
+  <div class="form-group row">
+    <div class="col-sm-12 text-center">
+      <input class="btn btn-success" type="submit" value="Guardar">
+      <input class="btn btn-danger" type="reset" value="Cancelar">
+    </div>
   </div>
 </form>
