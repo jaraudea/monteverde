@@ -7,9 +7,9 @@ var grassService = function(data, next) {
     serviceType: data.serviceType,
     zone: data.zone,
     team: data.team,
-    unit: data.units,
+    unit: data.unit,
     address: data.address,
-    phone: data.telephone,
+    phone: data.phone,
     area: data.area,
     description: data.description,
     active: data.active
@@ -24,9 +24,9 @@ var pruningService = function(data, next) {
     serviceType: data.serviceType,
     zone: data.zone,
     team: data.team,
-    unit: data.units,
+    unit: data.unit,
     address: data.address,
-    phone: data.telephone,
+    phone: data.phone,
     envAuthority: data.envAuthority,
     description: data.description,
     treeSpeciesByTask: [],
@@ -35,7 +35,7 @@ var pruningService = function(data, next) {
 
   data.treeSpeciesByTask.forEach(function(item) {
     var treeSpecieByTask = {
-      specie: item.kind, 
+      specie: item.specie, 
       task: item.task, 
       quantity: item.quantity
     };

@@ -10,13 +10,13 @@ monteverde.controller('createSvcCtrl', function ($state, $scope, ngTableParams, 
   $scope.formData = {};
 
   $scope.codes = [];
-    
+
   $scope.addSpecie = function () {
     dataSpecieTable.push(
       {
-        kind : {
+        specie : {
           _id : '', 
-          name : 't'
+          name : ''
         }, 
         task : {
           _id : '', 
@@ -38,34 +38,45 @@ monteverde.controller('createSvcCtrl', function ($state, $scope, ngTableParams, 
   }
 
   this.submitcreateSvc = function () {
-    var data = $scope.formData
-
-        code = data.code;
-
-        data.contract = contract;
+    var data = $scope.formData,
+        code = data.code,
+        editing = $scope.codes.indexOf(code) > -1;
 
         // add species and tasks
-        
-        for(ndx in dataSpecieTable) {
-          delete dataSpecieTable[ndx].edit
-        }
+        if (data.serviceType === '5563efe645051764c2e3da13') {
+          for(ndx in dataSpecieTable) {
+            delete dataSpecieTable[ndx].edit
+          }
 
-        data.treeSpeciesByTask = dataSpecieTable;
+          data.treeSpeciesByTask = dataSpecieTable;
+        };
 
+    // Check if is editting or creating
+    if (!editing) {
     connectorService.setData(connectorService.ep.create, data)
       .then(
         function (data) {
-          AlertsFactory.addAlert('success', 'Servicio creado, contrato: ' + code);
+          AlertsFactory.addAlert('success', 'Servicio creado, codigo: ' + code);
           $state.go($state.current, {}, {reload: true});
         },
         function (err) {
           AlertsFactory.addAlert('danger', 'Error al crear el servicio: ' + code);
         });
+    } else {
+      connectorService.editData(connectorService.ep.create, code, data)
+        .then(
+          function (data) {
+            AlertsFactory.addAlert('success', 'Servicio Actualizado, codigo: ' + code);
+            $state.go($state.current, {}, {reload: true});
+          },
+          function (err) {
+            AlertsFactory.addAlert('danger', 'Error al crear el servicio: ' + code);
+          });      
+    }
   }
 
   $scope.getServiceConfig = function (_id) {
     dataGet('serviceConf', _id, function (data) {
-      console.log(_id, data);
       $scope.formData = data[0];
       dataSpecieTable = data[0].treeSpeciesByTask;
       $scope.tableParams.reload();

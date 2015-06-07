@@ -62,17 +62,17 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
     return defer.promise;
   };
 
-  this.editData = function (user, data) {
+  this.editData = function (url, id, data) {
     var defer = $q.defer(),
-        url = spotsUrl + '/' + user;
+        url = url + id;
 
     $http.put(url, data)
-      .success(function(data) {
-        defer.resolve(data);
-      })
-      .error(function() {
-        defer.reject();
-      });
+        .success(function(data) {
+          defer.resolve(data);
+        })
+        .error(function() {
+          defer.reject();
+        });
 
     return defer.promise;
   };
