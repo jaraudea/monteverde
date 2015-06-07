@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" ng-app="monteverde" flow-init> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" ng-app="monteverde" flow-init> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" ng-app="monteverde" flow-init> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="es" ng-app="monteverde" flow-init> <!--<![endif]-->
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,7 +13,7 @@
         <link rel="stylesheet" href="/stylesheets/monteverde.min.css">
 
     </head>
-    <body ng-app="monteverde">
+    <body flow-prevent-drop>
 
       <div class="container-fluid panel panel-default main-app" ng-controller="monteverdeCtrl">
 
@@ -31,24 +31,20 @@
 
         </header>
 
-        <div class="row "  ng-if="userLogged">
-
-          <div class="col-sm-10">
-            <span class="navbar-text navbar-left">Usuario: \{{user}}</span>
+        <nav class="nav navbar navbar-default">
+          <div class="container-fluid">
+            <span class="navbar-text">Usuario: \{{user}}</span>
+            <button type="button" class="btn btn-danger navbar-btn navbar-right" ng-click="logout('login')">Cerrar Sesi&oacute;n</button>
           </div>
-          <div class="col-sm-2">
-            <a href="#" class="btn btn-danger" ng-click="logout('login')">Cerrar Sesi&oacute;n</a>
-          </div>
-        
-        </div>
-        <div class="row ">
+        </nav>
 
+        <div class="row">
           <div class="col-sm-12">
             <alert ng-repeat="alert in alerts" type="\{{alert.type}}" close="closeAlert($index)">
               \{{alert.msg}}
             </alert>
           </div>  
-        </div>  
+        </div>
           
         <div class="row ">           
             <nav class="col-sm-2" ng-if="userLogged">
