@@ -1,4 +1,4 @@
-// schedule service controller
+// run service controller
 
 'use strict';
 
