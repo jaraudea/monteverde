@@ -5,17 +5,19 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
   var that = this;
 
   this.ep = {
-    tasks : "/api/service/tasks",
-    species : "/api/service/species",
-    teams : "/api/service/teams",
-    zones : "/api/service/zones",
-    serviceTypes : "/api/service/servicetypes",
-    contracts : "/api/service/contracts",
-    units : "/api/service/units",
-    config : "/api/service/config/:code",
-    envAuths : "/api/service/environmentalauthorities",
+    tasks : "/api/service/tasks/",
+    species : "/api/service/species/",
+    teams : "/api/service/teams/",
+    zones : "/api/service/zones/",
+    serviceTypes : "/api/service/servicetypes/",
+    contracts : "/api/service/contracts/",
+    units : "/api/service/units/",
+    config : "/api/service/config/:code/",
+    envAuths : "/api/service/environmentalauthorities/",
+    codes : "/api/service/configservice/codes/",
+    serviceConf : "/api/service/configservice/",
     // POST
-    create : "/api/service/configservice"
+    create : "/api/service/configservice/"
   };
 
   socketFactory.on('notifyChanges', function (data) {
@@ -60,17 +62,17 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
     return defer.promise;
   };
 
-  this.editData = function (user, data) {
+  this.editData = function (url, id, data) {
     var defer = $q.defer(),
-        url = spotsUrl + '/' + user;
+        url = url + id;
 
     $http.put(url, data)
-      .success(function(data) {
-        defer.resolve(data);
-      })
-      .error(function() {
-        defer.reject();
-      });
+        .success(function(data) {
+          defer.resolve(data);
+        })
+        .error(function() {
+          defer.reject();
+        });
 
     return defer.promise;
   };

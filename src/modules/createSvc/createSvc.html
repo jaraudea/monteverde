@@ -1,11 +1,11 @@
 <form class="form-horizontal container-fluid" name="createSvcForm" ng-submit="createSvcForm.$valid && createSvc.submitcreateSvc()">
   <div class="form-group row">
-
+    {{editing}}
     <label for="contract" class="control-label col-sm-1">Contrato: </label>
     <div class="col-sm-2">
-      <select name="contract" id="contract" class="form-control" ng-model="formData.mContract" ng-change="updateContractType(formData.mContract)">
+      <select name="contract" class="form-control" ng-model="formData.contract">
         <option value="" selected disabled>Seleccione</option>
-        <option value="{{$index + ':' + contract._id}}" ng-bind="contract.contractNumber"   ng-repeat="contract in controls.contracts"></option>
+        <option value="{{contract._id}}" ng-bind="contract.contractNumber"   ng-repeat="contract in controls.contracts"></option>
       </select>
     </div>
 
@@ -13,7 +13,7 @@
     <div class="col-sm-2">
       <select name="serviceType" id="serviceType" class="form-control" placeholder="seleccione" ng-model="formData.serviceType">
         <option value="" selected disabled>Seleccione</option>
-        <option value="{{servTp._id}}" ng-bind="servTp.name"   ng-repeat="servTp in controls.serviceTypes"></option>
+        <option value="{{servTp._id}}" ng-bind="servTp.name" ng-repeat="servTp in controls.contracts.findById(formData.contract, 'serviceType')"></option>
       </select>
     </div>
 
@@ -28,7 +28,7 @@
   <div class="form-group row">
     <label for="code" class="control-label col-sm-1 double-line">C&oacute;digo / Radicado: </label>
     <div class="col-sm-2">
-      <input class="form-control" type="text" id="code" name="code" ng-model="formData.code">
+      <input class="form-control" type="text" typeahead-on-select="getServiceConfig(formData.code)"ng-model="formData.code" typeahead="field for field in codes | filter:$viewValue | limitTo:8" >
     </div>
 
     <label for="team" class="control-label col-sm-2">Cuadrilla: </label>
@@ -42,9 +42,9 @@
     <div ng-if="formData.serviceType == '5563efe645051764c2e3da13'">
       <label for="envAuth" class="control-label col-sm-2">Autoridad Ambiental: </label>
       <div class="col-sm-2">
-          <select class="form-control" ng-model="formData.envAuth">
+          <select class="form-control" ng-model="formData.envAuthority">
             <option value="" selected disabled>Seleccione</option>
-            <option value="{{envAuth._id}}" ng-bind="envAuth.name" ng-repeat="envAuth in controls.envAuths"></option>
+            <option value="{{envAuthority._id}}" ng-bind="envAuthority.name" ng-repeat="envAuthority in controls.envAuths"></option>
           </select>
       </div>
     </div>
@@ -69,12 +69,12 @@
 
     <label for="telephone" class="control-label col-sm-1">T&eacute;lefono: </label>
     <div class="col-sm-2">
-      <input class="form-control" type="text" id="telephone" name="telephone" ng-model="formData.telephone">
+      <input class="form-control" type="text" ng-model="formData.phone">
     </div>
 
     <label for="unity" class="control-label col-sm-2">Unidad: </label>
     <div class="col-sm-2">
-      <select name="unit" id="unit" class="form-control" ng-model="formData.units">
+      <select name="unit" id="unit" class="form-control" ng-model="formData.unit">
         <option value="" selected disabled>Seleccione</option>
         <option value="{{unit._id}}" ng-bind="unit.name" ng-repeat="unit in controls.units"></option>
       </select>
@@ -89,7 +89,7 @@
 
     <label for="active" class="control-label col-sm-1">Activo: </label>
     <div class="col-sm-3">
-      <switch id="active" name="active" ng-model="formData.act" class="green small"></switch>
+      <switch name="active" ng-model="formData.active" class="green small"></switch>
     </div>
   </div>
 
@@ -106,22 +106,20 @@
         </thead>  
         <tr ng-repeat="specie in $data">
             <td data-title="'Especie'">
-                <span  ng-show="!specie.edit">{{specie.kind.name}}</span> 
+                <span  ng-show="!specie.edit">{{controls.species.findById(specie.specie, 'name')}}</span> 
  
                 <div ng-show="specie.edit">
-                  <select class="form-control" ng-model="specieList" ng-change="SetupEspecie(specie.kind, specieList)" value="{specie.kind._id}}">
+                  <select class="form-control" ng-model="specie.specie" ng-options="specie._id as specie.name for specie in controls.species">
                     <option value="" selected disabled>Seleccione</option>
-                    <option value="{{specieItem._id + ':' + specieItem.name}}" ng-bind="specieItem.name"   ng-repeat="specieItem in controls.species"></option>
                   </select>
                 </div>
             </td>
             <td data-title="'Tarea'">
-                <span ng-show="!specie.edit">{{specie.task.name}}</span>
+                <span ng-show="!specie.edit">{{controls.tasks.findById(specie.task, 'name')}}</span>
 
                 <div ng-show="specie.edit">
-                  <select class="form-control" ng-model="taskList" ng-change="SetupEspecie(specie.task, taskList)">
+                  <select class="form-control" ng-model="specie.task" ng-options="task._id as task.name for task in controls.tasks">
                     <option value="" selected disabled>Seleccione</option>
-                    <option value="{{task._id + ':' + task.name}}" ng-bind="task.name"   ng-repeat="task in controls.tasks"></option>
                   </select>
                 </div>
             </td>

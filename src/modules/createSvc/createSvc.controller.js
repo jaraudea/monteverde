@@ -8,13 +8,15 @@ monteverde.controller('createSvcCtrl', function ($state, $scope, ngTableParams, 
   $scope.controls = {};
 
   $scope.formData = {};
-    
+
+  $scope.codes = [];
+
   $scope.addSpecie = function () {
     dataSpecieTable.push(
       {
-        kind : {
+        specie : {
           _id : '', 
-          name : 't'
+          name : ''
         }, 
         task : {
           _id : '', 
@@ -25,13 +27,6 @@ monteverde.controller('createSvcCtrl', function ($state, $scope, ngTableParams, 
       }
     );
     $scope.tableParams.reload();
-  }
-    
-  $scope.SetupEspecie = function (specie, data) {
-    data = data.split(':');
-    specie._id = data[0];
-    specie.name = data[1];
-    console.log('specie:', dataSpecieTable);
   }
 
   $scope.removeSpecie = function (ndx) {
@@ -44,38 +39,49 @@ monteverde.controller('createSvcCtrl', function ($state, $scope, ngTableParams, 
 
   this.submitcreateSvc = function () {
     var data = $scope.formData,
-        contract = data.mContract.split(':')[1],
-
-        code = data.code;
-
-        delete data.mContract;
-        data.contract = contract;
+        code = data.code,
+        editing = $scope.codes.indexOf(code) > -1;
 
         // add species and tasks
-        
-        for(ndx in dataSpecieTable) {
-          delete dataSpecieTable[ndx].edit
-        }
+        if (data.serviceType === '5563efe645051764c2e3da13') {
+          for(ndx in dataSpecieTable) {
+            delete dataSpecieTable[ndx].edit
+          }
 
-        data.treeSpeciesByTask = dataSpecieTable;
+          data.treeSpeciesByTask = dataSpecieTable;
+        };
 
+    // Check if is editting or creating
+    if (!editing) {
     connectorService.setData(connectorService.ep.create, data)
       .then(
         function (data) {
-          AlertsFactory.addAlert('success', 'Servicio creado, contrato: ' + code);
+          AlertsFactory.addAlert('success', 'Servicio creado, codigo: ' + code);
           $state.go($state.current, {}, {reload: true});
         },
         function (err) {
           AlertsFactory.addAlert('danger', 'Error al crear el servicio: ' + code);
         });
+    } else {
+      connectorService.editData(connectorService.ep.create, code, data)
+        .then(
+          function (data) {
+            AlertsFactory.addAlert('success', 'Servicio Actualizado, codigo: ' + code);
+            $state.go($state.current, {}, {reload: true});
+          },
+          function (err) {
+            AlertsFactory.addAlert('danger', 'Error al crear el servicio: ' + code);
+          });      
+    }
   }
 
-  $scope.updateContractType = function (ndx) {
-    var servicesNdx = ndx.split(':')[0];
-    contractId = ndx.split(':')[1],
-
-    $scope.controls.serviceTypes = $scope.controls.contracts[servicesNdx].serviceType;
-  }
+  $scope.getServiceConfig = function (_id) {
+    dataGet('serviceConf', _id, function (data) {
+      $scope.formData = data[0];
+      dataSpecieTable = data[0].treeSpeciesByTask;
+      $scope.tableParams.reload();
+    });
+  };
 
   var init = function () {
     dataGet('zones');
@@ -85,13 +91,23 @@ monteverde.controller('createSvcCtrl', function ($state, $scope, ngTableParams, 
     dataGet('species');
     dataGet('tasks');
     dataGet('envAuths');
+    dataGet('codes', '', function (data) {
+      for (var ndx in data) {
+        $scope.codes.push(data[ndx].code);
+      };
+    });
   }
 
   // Method to GET data
-  var dataGet = function (type) {
-    connectorService.getData(connectorService.ep[type])
+  var dataGet = function (type, param, callback) {
+    var url = (typeof param !== 'undefined') ? connectorService.ep[type] + param : connectorService.ep[type];
+    connectorService.getData(url)
       .then(function (data) {
-        $scope.controls[type] = data;
+        if (typeof callback === 'function'){
+          callback(data);
+        } else {
+          $scope.controls[type] = data;
+        };
       });    
   }
 
