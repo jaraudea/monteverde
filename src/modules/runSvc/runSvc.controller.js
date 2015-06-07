@@ -1,26 +1,80 @@
-// run service controller
+// Run service controller
 
 'use strict';
 
-monteverde.controller('runSvcCtrl', function ($state, $scope, $filter, ngTableParams, AlertsFactory) {
-  var data = [
+monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTableParams, AlertsFactory, connectorService, $filter) {
+
+  var contractId = null,
+      dataSpecieTable = [];
+
+  $scope.controls = {};
+
+  $scope.formData = {};
+
+  $scope.codes = [];
+
+  $scope.dateOptions = {
+    formatYear: 'yy',
+    startingDay: 1,
+    language: 'es'
+  };
+
+  $scope.uploader = {
+    target : "/upload",
+    testChunks : true
+  }
+  
+
+  $scope.doneQuantity = 356;
+
+
+  $scope.open = function(img) {
+    var base64;
+    var fileReader = new FileReader();
+      fileReader.onload = function (event) {
+            base64 = event.target.result;
+
+            var modalInstance = $modal.open({
+                animation: $scope.animationsEnabled,
+                template: '<img width="400" class="center-block" src="' + base64 + '" >'
+            })
+        };
+
+    fileReader.readAsDataURL(img.file);
+
+    console.log(img, base64, fileReader, fileReader.readAsDataURL);
+    
+  };
+
+
+  // Method to GET data
+  var dataGet = function (type, param, callback) {
+    var url = (typeof param !== 'undefined') ? connectorService.ep[type] + param : connectorService.ep[type];
+    connectorService.getData(url)
+      .then(function (data) {
+        if (typeof callback === 'function'){
+          callback(data);
+        } else {
+          $scope.controls[type] = data;
+        };
+      });    
+  }
+
+  var init = function () {
+    dataGet('zones');
+    dataGet('contracts');
+    dataGet('teams');
+    dataGet('units');
+    dataGet('codes', '', function (data) {
+      for (var ndx in data) {
+        $scope.codes.push(data[ndx].code);
+      };
+    });
+  }
+
+ var data = [
       {field: "Moroni", team: 50, state: 1, options: 1},
-      {field: "Tiancum", team: 43, state: 1, options: 1},
-      {field: "Jacob", team: 27, state: 1, options: 1},
-      {field: "Nephi", team: 29, state: 1, options: 1},
-      {field: "Enos", team: 34, state: 1, options: 1},
-      {field: "Tiancum", team: 43, state: 1, options: 1},
-      {field: "Jacob", team: 27, state: 1, options: 1},
-      {field: "Nephi", team: 29, state: 1, options: 1},
-      {field: "Enos", team: 34, state: 1, options: 1},
-      {field: "Tiancum", team: 43, state: 1, options: 1},
-      {field: "Jacob", team: 27, state: 1, options: 1},
-      {field: "Nephi", team: 29, state: 1, options: 1},
-      {field: "Enos", team: 34, state: 1, options: 1},
-      {field: "Tiancum", team: 43, state: 1, options: 1},
-      {field: "Jacob", team: 27, state: 1, options: 1},
-      {field: "Nephi", team: 29, state: 1, options: 1},
-      {field: "Enos", team: 34, state: 1, options: 1}
+      {field: "Tiancum", team: 43, state: 1, options: 1}
   ];
 
   $scope.fields = [
@@ -30,15 +84,6 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $filter, ngTablePa
       'R342',
       'Y565',
       'L897'
-  ];
-
-  $scope.teams = [
-      'uno',
-      'dos',
-      'tres',
-      '1uno',
-      '2dos',
-      '3tres'
   ];
 
   $scope.vehicles = [
@@ -65,5 +110,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $filter, ngTablePa
 
           $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
       }
-   })
+   });
+
+  init();
 });
