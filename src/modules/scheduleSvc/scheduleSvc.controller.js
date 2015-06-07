@@ -19,6 +19,12 @@ monteverde.controller('scheduleSvcCtrl', function ($state, $scope, $modal, ngTab
     language: 'es'
   };
 
+  $scope.uploader = {
+    target : "/upload",
+    testChunks : true
+  }
+  
+
   $scope.doneQuantity = 356;
 
 

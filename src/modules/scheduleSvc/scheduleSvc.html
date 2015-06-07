@@ -85,7 +85,7 @@
     </div>    
   </div>
   
-  <div class="form-group row"  flow-init>
+  <div class="form-group row"  flow-init="uploader">
     <div class="col-sm-6">
       <label for="observations" class="control-label">Descripci&oacute;n: </label>
       <textarea class="form-control" cols="30" rows="5" ng-model="formData.observations"></textarea>
@@ -101,12 +101,13 @@
     </div>
 
     <div class="col-sm-2">
-        <ul>
-          <li ng-repeat="img in $flow.files">
-            <a class="font-sm" href="" ng-click="open(img)">{{img.name}}</a>
-            <a href="" ng-click="img.cancel()"><i class="fa fa-times"></i></a>
-          </li>
-        </ul>
+      <button type="button" ng-click="$flow.upload()">subir</button>  
+      <ul>
+        <li ng-repeat="img in $flow.files">
+          <a class="font-sm" href="" ng-click="open(img)">{{img.name}}</a>
+          <a href="" ng-click="img.cancel()"><i class="fa fa-times"></i></a>
+        </li>
+      </ul>
     </div>
 
   </div>
