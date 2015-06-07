@@ -8,5 +8,5 @@ to **Build** execute following commands:
 to **Run Server** execute "gulp serverExpress"
 
 
-to **Restore Database** exceute
+to **Restore Database** execute
   - <mongorestore -d Monteverde data/dump/Monteverde>
