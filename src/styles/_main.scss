@@ -35,3 +35,31 @@ input[type="checkbox"] {
     margin-left: auto;
     margin-right: auto;
 }
+
+textarea {
+    resize: none;
+}
+
+.drop-area {
+  padding: 15px;
+  border: 2px #f1f1f1 dashed;
+  border-radius: 5px;
+  line-height: 34px;
+}
+
+.font-sm {
+  font-size : 10px;
+  white-space: nowrap;
+}
+
+// tables
+.table-fixed {
+  table-layout: fixed;
+  td {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    &.options {
+      width: 40px;
+    }
+  }
+}

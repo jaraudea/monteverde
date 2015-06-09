@@ -50,10 +50,15 @@ tasks = {
           .pipe(gulp.dest(dist + '/javascripts/'))
           .pipe(livereload());
       },
+      fallbacks : function () {
+        gulp.src(nodeModules + '/ng-file-upload/src/*.swf')
+          .pipe(gulp.dest(dist + '/javascripts/vendors/'))
+      },
       vendors: function () {
         gulp.src([
           nodeModules + '/angular/*.min.js',
           nodeModules + '/angular-bootstrap/dist/*.min.js',
+          nodeModules + '/ng-flow/dist/ng-flow-standalone.js',
           nodeModules + '/angular-ui-switch/angular-ui-switch.js',
           nodeModules + '/angular-ui-router/release/*.min.js',
           nodeModules + '/satellizer/satellizer.min.js',
@@ -127,6 +132,11 @@ tasks = {
 /*
  * Scripts setup
  */
+gulp.task('build:fallbacks', tasks.build.js.fallbacks);
+
+/*
+ * Scripts setup
+ */
 gulp.task('build:modules', tasks.build.js.modules);
 
 /**
@@ -180,6 +190,7 @@ gulp.task('default', [
     'build:libraries',
     'copy:fonts',
     'build:modules',
+    'build:fallbacks',
     'copy:angular-ui-templates',
     'watch'
   ]);

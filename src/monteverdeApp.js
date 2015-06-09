@@ -6,7 +6,8 @@ var monteverde = angular.module('monteverde', [
     'ngTable',
     'satellizer',
     'ngDialog',
-    'uiSwitch'
+    'uiSwitch',
+    'flow'
   ]
 );
 
