@@ -1,1 +1,102 @@
-<h2>Reporte de servicio</h2>
+<div class="container-fluid">
+  <form action="" class="form-horizontal">
+    <div class="form-group row">
+      <label for="contract" class="control-label col-sm-1">Contrato: </label>
+      <div class="col-sm-2">
+        <select name="contract" id="contract" class="form-control">
+          <option value="">Cxxxxx</option>
+          <option value="">Cxxxxx</option>
+          <option value="">Cxxxxx</option>
+        </select>
+      </div>
+
+      <label for="serviceType" class="control-label col-sm-1 double-line">Tipo de Servicio: </label>
+      <div class="col-sm-2">
+        <select name="serviceType" id="serviceType" class="form-control" placeholder="seleccione" ng-model="serviceType">
+          <option value="" selected disabled>Seleccione</option>
+          <option value="1">Tala y Poda</option>
+          <option value="2">Zonas Verdes</option>
+        </select>
+      </div>
+
+      <label for="zone" class="control-label col-sm-1">Zona: </label>
+      <div class="col-sm-2">
+        <select name="zone" id="zone" class="form-control">
+          <option value="">Cxxxxx</option>
+          <option value="">Cxxxxx</option>
+          <option value="">Cxxxxx</option>
+        </select>
+      </div>
+
+      <div class="col-sm-3">
+        <label for="executedStartDate" class="control-label">Fecha de Ejecución Inicial: </label>
+        <div>
+          <input type="date" class="form-control" name="executedStartDate" id="executedStartDate">
+        </div>
+        <label for="executedEndDate" class="control-label">Fecha de Ejecución Final: </label>
+        <div>
+          <input type="date" class="form-control" name="executedEndDate" id="executedEndDate">
+        </div>
+      </div>
+    </div>      
+  </form>
+  <div class="row">
+    <div class="col-sm-12">
+      <p>Filtro: <input class="form-control" type="text" ng-model="filter.$" /></p>
+        {{checkboxes.items}}
+        <a class="btn btn-primary" ng-mousedown="csv.generate()" ng-href="{{ csv.link() }}" download="test.csv">Exportar</a>
+        <table ng-table="tableParams" show-filter="true" class="table table-bordered" export-csv="csv">
+            <tr ng-repeat="service in $data">
+                <td data-title="'Lote'" sortable="'code'">
+                    {{service.code}}
+                </td>
+                <td data-title="'Nombre'" sortable="'name'">
+                    {{service.name}}
+                </td>
+                <td data-title="'Dirección'" sortable="'address'">
+                    {{service.address}}
+                </td>
+                <td data-title="'Teléfono'" sortable="'phone'">
+                    {{service.phone}}
+                </td>
+                <td data-title="'Fecha de Programación'" sortable="'scheduledDate'">
+                    {{service.scheduledDate}}
+                </td>
+                <td data-title="'Fecha de Ejecución'" sortable="'executedDate'">
+                    {{service.executedDate}}
+                </td>
+                <td data-title="'Fecha de Aprobación'" sortable="'approvedDate'">
+                    {{service.approvedDate}}
+                </td>
+                <td data-title="'Cantidad Ejecutada'" sortable="'quantity'">
+                    {{service.quantity}}
+                </td>
+                <td data-title="'Unidad'" sortable="'unit'">
+                    {{service.unit}}
+                </td>
+                <td data-title="'Especie'" sortable="'specie'">
+                    {{service.specie}}
+                </td>
+                <td data-title="'Tarea'" sortable="'task'">
+                    {{service.task}}
+                </td>
+                <td data-title="'Fotos de Respaldo'" sortable="'photo'">
+                    {{service.photo}}
+                </td>
+                <td data-title="'Status'" sortable="'status'">
+                    {{service.status}}
+                </td>
+                <td data-title="'Observaciones'" sortable="'description'">
+                    {{service.description}}
+                </td>
+                <td width="30" style="text-align: left" header="'ng-table/headers/checkbox.html'">
+                  <input type="checkbox" ng-model="checkboxes.items[service.id]" />
+                </td>
+            </tr>
+        </table>
+        <script type="text/ng-template" id="ng-table/headers/checkbox.html">
+          <input type="checkbox" ng-model="checkboxes.checked" id="select_all" name="filter-checkbox" value="" />
+        </script>
+    </div>
+  </div>
+</div>  

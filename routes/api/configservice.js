@@ -1,6 +1,6 @@
 var ConfigService = require('../../models/ConfigService');
 
-var grassService = function(data, next) {
+var grassService = function(data) {
   var configService = {
     code: data.code,
     contract: data.contract,
@@ -12,12 +12,12 @@ var grassService = function(data, next) {
     phone: data.phone,
     area: data.area,
     description: data.description,
-    active: data.active
+    active: (typeof data.active != 'undefined') ? data.active : false
   }
   return configService;
 }
 
-var pruningService = function(data, next) {
+var pruningService = function(data) {
   var configService = {
     code: data.code,
     contract: data.contract,
@@ -30,7 +30,7 @@ var pruningService = function(data, next) {
     envAuthority: data.envAuthority,
     description: data.description,
     treeSpeciesByTask: [],
-    active: data.active
+    active: (typeof data.active != 'undefined') ? data.active : false
   }
 
   data.treeSpeciesByTask.forEach(function(item) {
@@ -42,6 +42,18 @@ var pruningService = function(data, next) {
     configService.treeSpeciesByTask.push(treeSpecieByTask);
   });
   return configService;
+}
+
+var configService = function(data) {
+  var confSvc;
+  if (data.serviceType === '5563efda45051764c2e3da12') {
+    confSvc = grassService(data);
+  } else if (data.serviceType === '5563efe645051764c2e3da13') {
+    confSvc = pruningService(data);
+  } else {
+    res.sendStatus(402, 'Parametro no soportado');
+  }
+  return confSvc;
 }
 
 exports.getAllConfigCodes = function(req, res, next) {
@@ -62,14 +74,7 @@ exports.getByCode = function(req, res, next) {
 
 exports.create = function(req, res, next) {
   var data = req.body;
-  var confSvc;
-  if (data.serviceType === '5563efda45051764c2e3da12') {
-    confSvc = grassService(data);
-  } else if (data.serviceType === '5563efe645051764c2e3da13') {
-    confSvc = pruningService(data);
-  } else {
-    res.sendStatus(402, 'Parametro no soportado');
-  }
+  var confSvc = configService(data);
   ConfigService.create(confSvc, function(err, next) {
     if (err) next(err);
     res.sendStatus(200);
@@ -77,7 +82,12 @@ exports.create = function(req, res, next) {
 };
 
 exports.update = function(req, res, next) {
-  res.sendStatus(200);
+  var confSvc = configService(req.body);
+  ConfigService.update({_id: req.body._id}, confSvc, function(err, response) {
+    // response should be { ok: 1, nModified: 1, n: 1 }
+    if (err) next(err);
+    res.sendStatus(200);
+  });
 };
 
 var isEmpty = function(obj) {

@@ -22,7 +22,7 @@
 }
 
 input[type="checkbox"] {
-  display: none;
+  -webkit-appearance:checkbox;
 }
 .pagination {
   &.ng-table-pagination {

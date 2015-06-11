@@ -3,7 +3,7 @@ var mongoose = require('../data/db'),
 
 var photoSchema = new Schema({
   name: String,
-  file: BSON,
+  file: Buffer,
   service: { type: Schema.Types.ObjectId, ref: 'Service' }
 });
 

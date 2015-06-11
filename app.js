@@ -73,8 +73,7 @@ app.get('/api/service/vehicles', vehicleApi.getAll);
 app.get('/api/service/units', unitApi.getAll);
 app.get('/api/service/configservice/codes', configServiceApi.getAllConfigCodes);
 app.get('/api/service/configservice/:code?', configServiceApi.getByCode);
-app.get('/api/service/:scheduledDate?', serviceApi.getByScheduledDate);
-app.get('/api/service/:executedDate?', serviceApi.getByScheduledDate);
+app.get('/api/service/executeService?', serviceApi.getExecutedServices);
 
 /*POST*/  
 app.post('/api/service/configservice', configServiceApi.create);
@@ -87,6 +86,9 @@ app.put('/api/service/scheduleService/:id', serviceApi.updateScheduledService);
 app.put('/api/service/executeService/:id', serviceApi.updateExecutedService);
 app.put('/api/service/approveService/:id', serviceApi.approveService);
 app.put('/api/service/disapproveService/:id', serviceApi.disapproveService);
+
+/*DELETE*/
+app.delete('/api/service/executeService/:id', serviceApi.deleteExecutedService);
 
 /* upload (testing porpouses) this is a basic oute, please move the components to the corect files */
 // Handle uploads through Flow.js
@@ -136,7 +138,6 @@ app.get('/download/:identifier', function(req, res) {
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-    console.log(req);
     var err = new Error('Not Found');
     err.status = 404;
     next(err);
