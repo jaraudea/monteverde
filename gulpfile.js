@@ -3,6 +3,7 @@
 var src = './src',
   dist = './public',
   nodeModules = './node_modules',
+  bowerComponents = './bower_components',
   gulp = require('gulp'),
   concat = require('gulp-concat'),
   sourcemaps = require('gulp-sourcemaps'),
@@ -63,7 +64,8 @@ tasks = {
           nodeModules + '/angular-ui-router/release/*.min.js',
           nodeModules + '/satellizer/satellizer.min.js',
           nodeModules + '/ng-dialog/js/*.min.js',
-          nodeModules + '/ng-table/dist/*.min.js'
+          nodeModules + '/ng-table/dist/*.min.js',
+          bowerComponents + '/ng-table-export/ng-table-export.js'
         ])
           .pipe(concat('libraries.js'))
           .pipe(gulp.dest(dist + '/javascripts/vendors/'));
