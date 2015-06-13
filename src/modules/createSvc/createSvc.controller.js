@@ -79,7 +79,6 @@ monteverde.controller('createSvcCtrl', function ($state, $scope, ngTableParams, 
     dataGet('serviceConf', _id, function (data) {
       $scope.formData = data[0];
       dataSpecieTable = data[0].treeSpeciesByTask;
-      // $scope.fortnightSelected = { period: $scope.formData.period };
       $scope.tableParams.reload();
     });
   };
@@ -98,10 +97,6 @@ monteverde.controller('createSvcCtrl', function ($state, $scope, ngTableParams, 
       };
     });
   }
-  
-  $scope.fortnights = [1,2];
-
-  // $scope.fortnightSelected = { period: $scope.formData.period };
 
   // Method to GET data
   var dataGet = function (type, param, callback) {
@@ -117,18 +112,31 @@ monteverde.controller('createSvcCtrl', function ($state, $scope, ngTableParams, 
   }
 
   // Eviroment authority table
-    $scope.tableParams = new ngTableParams({
-        page: 1,            // show first page
-        total: 1,
-        count: 500           // count per page
-    }, {
-        total: dataSpecieTable.length, // length of dataSpecieTable
-        getData: function ($defer, params) {
-            $defer.resolve(dataSpecieTable.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-        },
-        $scope : $scope
-    })
+  $scope.tableParams = new ngTableParams({
+      page: 1,            // show first page
+      total: 1,
+      count: 500           // count per page
+  }, {
+      total: dataSpecieTable.length, // length of dataSpecieTable
+      getData: function ($defer, params) {
+          $defer.resolve(dataSpecieTable.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+      },
+      $scope : $scope
+  })
 
+  $scope.reset = function() {
+    contractId = null;
+    dataSpecieTable = [];
+
+    $scope.controls = {};
+
+    $scope.formData = {};
+
+    $scope.codes = [];
+    
+  };
+
+  $scope.reset();
 
   init();
 });

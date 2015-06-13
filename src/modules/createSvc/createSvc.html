@@ -69,14 +69,9 @@
 
     <label for="period" class="control-label col-sm-1">Quincena: </label>
     <div class="col-sm-2">
-    <!-- <select ng-model="ctrl.selectedUnitOrdinal" ng-options="convertToInt(unit.id) as unit.text for unit in ctrl.unitsOptions"></select> -->
-      <select name="period" id="period" class="form-control" ng-options="fortnight for fortnight in fortnights track by fortnight" ng-model="formData.period">
+      <select name="period" id="period" class="form-control" ng-options="name for (name, value) in {'Primera': 1, 'Segunda': 2} track by value" ng-model="formData.period">
         <option value="" disabled>Seleccione</option>
       </select>
-      <!-- <select  ng-model="" convert-to-number>
-        <option value="" disabled>Seleccione</option>
-        <option value="{{fortnight.value}}" ng-bind="fortnight.name" ng-repeat="fortnight in fortnights"></option>
-      </select> -->
     </div>
 
     <label for="unity" class="control-label col-sm-2">Unidad: </label>
