@@ -79,6 +79,7 @@ monteverde.controller('createSvcCtrl', function ($state, $scope, ngTableParams, 
     dataGet('serviceConf', _id, function (data) {
       $scope.formData = data[0];
       dataSpecieTable = data[0].treeSpeciesByTask;
+      // $scope.fortnightSelected = { period: $scope.formData.period };
       $scope.tableParams.reload();
     });
   };
@@ -97,6 +98,10 @@ monteverde.controller('createSvcCtrl', function ($state, $scope, ngTableParams, 
       };
     });
   }
+  
+  $scope.fortnights = [1,2];
+
+  // $scope.fortnightSelected = { period: $scope.formData.period };
 
   // Method to GET data
   var dataGet = function (type, param, callback) {

@@ -11,7 +11,7 @@ var serviceSchema = new Schema({
   vehicle: { type: Schema.Types.ObjectId, ref: 'Vehicle' },
   quantity: Number,
   description: String,
-  nroViajes: Number,
+  trips: Number,
   status: { type: Schema.Types.ObjectId, ref: 'ServiceStatus' },
   disapproveNotes: String
 });

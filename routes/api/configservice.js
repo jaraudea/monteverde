@@ -1,6 +1,7 @@
 var ConfigService = require('../../models/ConfigService');
 
 var grassService = function(data) {
+  console.log(data.period);
   var configService = {
     code: data.code,
     contract: data.contract,
@@ -8,8 +9,8 @@ var grassService = function(data) {
     zone: data.zone,
     team: data.team,
     unit: data.unit,
-    address: data.address,
-    phone: data.phone,
+    location: data.location,
+    period: data.period,
     area: data.area,
     description: data.description,
     active: (typeof data.active != 'undefined') ? data.active : false
@@ -25,8 +26,8 @@ var pruningService = function(data) {
     zone: data.zone,
     team: data.team,
     unit: data.unit,
-    address: data.address,
-    phone: data.phone,
+    location: data.location,
+    period: data.period,
     envAuthority: data.envAuthority,
     description: data.description,
     treeSpeciesByTask: [],
@@ -65,9 +66,9 @@ exports.getAllConfigCodes = function(req, res, next) {
 
 exports.getByCode = function(req, res, next) {
   var query = isEmpty(req.query) ? {code: req.params.code} : req.query;
-  console.log(query)
   ConfigService.find(query, function(err, configService) {
     if (err) return next(err);
+    console.log(configService);
     res.json(configService)
   });
 };

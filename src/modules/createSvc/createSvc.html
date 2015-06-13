@@ -19,6 +19,7 @@
     <label for="zone" class="control-label col-sm-2">Zona: </label>
     <div class="col-sm-2">
       <select name="zone" id="zone" class="form-control" ng-model="formData.zone">
+        <option value="" disabled>Seleccione</option>
         <option value="{{zone._id}}" ng-bind="zone.name" ng-repeat="zone in controls.zones"></option>
       </select>
     </div>
@@ -61,20 +62,27 @@
   </div>
 
   <div class="form-group row">
-    <label for="address" class="control-label col-sm-1">Dirección: </label>
+    <label for="location" class="control-label col-sm-1">Ubicaci&oacute;n: </label>
     <div class="col-sm-3">
-      <input class="form-control" type="text" id="address" name="address" ng-model="formData.address">
+      <textarea class="form-control" type="text" id="location" name="location" ng-model="formData.location" cols="30" rows="5" class="col-sm-2"></textarea>
     </div>
 
-    <label for="telephone" class="control-label col-sm-1">T&eacute;lefono: </label>
+    <label for="period" class="control-label col-sm-1">Quincena: </label>
     <div class="col-sm-2">
-      <input class="form-control" type="text" ng-model="formData.phone">
+    <!-- <select ng-model="ctrl.selectedUnitOrdinal" ng-options="convertToInt(unit.id) as unit.text for unit in ctrl.unitsOptions"></select> -->
+      <select name="period" id="period" class="form-control" ng-options="fortnight for fortnight in fortnights track by fortnight" ng-model="formData.period">
+        <option value="" disabled>Seleccione</option>
+      </select>
+      <!-- <select  ng-model="" convert-to-number>
+        <option value="" disabled>Seleccione</option>
+        <option value="{{fortnight.value}}" ng-bind="fortnight.name" ng-repeat="fortnight in fortnights"></option>
+      </select> -->
     </div>
 
     <label for="unity" class="control-label col-sm-2">Unidad: </label>
     <div class="col-sm-2">
       <select name="unit" id="unit" class="form-control" ng-model="formData.unit">
-        <option value="" selected disabled>Seleccione</option>
+        <option value="" disabled>Seleccione</option>
         <option value="{{unit._id}}" ng-bind="unit.name" ng-repeat="unit in controls.units"></option>
       </select>
     </div>
