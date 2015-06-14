@@ -4,6 +4,7 @@ var monteverde = angular.module('monteverde', [
     'ui.router',
     'common.module',
     'ngTable',
+    'ngTableExport',
     'satellizer',
     'ngDialog',
     'uiSwitch',
