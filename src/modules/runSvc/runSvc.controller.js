@@ -11,6 +11,12 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
 
   $scope.formData = {};
 
+  $scope.images = {};
+
+  $scope.vehicles = [];
+
+  $scope.formData.vehicle = '';
+
   $scope.codes = [];
 
   $scope.dateOptions = {
@@ -40,10 +46,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
             })
         };
 
-    fileReader.readAsDataURL(img.file);
-
-    console.log(img, base64, fileReader, fileReader.readAsDataURL);
-    
+    fileReader.readAsDataURL(img.file);    
   };
 
 
@@ -65,6 +68,10 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
     dataGet('contracts');
     dataGet('teams');
     dataGet('units');
+    dataGet('vehicles', '', function (data) {
+        $scope.vehicles = data;
+    });
+
     dataGet('codes', '', function (data) {
       for (var ndx in data) {
         $scope.codes.push(data[ndx].code);
@@ -72,7 +79,31 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
     });
   }
 
- var data = [
+  this.submitaddExec = function () {
+    var form = $scope.addExecSvcForm,
+        valid = form.$valid,
+        files = $scope.images.flow.files;
+
+    if (valid) {
+
+      // add file names
+      if (files.length) {
+        $scope.formData.files = [];
+
+        for (var ndx in files) {
+          $scope.formData.files.push(files[ndx].name);
+        };
+      }
+
+      console.log('submitting', $scope.formData);
+    } else {
+      AlertsFactory.addAlert('warning', 'Por favor llene todos los campos correctamente antes de agregar el servicio', true);
+    }
+
+  };
+
+
+  var data = [
       {field: "Moroni", team: 50, state: 1, options: 1},
       {field: "Tiancum", team: 43, state: 1, options: 1}
   ];
@@ -84,15 +115,6 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
       'R342',
       'Y565',
       'L897'
-  ];
-
-  $scope.vehicles = [
-      'abc 123',
-      'def 456',
-      'hij 789',
-      'qaz 147',
-      'wsx 258',
-      'rfv 369'
   ];
 
   $scope.percent = 25;

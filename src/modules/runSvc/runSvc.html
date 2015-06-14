@@ -1,4 +1,4 @@
-<form class="form-horizontal container-fluid" name="scheduleSvcForm" ng-submit="createSvcForm.$valid && createSvc.submitcreateSvc()">
+<form class="form-horizontal container-fluid" name="runSvcForm" ng-submit="runSvcForm.$valid && runSvc.submitRunSvc()">
   <div class="form-group row">
     <label for="contract" class="control-label col-sm-1">Contrato: </label>
     <div class="col-sm-2">
@@ -50,16 +50,16 @@
   </div>
 </div>
 
-<form class="form-horizontal container-fluid" name="scheduleSvcForm" ng-submit="createSvcForm.$valid && createSvc.submitcreateSvc()">
+<form class="form-horizontal container-fluid" name="addExecSvcForm" ng-submit="runSvc.submitaddExec()" novalidate>
   <div class="form-group row">
     <label for="code" class="control-label col-sm-1 double-line">C&oacute;digo / Radicado: </label>
     <div class="col-sm-1">
-      <input class="form-control" type="text" typeahead-on-select="getServiceConfig(formData.code)" ng-model="formData.code" typeahead="field for field in codes | filter:$viewValue | limitTo:8" >
+      <input class="form-control" type="text" typeahead-on-select="getServiceConfig(formData.code)" ng-model="formData.code" typeahead="field for field in codes | filter:$viewValue | limitTo:8" required>
     </div>
 
     <label for="team" class="control-label col-sm-1">Cuadrilla: </label>
     <div class="col-sm-1">
-      <select name="team" id="team" class="form-control" ng-model="formData.team">
+      <select name="team" id="team" class="form-control" ng-model="formData.team" required>
         <option value="" selected disabled>Seleccione</option>
         <option value="{{team._id}}" ng-bind="team.name" ng-repeat="team in controls.teams"></option>
       </select>
@@ -70,25 +70,25 @@
 
     <label for="unity" class="control-label col-sm-1">Unidad: </label>
     <div class="col-sm-1">
-      <select class="form-control" ng-model="formData.unit" ng-options="unit._id as unit.name for unit in controls.units">
+      <select class="form-control" ng-model="formData.unit" ng-options="unit._id as unit.name for unit in controls.units" required>
       </select>
     </div>
 
     <label class="control-label col-sm-1">Veh&iacute;culo: </label>
     <div class="col-sm-1">
-      <input class="form-control" type="text" typeahead-on-select="getServiceConfig(formData.code)" ng-model="formData.vehicle" typeahead="vehicle for vehicle in vehicles | filter:$viewValue | limitTo:8" >
+      <input class="form-control" type="text" ng-model="formData.vehicle" placeholder="Vehiculo" typeahead="vehicle as vehicle.plate for vehicle in vehicles | filter:{plate:$viewValue}" required>
     </div>    
 
     <label class="control-label col-sm-1">Viajes: </label>
     <div class="col-sm-1">
-      <input class="form-control" type="text" ng-model="formData.tripsNumber">
+      <input class="form-control" type="number" ng-model="formData.tripsNumber" required>
     </div>    
   </div>
   
-  <div class="form-group row"  flow-init="uploader">
+  <div class="form-group row"  flow-init="uploader" flow-name="images.flow">
     <div class="col-sm-4">
       <label for="observations" class="control-label">Descripci&oacute;n: </label>
-      <textarea class="form-control" cols="30" rows="5" ng-model="formData.observations"></textarea>
+      <textarea class="form-control" cols="30" rows="5" ng-model="formData.observations" required></textarea>
     </div>
 
     <div class="col-sm-2">
@@ -109,7 +109,7 @@
         </tr>
       </table>
     </div>
-
+    
     <div class="col-sm-3">
       <h2 ng-bind="percent + '%'"></h2>
     </div>
