@@ -7,11 +7,18 @@ common.factory('AlertsFactory', function ($rootScope, $timeout) {
   $rootScope.alerts = [];
 
   factory.addAlert = function(type, msg, disposable) {
-    $rootScope.alerts.push({type: type, msg: msg});
+    var ndx = $rootScope.alerts.push({type: type, msg: msg, destroy: null});
+    if (disposable) {
+      var i = ndx - 1,
+          alert = $rootScope.alerts[i];
+      $timeout (function () {
+        factory.closeAlert(i, alert);
+      }, 1500);
+    }
   };
 
   factory.closeAlert = function(index, alert) {
-    alert.alert.destroy = "opacity : 0";
+    alert.destroy = "opacity : 0";
     $timeout (function () {
       $rootScope.alerts.splice(index, 1);
     }, 500);
