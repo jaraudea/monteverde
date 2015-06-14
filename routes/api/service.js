@@ -28,10 +28,13 @@ exports.scheduleService = function(req, res, next) {
 
 exports.executeService = function(req, res, next) {
   var data = req.service;
-  executedService(data);
-  //TODO: validate if service has been disapproved or it's a new one.
-  //TODO: validate that execution has photos.
-  res.sendStatus(200);
+  console.log(data);
+
+  var service = executedService(data);
+  Service.create(service, function(err, next) {
+    if (err) next(err);
+    res.sendStatus(200);
+  });
 };
 
 exports.approveService = function(req, res, next) {
