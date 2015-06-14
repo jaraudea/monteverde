@@ -16,8 +16,10 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
     envAuths : "/api/service/environmentalauthorities/",
     codes : "/api/service/configservice/codes/",
     serviceConf : "/api/service/configservice/",
+    vehicles : "api/service/vehicles",
     // POST
-    create : "/api/service/configservice/"
+    create : "/api/service/configservice/",
+    run : "api/service/executeService"
   };
 
   socketFactory.on('notifyChanges', function (data) {
