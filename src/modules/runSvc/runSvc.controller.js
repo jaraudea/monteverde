@@ -30,9 +30,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
     testChunks : true
   }
   
-
-  $scope.doneQuantity = 356;
-
+  $scope.doneQuantity = 0;
 
   $scope.open = function(img) {
     var base64;
@@ -85,9 +83,33 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
 
   $scope.getServiceConfig = function (_id) {
     dataGet('serviceConf', _id, function (data) {
-      $scope.formData = data[0];
+      var data = data[0];
+
+      $scope.formData = data;
+
       $scope.tableParams.reload();
+
+      updateWorkArea(data);
     });
+  };
+
+  var updateWorkArea = function (data) {
+    var formData = $scope.formData;
+    try{
+      $scope.doneQuantity = (typeof data.area !== 'undefined') ? data.area : (parseInt(formData.vehicle.cubicMeters) * parseInt(formData.tripsNumber));
+    }catch(e){
+    }
+  }
+
+  $scope.calculateWork = function () {
+    var formData = $scope.formData;
+
+    if (typeof formData.area === 'undefined') {
+      try{
+        $scope.doneQuantity = parseInt(formData.vehicle.cubicMeters) * parseInt(formData.tripsNumber);
+      }catch(e){
+      }
+    };
   };
 
   this.submitaddExec = function () {
@@ -126,20 +148,11 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
 
   };
 
-
   var data = [
       {field: "Moroni", team: 50, state: 1, options: 1},
       {field: "Tiancum", team: 43, state: 1, options: 1}
   ];
 
-  $scope.fields = [
-      'A123',
-      'B456',
-      'C567',
-      'R342',
-      'Y565',
-      'L897'
-  ];
 
   $scope.percent = 25;
 
