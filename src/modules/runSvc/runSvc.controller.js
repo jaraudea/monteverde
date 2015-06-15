@@ -83,6 +83,13 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
     $scope.images.flow.upload();
   };
 
+  $scope.getServiceConfig = function (_id) {
+    dataGet('serviceConf', _id, function (data) {
+      $scope.formData = data[0];
+      $scope.tableParams.reload();
+    });
+  };
+
   this.submitaddExec = function () {
     var form = $scope.addExecSvcForm,
         valid = form.$valid,
