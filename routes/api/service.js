@@ -19,26 +19,23 @@ var executedService = function(data) {
 }
 
 exports.getExecutedServices = function(req, res, next) {
-  var contractQuery = req.query.contract;
-  var serviceTypeQuery = req.query.serviceType;
-  var zoneQuery = req.query.zone;
   var dateQuery = req.query.date;
 
-  console.log(contractQuery);
-  console.log(serviceTypeQuery);
-  console.log(zoneQuery);
-  console.log(dateQuery);
+  console.log('contract:' + req.query.contract);
+  console.log('serviceType:' + req.query.serviceType);
+  console.log('zone:' + req.query.zone);
+  console.log('date:' + dateQuery);
 
   var query = {
-    contract: contractQuery, 
-    serviceType: serviceTypeQuery, 
-    zone: zoneQuery, 
+    contract: req.query.contract, 
+    serviceType: req.query.serviceType, 
+    zone: req.query.zone, 
     $or: [{scheduledDate: new Date(dateQuery), executedDate: null}, {executedDate: new Date(dateQuery)}]
   };
+  console.log(query)
 
   Service.find(query, function(err, service) {
     if (err) next(err); 
-    if (!service.configService) res.json({});
     else res.json(service);
   });
 }
