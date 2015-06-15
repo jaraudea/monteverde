@@ -133,7 +133,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
       if (files.length) {
         data.files = [];
 
-        for (var ndx in files) {
+        for (var ndx = 0; ndx < files.length; ndx++) {
           data.files.push(files[ndx].name);
         };
 
@@ -141,15 +141,15 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
       }
 
       data = JrfService.parseRunService(data);
-      // TODO: service to parse JSON
 
       connectorService.setData(connectorService.ep.createSrv, data)
         .then (
           function (data) {
-            console.log('saved!');
+            AlertsFactory.addAlert('success', 'Ejecucion del servicio creada', true);
+            $state.go($state.current, {}, {reload: true});
           },
           function (err) {
-            console.log('error!', err);
+            AlertsFactory.addAlert('danger', 'Error al crear servicio, contacte al servicio tecnico error:' + err, true);
           }
         );
     } else {
