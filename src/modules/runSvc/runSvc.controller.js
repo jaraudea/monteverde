@@ -102,6 +102,8 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
         $scope.images.flow.upload();
       }
 
+      console.log('data:', data);
+
       connectorService.setData(connectorService.ep.createSrv, data)
         .then (
           function (data) {
