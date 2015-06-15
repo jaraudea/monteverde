@@ -111,7 +111,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
   $scope.calculateWork = function () {
     var formData = $scope.formData;
 
-    if (typeof formData.area === 'undefined') {
+    if (typeof formData.area !== 'undefined') {
       try{
         $scope.formData.doneQuantity = parseInt(formData.vehicle.cubicMeters) * parseInt(formData.tripsNumber);
       }catch(e){
