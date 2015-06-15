@@ -67,9 +67,6 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
     dataGet('units');
     dataGet('vehicles');
     dataGet('codes');
-
-
-    $scope.fullFields = $scope.formData.contract;
   }
 
   $scope.upload = function(){
@@ -82,6 +79,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
 
       $scope.formData.unit = data.unit;
       $scope.formData.team = data.team;
+      $scope.formData.codeId = data._id;
 
       $scope.formData.codeId = data._id;
 
@@ -113,11 +111,13 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
     };
   };
 
-  this.submitaddExec = function () {
+  $scope.submitaddExec = function () {
     var form = $scope.addExecSvcForm,
         valid = form.$valid,
         files = $scope.images.flow.files,
         data = $scope.formData;
+
+    console.log('data:', $scope.formData);
 
     if (valid) {
 

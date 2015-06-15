@@ -48,76 +48,79 @@
   </div>
 </div>
 
-<form class="form-horizontal container-fluid" name="addExecSvcForm" ng-submit="runSvc.submitaddExec()" novalidate ng-if="formData.contract && formData.serviceType && formData.zone && formData.date">
-  <div class="form-group row">
-    <label for="code" class="control-label col-sm-1 double-line">C&oacute;digo / Radicado: </label>
-    <div class="col-sm-1">
-      <input class="form-control" type="text" typeahead-on-select="getServiceConfig(formData.code.code)" ng-model="formData.code" typeahead="code as code.code for code in controls.codes | filter:$viewValue | limitTo:8" required>
-    </div>
-
-    <label for="team" class="control-label col-sm-1">Cuadrilla: </label>
-    <div class="col-sm-1">
-      <select name="team" id="team" class="form-control" ng-model="formData.team" required>
-        <option value="" selected disabled>Seleccione</option>
-        <option value="{{team._id}}" ng-bind="team.name" ng-repeat="team in controls.teams"></option>
-      </select>
-    </div>
-
-    <label class="control-label double-line col-sm-1">Cantidad trabajada: </label>
-    <span class="control-label col-sm-1" ng-bind="formData.doneQuantity"></span>
-
-    <label for="unity" class="control-label col-sm-1">Unidad: </label>
-    <div class="col-sm-1">
-      <select class="form-control" ng-model="formData.unit" ng-options="unit._id as unit.name for unit in controls.units" required>
-      </select>
-    </div>
-
-    <label class="control-label col-sm-1">Veh&iacute;culo: </label>
-    <div class="col-sm-1">
-      <input class="form-control" type="text" typeahead-on-select="calculateWork()" ng-model="formData.vehicle" placeholder="Vehiculo" typeahead="vehicle as vehicle.plate for vehicle in controls.vehicles | filter:{plate:$viewValue}" required>
-    </div>    
-
-    <label class="control-label col-sm-1">Viajes: </label>
-    <div class="col-sm-1">
-      <input class="form-control" type="number" ng-model="formData.tripsNumber" ng-change="calculateWork()" required>
-    </div>    
-  </div>
+<div ng-show="formData.contract && formData.serviceType && formData.zone && formData.date">
   
-  <div class="form-group row"  flow-init="uploader" flow-name="images.flow">
-    <div class="col-sm-4">
-      <label for="observations" class="control-label">Descripci&oacute;n: </label>
-      <textarea class="form-control" cols="30" rows="5" ng-model="formData.observations" required></textarea>
-    </div>
-
-    <div class="col-sm-2">
-      <label for="observations" class="control-label">Im&aacute;genes: </label>
-      <div class="alert drop-area" flow-drag-enter="dropping='bg-warning'" flow-drag-leave="dropping=''" ng-class="dropping" flow-drop>
-          Arrastre y suelte las imagenes ac&aacute;a 
+  <form class="form-horizontal container-fluid" name="addExecSvcForm" ng-submit="submitaddExec()" novalidate>
+    <div class="form-group row">
+      <label for="code" class="control-label col-sm-1 double-line">C&oacute;digo / Radicado: </label>
+      <div class="col-sm-1">
+        <input class="form-control" type="text" typeahead-on-select="getServiceConfig(formData.code.code)" ng-model="formData.code" typeahead="code as code.code for code in controls.codes | filter:$viewValue | limitTo:8" required>
       </div>
 
-      <input type="file" flow-btn />
-    </div>
+      <label for="team" class="control-label col-sm-1">Cuadrilla: </label>
+      <div class="col-sm-1">
+        <select name="team" id="team" class="form-control" ng-model="formData.team" required>
+          <option value="" selected disabled>Seleccione</option>
+          <option value="{{team._id}}" ng-bind="team.name" ng-repeat="team in controls.teams"></option>
+        </select>
+      </div>
 
-    <div class="col-sm-3">
-      <!-- <button type="button" ng-click="upload()">subir</button>   -->
-      <table class="table table table-bordered table-fixed">
-        <tr  ng-repeat="img in $flow.files">
-          <td><a class="font-sm" href="" ng-click="open(img)">{{img.name}}</a></td>
-          <td class="options"><a href="" ng-click="img.cancel()" class="badge"><i class="fa fa-times"></i></a></td>
-        </tr>
-      </table>
+      <label class="control-label double-line col-sm-1">Cantidad trabajada: </label>
+      <span class="control-label col-sm-1" ng-bind="formData.doneQuantity"></span>
+
+      <label for="unity" class="control-label col-sm-1">Unidad: </label>
+      <div class="col-sm-1">
+        <select class="form-control" ng-model="formData.unit" ng-options="unit._id as unit.name for unit in controls.units" required>
+        </select>
+      </div>
+
+      <label class="control-label col-sm-1">Veh&iacute;culo: </label>
+      <div class="col-sm-1">
+        <input class="form-control" type="text" typeahead-on-select="calculateWork()" ng-model="formData.vehicle" placeholder="Vehiculo" typeahead="vehicle as vehicle.plate for vehicle in controls.vehicles | filter:{plate:$viewValue}" required>
+      </div>    
+
+      <label class="control-label col-sm-1">Viajes: </label>
+      <div class="col-sm-1">
+        <input class="form-control" type="number" ng-model="formData.tripsNumber" ng-change="calculateWork()" required>
+      </div>    
     </div>
     
-    <div class="col-sm-3">
-      <h2 ng-bind="percent + '%'"></h2>
-    </div>
-  </div>
-    
-  <div class="form-group row">
-    <div class="col-sm-12 text-center">
-      <input class="btn btn-success" type="submit" value="Guardar Ejecucion">
-      <input class="btn btn-warning" type="reset" value="Limpiar">
-    </div>
-  </div>   
+    <div class="form-group row"  flow-init="uploader" flow-name="images.flow">
+      <div class="col-sm-4">
+        <label for="observations" class="control-label">Descripci&oacute;n: </label>
+        <textarea class="form-control" cols="30" rows="5" ng-model="formData.observations" required></textarea>
+      </div>
 
-</form>
+      <div class="col-sm-2">
+        <label for="observations" class="control-label">Im&aacute;genes: </label>
+        <div class="alert drop-area" flow-drag-enter="dropping='bg-warning'" flow-drag-leave="dropping=''" ng-class="dropping" flow-drop>
+            Arrastre y suelte las imagenes ac&aacute;a 
+        </div>
+
+        <input type="file" flow-btn />
+      </div>
+
+      <div class="col-sm-3">
+        <!-- <button type="button" ng-click="upload()">subir</button>   -->
+        <table class="table table table-bordered table-fixed">
+          <tr  ng-repeat="img in $flow.files">
+            <td><a class="font-sm" href="" ng-click="open(img)">{{img.name}}</a></td>
+            <td class="options"><a href="" ng-click="img.cancel()" class="badge"><i class="fa fa-times"></i></a></td>
+          </tr>
+        </table>
+      </div>
+      
+      <div class="col-sm-3">
+        <h2 ng-bind="percent + '%'"></h2>
+      </div>
+    </div>
+      
+    <div class="form-group row">
+      <div class="col-sm-12 text-center">
+        <input class="btn btn-success" type="submit" value="Guardar Ejecucion">
+        <input class="btn btn-warning" type="reset" value="Limpiar">
+      </div>
+    </div>   
+
+  </form>
+</div>
