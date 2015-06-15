@@ -13,7 +13,8 @@ var executedService = function(data) {
     vehicle: data.vehicle,
     trips: data.trips,
     quantity: data.quantity,
-    description: data.description
+    description: data.description,
+    photos: data.photos
   }
   return service;
 }
@@ -53,6 +54,8 @@ exports.executeService = function(req, res, next) {
   console.log(data);
 
   var service = executedService(data);
+
+  service.
   Service.create(service, function(err, next) {
     if (err) next(err);
     res.sendStatus(200);
