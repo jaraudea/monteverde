@@ -1,5 +1,4 @@
 var Service = require('../../models/Service');
-var Photo = require('../../models/Photo');
 
 var executedService = function(data) {
   var service = {
