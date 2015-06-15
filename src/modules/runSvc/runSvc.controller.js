@@ -49,7 +49,6 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
     fileReader.readAsDataURL(img.file);    
   };
 
-
   // Method to GET data
   var dataGet = function (type, param, callback) {
     var url = (typeof param !== 'undefined') ? connectorService.ep[type] + param : connectorService.ep[type];
@@ -77,7 +76,12 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
         $scope.codes.push(data[ndx].code);
       };
     });
+
   }
+
+  $scope.upload = function(){
+    $scope.images.flow.upload();
+  };
 
   this.submitaddExec = function () {
     var form = $scope.addExecSvcForm,
@@ -94,9 +98,9 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
         for (var ndx in files) {
           data.files.push(files[ndx].name);
         };
-      }
 
-      console.log('submitting', data);
+        $scope.images.flow.upload();
+      }
 
       connectorService.setData(connectorService.ep.createSrv, data)
         .then (
