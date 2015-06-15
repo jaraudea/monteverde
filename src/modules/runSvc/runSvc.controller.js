@@ -7,6 +7,13 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
   var contractId = null,
       dataSpecieTable = [];
 
+
+  $scope.tableData = [
+      {field: "Moroni", team: 50, state: 1, options: 1},
+      {field: "Tiancum", team: 43, state: 1, options: 1}
+  ];
+
+
   $scope.controls = {};
 
   $scope.formData = {};
@@ -43,9 +50,18 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
   $scope.updateCodes = function () {
     var formData = $scope.formData;
     
-    if ((typeof formData.contract != 'undefined') && (typeof formData.serviceType != 'undefined') && (typeof formData.zone != 'undefined')) {
+    if ((typeof formData.contract != 'undefined') && (typeof formData.serviceType != 'undefined') && (typeof formData.zone != 'undefined'))  {
       dataGet('codes', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone);
+        updateServicesTable();
     };
+  };
+
+  var updateServicesTable = function () {
+      var formData = $scope.formData,
+          date = formData.date.getFullYear() + '-' + formData.date.getMonth() + '-' + formData.date.getDate();
+
+      dataGet('executeService', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone + '&date=' + date);
+      $scope.tableData = $scope.formData.executeService;
   };
 
   $scope.open = function(img) {
@@ -158,11 +174,6 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
 
   };
 
-  var data = [
-      {field: "Moroni", team: 50, state: 1, options: 1},
-      {field: "Tiancum", team: 43, state: 1, options: 1}
-  ];
-
 
   $scope.percent = 25;
 
@@ -170,12 +181,12 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
       page: 1,            // show first page
       count: 10           // count per page
   }, {
-      total: data.length, // length of data
+      total: $scope.tableData.length, // length of data
       getData: function($defer, params) {
           // use build-in angular filter
           var orderedData = params.sorting() ?
-                  $filter('orderBy')(data, params.orderBy()) :
-                  data;
+                  $filter('orderBy')($scope.tableData, params.orderBy()) :
+                  tableData;
 
           $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
       }

@@ -18,6 +18,7 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
     codes : "/api/service/configservice/codes/",
     serviceConf : "/api/service/configservice/",
     vehicles : "api/service/vehicles",
+    executeService : "api/service/executeService",
     // POST
     createSrv : "api/service/executeService",
     create : "/api/service/configservice/"
