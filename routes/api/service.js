@@ -3,6 +3,11 @@ var Photo = require('../../models/Photo');
 
 var executedService = function(data) {
   var service = {
+    contract: data.contract,
+    serviceType: data.serviceType,
+    zone: data.zone,
+    team: data.team,
+    unit: data.unit,
     configService: data.configService,
     executedDate: data.date,
     vehicle: data.vehicle,
@@ -14,10 +19,27 @@ var executedService = function(data) {
 }
 
 exports.getExecutedServices = function(req, res, next) {
-  console.log(req.query);
-  Service.find(req.query, function(err, service) {
+  var contractQuery = req.query.contract;
+  var serviceTypeQuery = req.query.serviceType;
+  var zoneQuery = req.query.zone;
+  var dateQuery = req.query.date;
+
+  console.log(contractQuery);
+  console.log(serviceTypeQuery);
+  console.log(zoneQuery);
+  console.log(dateQuery);
+
+  var query = {
+    contract: contractQuery, 
+    serviceType: serviceTypeQuery, 
+    zone: zoneQuery, 
+    $or: [{scheduledDate: new Date(dateQuery), executedDate: null}, {executedDate: new Date(dateQuery)}]
+  };
+
+  Service.find(query, function(err, service) {
     if (err) next(err); 
-    res.json(service);
+    if (!service.configService) res.json({});
+    else res.json(service);
   });
 }
 
@@ -27,7 +49,7 @@ exports.scheduleService = function(req, res, next) {
 };
 
 exports.executeService = function(req, res, next) {
-  var data = req.service;
+  var data = req.body;
   console.log(data);
 
   var service = executedService(data);
