@@ -5,6 +5,7 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
   var that = this;
 
   this.ep = {
+    // GET
     tasks : "/api/service/tasks/",
     species : "/api/service/species/",
     teams : "/api/service/teams/",
@@ -18,8 +19,10 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
     serviceConf : "/api/service/configservice/",
     vehicles : "api/service/vehicles",
     // POST
-    create : "/api/service/configservice/",
-    run : "api/service/executeService"
+    createSrv : "api/service/executeService",
+    create : "/api/service/configservice/"
+    // PUT
+    // DELETE
   };
 
   socketFactory.on('notifyChanges', function (data) {

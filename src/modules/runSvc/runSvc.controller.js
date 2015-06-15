@@ -82,20 +82,31 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
   this.submitaddExec = function () {
     var form = $scope.addExecSvcForm,
         valid = form.$valid,
-        files = $scope.images.flow.files;
+        files = $scope.images.flow.files,
+        data = $scope.formData;
 
     if (valid) {
 
       // add file names
       if (files.length) {
-        $scope.formData.files = [];
+        data.files = [];
 
         for (var ndx in files) {
-          $scope.formData.files.push(files[ndx].name);
+          data.files.push(files[ndx].name);
         };
       }
 
-      console.log('submitting', $scope.formData);
+      console.log('submitting', data);
+
+      connectorService.setData(connectorService.ep.createSrv, data)
+        .then (
+          function (data) {
+            console.log('saved!');
+          },
+          function (err) {
+            console.log('error!', err);
+          }
+        );
     } else {
       AlertsFactory.addAlert('warning', 'Por favor llene todos los campos correctamente antes de agregar el servicio', true);
     }
