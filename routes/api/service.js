@@ -46,13 +46,9 @@ exports.scheduleService = function(req, res, next) {
 };
 
 exports.executeService = function(req, res, next) {
-  var data = req.body;
-  console.log(data);
+  var service = executedService(req.body);
 
-  var service = executedService(data);
-
-  service.
-  Service.create(service, function(err, next) {
+  Service.create(service, function(err, response) {
     if (err) next(err);
     res.sendStatus(200);
   });
@@ -74,8 +70,11 @@ exports.updateScheduledService = function(req, res, next) {
 };
 
 exports.updateExecutedService = function(req, res, next) {
-  console.log(req);
-  res.sendStatus(200);
+  var service = executedService(req.body);
+  Service.update({_id: req.body._id}, Service, function(err, response) {
+    if (err) next(err);
+    res.sendStatus(200);
+  });
 };
 
 exports.deleteExecutedService = function(req, res, next) {
