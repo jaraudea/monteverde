@@ -36,9 +36,9 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
 
   // Http Requests
   
-  this.getData = function (url, id) {
+  this.getData = function (url, q) {
     var defer = $q.defer(),
-        url = (id)? url + '/' + id : url;
+        url = (q)? url + '/' + q : url;
 
     $http.get(url)
       .success(function(data) {
@@ -53,8 +53,6 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
 
   this.setData = function (url, pData) {
     var defer = $q.defer();
-
-    console.log(pData);
 
     $http.post(url, pData)
       .success(function(data) {

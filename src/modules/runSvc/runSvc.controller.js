@@ -32,6 +32,22 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
   
   $scope.doneQuantity = 0;
 
+  var init = function () {
+    dataGet('zones');
+    dataGet('contracts');
+    dataGet('teams');
+    dataGet('units');
+    dataGet('vehicles');
+  };
+
+  $scope.updateCodes = function () {
+    var formData = $scope.formData;
+    
+    if ((typeof formData.contract != 'undefined') && (typeof formData.serviceType != 'undefined') && (typeof formData.zone != 'undefined')) {
+      dataGet('codes', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone);
+    };
+  };
+
   $scope.open = function(img) {
     var base64;
     var fileReader = new FileReader();
@@ -60,14 +76,6 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
       });    
   }
 
-  var init = function () {
-    dataGet('zones');
-    dataGet('contracts');
-    dataGet('teams');
-    dataGet('units');
-    dataGet('vehicles');
-    dataGet('codes');
-  }
 
   $scope.upload = function(){
     $scope.images.flow.upload();

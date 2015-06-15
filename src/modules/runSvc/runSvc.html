@@ -1,14 +1,14 @@
 <div class="form-group row">
   <label for="contract" class="control-label col-sm-1">Contrato: </label>
   <div class="col-sm-2">
-    <select name="contract" class="form-control" ng-model="formData.contract" ng-options="contract._id as contract.contractNumber for contract in controls.contracts">
+    <select name="contract" class="form-control" ng-model="formData.contract" ng-options="contract._id as contract.contractNumber for contract in controls.contracts" ng-change="updateCodes()">
       <option value="" selected disabled>Seleccione</option>
     </select>
   </div>
 
   <label for="serviceType" class="control-label col-sm-1 double-line">Tipo de Servicio: </label>
   <div class="col-sm-2">
-    <select name="serviceType" id="serviceType" class="form-control" placeholder="seleccione" ng-model="formData.serviceType" ng-change="clearOnServiceTypeChange()">
+    <select name="serviceType" id="serviceType" class="form-control" placeholder="seleccione" ng-model="formData.serviceType" ng-change="updateCodes(); clearOnServiceTypeChange()">
       <option value="" selected disabled>Seleccione</option>
       <option value="{{servTp._id}}" ng-bind="servTp.name" ng-repeat="servTp in controls.contracts.findById(formData.contract, 'serviceType')"></option>
     </select>
@@ -16,7 +16,7 @@
 
   <label for="zone" class="control-label col-sm-1">Zona: </label>
   <div class="col-sm-2">
-    <select name="zone" class="form-control" ng-model="formData.zone" ng-options="control._id as control.name for control in controls.zones">
+    <select name="zone" class="form-control" ng-model="formData.zone" ng-options="control._id as control.name for control in controls.zones" ng-change="updateCodes()">
       <option value="" selected disabled>Seleccione</option>
     </select>
   </div>
