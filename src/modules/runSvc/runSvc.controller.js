@@ -2,7 +2,7 @@
 
 'use strict';
 
-monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTableParams, AlertsFactory, connectorService, $filter) {
+monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTableParams, AlertsFactory, connectorService, $filter, JrfService) {
 
   var contractId = null,
       dataSpecieTable = [];
@@ -65,16 +65,11 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
     dataGet('contracts');
     dataGet('teams');
     dataGet('units');
-    dataGet('vehicles', '', function (data) {
-        $scope.vehicles = data;
-    });
+    dataGet('vehicles');
+    dataGet('codes');
 
-    dataGet('codes', '', function (data) {
-      for (var ndx in data) {
-        $scope.codes.push(data[ndx].code);
-      };
-    });
 
+    $scope.fullFields = $scope.formData.contract;
   }
 
   $scope.upload = function(){
@@ -85,7 +80,10 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
     dataGet('serviceConf', _id, function (data) {
       var data = data[0];
 
-      $scope.formData = data;
+      $scope.formData.unit = data.unit;
+      $scope.formData.team = data.team;
+
+      $scope.formData.codeId = data._id;
 
       $scope.tableParams.reload();
 
@@ -93,12 +91,15 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
     });
   };
 
+  $scope.clearOnServiceTypeChange = function () {
+    $scope.formData.code = "";
+  }
+
   var updateWorkArea = function (data) {
     var formData = $scope.formData;
     try{
-      $scope.doneQuantity = (typeof data.area !== 'undefined') ? data.area : (parseInt(formData.vehicle.cubicMeters) * parseInt(formData.tripsNumber));
-    }catch(e){
-    }
+      $scope.formData.doneQuantity = (typeof data.area !== 'undefined') ? data.area : (parseInt(formData.vehicle.cubicMeters) * parseInt(formData.tripsNumber));
+    }catch(e){}
   }
 
   $scope.calculateWork = function () {
@@ -106,7 +107,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
 
     if (typeof formData.area === 'undefined') {
       try{
-        $scope.doneQuantity = parseInt(formData.vehicle.cubicMeters) * parseInt(formData.tripsNumber);
+        $scope.formData.doneQuantity = parseInt(formData.vehicle.cubicMeters) * parseInt(formData.tripsNumber);
       }catch(e){
       }
     };
@@ -131,7 +132,8 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
         $scope.images.flow.upload();
       }
 
-      console.log('data:', data);
+      data = JrfService.parseRunService(data);
+      // TODO: service to parse JSON
 
       connectorService.setData(connectorService.ep.createSrv, data)
         .then (

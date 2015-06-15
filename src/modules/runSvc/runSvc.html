@@ -8,7 +8,7 @@
 
   <label for="serviceType" class="control-label col-sm-1 double-line">Tipo de Servicio: </label>
   <div class="col-sm-2">
-    <select name="serviceType" id="serviceType" class="form-control" placeholder="seleccione" ng-model="formData.serviceType">
+    <select name="serviceType" id="serviceType" class="form-control" placeholder="seleccione" ng-model="formData.serviceType" ng-change="clearOnServiceTypeChange()">
       <option value="" selected disabled>Seleccione</option>
       <option value="{{servTp._id}}" ng-bind="servTp.name" ng-repeat="servTp in controls.contracts.findById(formData.contract, 'serviceType')"></option>
     </select>
@@ -48,11 +48,11 @@
   </div>
 </div>
 
-<form class="form-horizontal container-fluid" name="addExecSvcForm" ng-submit="runSvc.submitaddExec()" novalidate>
+<form class="form-horizontal container-fluid" name="addExecSvcForm" ng-submit="runSvc.submitaddExec()" novalidate ng-if="formData.contract && formData.serviceType && formData.zone && formData.date">
   <div class="form-group row">
     <label for="code" class="control-label col-sm-1 double-line">C&oacute;digo / Radicado: </label>
     <div class="col-sm-1">
-      <input class="form-control" type="text" typeahead-on-select="getServiceConfig(formData.code)" ng-model="formData.code" typeahead="field for field in codes | filter:$viewValue | limitTo:8" required>
+      <input class="form-control" type="text" typeahead-on-select="getServiceConfig(formData.code.code)" ng-model="formData.code" typeahead="code as code.code for code in controls.codes | filter:$viewValue | limitTo:8" required>
     </div>
 
     <label for="team" class="control-label col-sm-1">Cuadrilla: </label>
@@ -64,7 +64,7 @@
     </div>
 
     <label class="control-label double-line col-sm-1">Cantidad trabajada: </label>
-    <span class="control-label col-sm-1" ng-bind="doneQuantity"></span>
+    <span class="control-label col-sm-1" ng-bind="formData.doneQuantity"></span>
 
     <label for="unity" class="control-label col-sm-1">Unidad: </label>
     <div class="col-sm-1">
@@ -74,7 +74,7 @@
 
     <label class="control-label col-sm-1">Veh&iacute;culo: </label>
     <div class="col-sm-1">
-      <input class="form-control" type="text" typeahead-on-select="calculateWork()" ng-model="formData.vehicle" placeholder="Vehiculo" typeahead="vehicle as vehicle.plate for vehicle in vehicles | filter:{plate:$viewValue}" required>
+      <input class="form-control" type="text" typeahead-on-select="calculateWork()" ng-model="formData.vehicle" placeholder="Vehiculo" typeahead="vehicle as vehicle.plate for vehicle in controls.vehicles | filter:{plate:$viewValue}" required>
     </div>    
 
     <label class="control-label col-sm-1">Viajes: </label>
