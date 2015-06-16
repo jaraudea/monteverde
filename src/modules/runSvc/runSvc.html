@@ -37,11 +37,25 @@
             <td data-title="'Cuadrilla'" sortable="'team'">
                 {{service.team}}
             </td>
+            <td data-title="'Cantidad trabajada'" sortable="'quantity'">
+                {{service.quantity}}
+            </td>
+            <td data-title="'Unidad'" sortable="'unit'">
+                {{service.unit}}
+            </td>
+            <td data-title="'Camion'" sortable="'vehicle'">
+                {{service.vehicle}}
+            </td>
+            <td data-title="'Nro de viajes'" sortable="'trips'">
+                {{service.trips}}
+            </td>
             <td data-title="'Estado'" sortable="'state'">
                 {{service.state}}
             </td>
             <td data-title="'Opciones'">
-                {{service.options}}
+              <div class="btn-group" role="group" aria-label="">
+                <a ng-if="!specie.edit" href="" class="btn btn-danger" ng-click="removeExecution(service._id)"><i class="fa fa-trash-o fa-fw"></i></a>
+              </div>                 
             </td>
         </tr>
     </table>

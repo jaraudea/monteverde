@@ -1,7 +1,7 @@
 // JSON rest formatter service
 'use strict';
 
-common.service ('JrfService', function () {
+common.service ('JrfService', function () { 
   this.parseRunService = function (data) {
     var parsedData = {
       contract: data.contract, 
@@ -21,5 +21,27 @@ common.service ('JrfService', function () {
     return parsedData
   };
 
+  this.parseRunServicetableData = function (data, scope) {
+
+    var parsedData = [];
+ 
+    if (typeof data.length !== 'undefined') {
+      for(var i = 0; i <= data.length - 1; i++ ) {
+        parsedData.push({
+          _id : data[i]._id,
+          field: 0,
+          team: scope.controls.teams.findById(data[i].team, 'code' ),
+          state: 0,
+          quantity: data[i].quantity,
+          vehicle: scope.controls.vehicles.findById(data[i].vehicle, 'plate'),
+          unit: scope.controls.units.findById(data[i].unit, 'name'),
+          trips: data[i].trips,
+          options: data[i].options
+        });
+      };
+    };
+
+    return parsedData
+  };
 
 });

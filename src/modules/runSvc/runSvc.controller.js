@@ -8,11 +8,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
       dataSpecieTable = [];
 
 
-  $scope.tableData = [
-      {field: "Moroni", team: 50, state: 1, options: 1},
-      {field: "Tiancum", team: 43, state: 1, options: 1}
-  ];
-
+  $scope.tableData = [];
 
   $scope.controls = {};
 
@@ -57,11 +53,14 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
   };
 
   var updateServicesTable = function () {
-      var formData = $scope.formData,
-          date = formData.date.getFullYear() + '-' + formData.date.getMonth() + '-' + formData.date.getDate();
+      var formData = $scope.formData;
+      if (typeof formData.date !== 'undefined') {
+        var date = formData.date.getFullYear() + '-' + formData.date.getMonth() + '-' + formData.date.getDate();
 
-      dataGet('executeService', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone + '&date=' + date);
-      $scope.tableData = $scope.formData.executeService;
+        dataGet('executeService', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone + '&date=' + date);
+        $scope.tableData = JrfService.parseRunServicetableData($scope.controls.executeService, $scope);
+        $scope.tableParams.reload();
+      }
   };
 
   $scope.open = function(img) {
@@ -107,7 +106,6 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
 
       $scope.formData.codeId = data._id;
 
-      $scope.tableParams.reload();
 
       updateWorkArea(data);
     });
@@ -134,6 +132,19 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
       }
     };
   };
+
+  $scope.removeExecution = function (id) {
+    connectorService.removeData(connectorService.ep.deleteSrv, id)
+      .then(
+        function (data) {
+          AlertsFactory.addAlert('warning', 'Ejecucion del servicio eliminada', true);
+          $state.go($state.current, {}, {reload: true});
+        },
+        function (err) {
+          AlertsFactory.addAlert('danger', 'Error al eliminar servicio, contacte al servicio tecnico error:' + err, true);
+        }
+      )
+  }
 
   $scope.submitaddExec = function () {
     var form = $scope.addExecSvcForm,

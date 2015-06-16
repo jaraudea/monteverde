@@ -21,9 +21,10 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
     executeService : "api/service/executeService",
     // POST
     createSrv : "api/service/executeService",
-    create : "/api/service/configservice/"
+    create : "/api/service/configservice/",
     // PUT
     // DELETE
+    deleteSrv : "api/service/executeService"
   };
 
   socketFactory.on('notifyChanges', function (data) {
@@ -81,9 +82,9 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
     return defer.promise;
   };
 
-  this.removeData = function (id) {
+  this.removeData = function (url, id) {
     var defer = $q.defer(),
-        url = spotsUrl + '/' + id;
+        url = url + '/' + id;
 
     $http.delete(url)
       .success(function(data) {
