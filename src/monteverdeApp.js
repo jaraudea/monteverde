@@ -81,6 +81,8 @@ monteverde.run(function ($rootScope, $location, $state, $auth) {
     return false;
   }; 
 
+  Date.prototype.getRealMonth = function () {return this.getMonth() + 1};
+
   $rootScope.$on( '$stateChangeStart', function(e, toState  , toParams, fromState, fromParams) { 
     var isLogin = (toState.name === "login");
     

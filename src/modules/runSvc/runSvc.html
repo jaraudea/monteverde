@@ -44,17 +44,24 @@
                 {{service.unit}}
             </td>
             <td data-title="'Camion'" sortable="'vehicle'">
-                {{service.vehicle}}
+                <span ng-if="!service.$edit">{{service.vehicle}}</span>
+                <div ng-if="service.$edit"><input class="form-control" type="text" typeahead-on-select="calculateWork(service.vehicle, $index)" ng-model="service.vehicle" placeholder="Vehiculo" typeahead="vehicle as vehicle.plate for vehicle in controls.vehicles | filter:{plate:$viewValue}"></div>
             </td>
             <td data-title="'Nro de viajes'" sortable="'trips'">
-                {{service.trips}}
+                <span ng-if="!service.$edit">{{service.trips}}</span>
+                <div ng-if="service.$edit"><input class="form-control" type="number" ng-model="service.trips" /></div>
             </td>
             <td data-title="'Estado'" sortable="'state'">
                 {{service.state}}
             </td>
             <td data-title="'Opciones'">
               <div class="btn-group" role="group" aria-label="">
-                <a ng-if="!specie.edit" href="" class="btn btn-danger" ng-click="removeExecution(service._id)"><i class="fa fa-trash-o fa-fw"></i></a>
+              <div class="btn-group" role="group" aria-label="">
+                <a ng-if="!service.$edit" href="" class="btn btn-primary" ng-click="service.$edit = true"><i class="fa fa-pencil fa-fw"></i></a>
+                <a ng-if="service.$edit"  href="" class="btn btn-success" ng-click="service.$edit = false"><i class="fa fa-floppy-o fafw"></i></a>
+                <a ng-if="!service.$edit" href="" class="btn btn-danger"  ng-click="removeExecution($index, service._id)"><i class="fa fa-trash-o fa-fw"></i></a>
+            </td>                
+              </div>  
               </div>                 
             </td>
         </tr>

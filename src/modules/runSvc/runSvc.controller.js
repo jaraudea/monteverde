@@ -55,11 +55,12 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
   var updateServicesTable = function () {
       var formData = $scope.formData;
       if (typeof formData.date !== 'undefined') {
-        var date = formData.date.getFullYear() + '-' + formData.date.getMonth() + '-' + formData.date.getDate();
+        var date = formData.date.getFullYear() + '-' + formData.date.getRealMonth() + '-' + formData.date.getDate();
 
-        dataGet('executeService', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone + '&date=' + date);
-        $scope.tableData = JrfService.parseRunServicetableData($scope.controls.executeService, $scope);
-        $scope.tableParams.reload();
+        dataGet('executeService', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone + '&date=' + date, function (data) {
+          $scope.tableData = JrfService.parseRunServicetableData(data, $scope);
+          $scope.tableParams.reload();
+        });
       }
   };
 
@@ -91,10 +92,18 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
       });    
   }
 
-
-  $scope.upload = function(){
-    $scope.images.flow.upload();
-  };
+  $scope.removeExecution = function (ndx, id) {
+    connectorService.removeData(connectorService.ep.deleteSrv, id)
+      .then(
+        function (data) {
+          AlertsFactory.addAlert('warning', 'Ejecucion del servicio eliminada', true);
+          $scope.tableParams.reload();
+        },
+        function (err) {
+          AlertsFactory.addAlert('danger', 'Error al eliminar servicio, contacte al servicio tecnico error:' + err, true);
+        }
+      )
+  }
 
   $scope.getServiceConfig = function (_id) {
     dataGet('serviceConf', _id, function (data) {
@@ -111,6 +120,11 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
     });
   };
 
+  $scope.upload = function(){
+    $scope.images.flow.upload();
+  };
+
+
   $scope.clearOnServiceTypeChange = function () {
     $scope.formData.code = "";
   }
@@ -122,7 +136,11 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
     }catch(e){}
   }
 
-  $scope.calculateWork = function () {
+  $scope.calculateWork = function (param) {
+    if(typeof param !== 'undefined') {
+      return param.plate;
+    };
+    
     var formData = $scope.formData;
 
     if (typeof formData.area !== 'undefined') {
@@ -132,19 +150,6 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
       }
     };
   };
-
-  $scope.removeExecution = function (id) {
-    connectorService.removeData(connectorService.ep.deleteSrv, id)
-      .then(
-        function (data) {
-          AlertsFactory.addAlert('warning', 'Ejecucion del servicio eliminada', true);
-          $state.go($state.current, {}, {reload: true});
-        },
-        function (err) {
-          AlertsFactory.addAlert('danger', 'Error al eliminar servicio, contacte al servicio tecnico error:' + err, true);
-        }
-      )
-  }
 
   $scope.submitaddExec = function () {
     var form = $scope.addExecSvcForm,
@@ -173,7 +178,8 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
         .then (
           function (data) {
             AlertsFactory.addAlert('success', 'Ejecucion del servicio creada', true);
-            $state.go($state.current, {}, {reload: true});
+            $scope.tableParams.reload();
+            // $state.go($state.current, {}, {reload: true});
           },
           function (err) {
             AlertsFactory.addAlert('danger', 'Error al crear servicio, contacte al servicio tecnico error:' + err, true);
