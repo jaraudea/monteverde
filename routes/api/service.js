@@ -78,6 +78,10 @@ exports.updateExecutedService = function(req, res, next) {
 };
 
 exports.deleteExecutedService = function(req, res, next) {
-  console.log(req);
-  res.sendStatus(200);
+  var serviceId = req.params.id;
+  Service.remove({_id: serviceId}, function(err, response) {
+    if (err) next(err);
+    console.log(response);
+    res.sendStatus(200);
+  });
 };
