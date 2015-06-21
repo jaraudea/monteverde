@@ -55,7 +55,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
   var updateServicesTable = function () {
       var formData = $scope.formData;
       if (typeof formData.date !== 'undefined') {
-        var date = formData.date.getFullYear() + '-' + formData.date.getRealMonth() + '-' + formData.date.getDate();
+        var date = formData.date.toJSON().substr(0, 10);
 
         dataGet('executeService', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone + '&date=' + date, function (data) {
           $scope.tableData = JrfService.parseRunServicetableData(data, $scope);
@@ -97,7 +97,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
       .then(
         function (data) {
           AlertsFactory.addAlert('warning', 'Ejecucion del servicio eliminada', true);
-          $scope.tableParams.reload();
+          updateServicesTable();
         },
         function (err) {
           AlertsFactory.addAlert('danger', 'Error al eliminar servicio, contacte al servicio tecnico error:' + err, true);
@@ -178,7 +178,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
         .then (
           function (data) {
             AlertsFactory.addAlert('success', 'Ejecucion del servicio creada', true);
-            $scope.tableParams.reload();
+            updateServicesTable();
             // $state.go($state.current, {}, {reload: true});
           },
           function (err) {

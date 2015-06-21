@@ -7,7 +7,7 @@ common.service ('JrfService', function () {
       contract: data.contract, 
       serviceType: data.serviceType, 
       zone: data.zone, 
-      date: data.date.getFullYear() + '-' + data.date.getMonth() + '-' + data.date.getDate(), 
+      date: data.date.toJSON().substr(0, 10), 
       configService: data.codeId || _id, 
       team: data.team, 
       quantity: data.doneQuantity, 
