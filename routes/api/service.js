@@ -14,7 +14,8 @@ var executedService = function(data) {
     trips: data.trips,
     quantity: data.quantity,
     description: data.description,
-    photos: data.photos
+    photos: data.photos,
+    status: '556fcd97540893b44a2aef07'
   }
   return service;
 }
@@ -36,8 +37,7 @@ exports.getExecutedServices = function(req, res, next) {
     query['$or'] = [{scheduledDate: new Date(queryDate), executedDate: null}, {executedDate: new Date(queryDate)}];
   }
 
-  console.log(query);
-  Service.find(query, function(err, service) {
+  Service.find(query).populate('configService', 'code').exec(function(err, service) {
     if (err) next(err); 
     else res.json(service);
   });
