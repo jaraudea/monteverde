@@ -23,7 +23,7 @@ exports.getExecutedServices = function(req, res, next) {
   var parameters = req.params;
   var query = req.query;
 
-  if (typeof parameters != 'undefined') {
+  if (typeof parameters._id != 'undefined') {
     for (param in parameters) {
       console.log(parameters[param]);
       query[param] = parameters[param];
