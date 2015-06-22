@@ -14,9 +14,17 @@ common.service ('JrfService', function () {
       unit: data.unit, 
       vehicle: data.vehicle._id, 
       trips: data.tripsNumber, 
-      description: data.observations, 
-      photos: data.files
+      description: data.observations,
+      photos: []
     }
+
+    data.files.forEach(function(photo) {
+      var photoJson = {
+        name: photo.name, 
+        identifier: photo.identifier
+      };
+      parsedData.photos.push(photoJson);
+    });
 
     return parsedData
   };

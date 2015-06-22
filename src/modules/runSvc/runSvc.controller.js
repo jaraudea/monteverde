@@ -165,9 +165,9 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
         data.files = [];
 
         for (var ndx = 0; ndx < files.length; ndx++) {
-          data.files.push(files[ndx].name);
+          data.files.push({name: files[ndx].name, identifier: files[ndx].uniqueIdentifier});
         };
-
+        console.log(data.files);
         $scope.images.flow.upload();
       }
 

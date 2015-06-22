@@ -1,6 +1,7 @@
 var Service = require('../../models/Service');
 
 var executedService = function(data) {
+  console.log(data);
   var service = {
     contract: data.contract,
     serviceType: data.serviceType,
@@ -19,20 +20,13 @@ var executedService = function(data) {
 }
 
 exports.getExecutedServices = function(req, res, next) {
-  var dateQuery = req.query.date;
+  var query = req.query;
 
-  console.log('contract:' + req.query.contract);
-  console.log('serviceType:' + req.query.serviceType);
-  console.log('zone:' + req.query.zone);
-  console.log('date:' + dateQuery);
-
-  var query = {
-    contract: req.query.contract, 
-    serviceType: req.query.serviceType, 
-    zone: req.query.zone, 
-    $or: [{scheduledDate: new Date(dateQuery), executedDate: null}, {executedDate: new Date(dateQuery)}]
-  };
-  console.log(query)
+  if (typeof query.date != 'undefined') {
+    var queryDate = query.date;
+    delete query['date'];
+    query['$or'] = [{scheduledDate: new Date(queryDate), executedDate: null}, {executedDate: new Date(queryDate)}];
+  }
 
   Service.find(query, function(err, service) {
     if (err) next(err); 
