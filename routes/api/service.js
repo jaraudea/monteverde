@@ -57,7 +57,8 @@ exports.executeService = function(req, res, next) {
 };
 
 exports.approveService = function(req, res, next) {
-  Service.update({_id: req.params._id}, {status: '556fcd3f540893b44a2aef03'}, function(err, response) {
+  var approvedDate = truncateDate(new Date());
+  Service.update({_id: req.params._id}, {status: '556fcd3f540893b44a2aef03', approvedDate: approvedDate}, function(err, response) {
     // response should be { ok: 1, nModified: 1, n: 1 }
     if (err) next(err);
     res.sendStatus(200);
@@ -65,7 +66,8 @@ exports.approveService = function(req, res, next) {
 };
 
 exports.disapproveService = function(req, res, next) {
-  Service.update({_id: req.params._id}, {status: '556fcd8f540893b44a2aef06'}, function(err, response) {
+  var disapprovedDate = truncateDate(new Date());
+  Service.update({_id: req.params._id}, {status: '556fcd8f540893b44a2aef06', disapprovedDate: disapprovedDate}, function(err, response) {
     // response should be { ok: 1, nModified: 1, n: 1 }
     if (err) next(err);
     res.sendStatus(200);
@@ -110,4 +112,12 @@ exports.getServices = function(req, res, next) {
       if (err) next(err);
       res.json(service);
   });
+};
+
+var truncateDate = function(date) {
+  date.setHours(0);
+  date.setMinutes(0);
+  date.setSeconds(0);
+  date.setMilliseconds(0);
+  return date;
 };

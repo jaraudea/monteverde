@@ -79,6 +79,9 @@
           <td data-title="'Fecha de Aprobación'" sortable="'approvedDate'">
               {{ service.approvedDate | date : 'fullDate'}}
           </td>
+          <td data-title="'Fecha de Desaprobación'" sortable="'disapprovedDate'">
+              {{ service.disapprovedDate | date : 'fullDate'}}
+          </td>
           <td data-title="'Cantidad Ejecutada'" sortable="'quantity'">
               {{service.quantity}}
           </td>
