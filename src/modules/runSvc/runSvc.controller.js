@@ -2,10 +2,21 @@
 
 'use strict';
 
-monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTableParams, AlertsFactory, connectorService, $filter, JrfService) {
+monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTableParams, AlertsFactory, connectorService, $filter, JrfService, socketFactory) {
 
   var contractId = null,
       dataSpecieTable = [];
+
+// Socket IO
+  socketFactory.on('notifyChanges', function (data) {
+    uptadeData(data);
+  });  
+
+  var uptadeData = function (data) {
+    updateServicesTable();
+    console.log('updating all data', data);
+  }; 
+
 
 
   $scope.tableData = [];
@@ -41,6 +52,12 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
     dataGet('teams');
     dataGet('units');
     dataGet('vehicles');
+  };
+
+  $scope.editExecution = function (ndx) {
+    var exec = $scope.tableData[ndx];
+
+    $scope.formData = exec;
   };
 
   $scope.updateCodes = function () {
