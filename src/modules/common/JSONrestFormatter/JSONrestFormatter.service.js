@@ -2,13 +2,12 @@
 'use strict';
 
 common.service ('JrfService', function () { 
-  this.parseRunService = function (data) {
+  this.parseRunService = function (data, editing) {
     var parsedData = {
       contract: data.contract, 
       serviceType: data.serviceType, 
       zone: data.zone, 
       date: data.date.toJSON().substr(0, 10), 
-      configService: data.codeId || _id, 
       team: data.team, 
       quantity: data.doneQuantity, 
       unit: data.unit, 
@@ -16,6 +15,10 @@ common.service ('JrfService', function () {
       trips: data.tripsNumber, 
       description: data.observations,
       photos: []
+    };
+
+    if (!editing) {
+      parsedData.configService = data.codeId || data._id;
     }
 
     data.files.forEach(function(photo) {
@@ -37,9 +40,9 @@ common.service ('JrfService', function () {
       for(var i = 0; i <= data.length - 1; i++ ) {
         parsedData.push({
           _id : data[i]._id,
-          field: data[i].field,
+          field: data[i].field || 'no existe en el JSON',
           team: scope.controls.teams.findById(data[i].team, 'code' ),
-          state: data[i].state,
+          status: data[i].status.name,
           quantity: data[i].quantity,
           vehicle: scope.controls.vehicles.findById(data[i].vehicle, 'plate'),
           unit: scope.controls.units.findById(data[i].unit, 'name'),
@@ -59,6 +62,7 @@ common.service ('JrfService', function () {
     if (typeof data.length !== 'undefined') {
       for(var i = 0; i <= data.length - 1; i++ ) {
         parsedData.push({
+          _id : data[i]._id,
           vehicle : scope.controls.vehicles.findById(data[i].vehicle, 'plate'),
           serviceType : data[i].serviceType,
           observations : data[i].description,
