@@ -1,4 +1,5 @@
 var Service = require('../../models/Service');
+var ServiceStatus = require('../../models/ServiceStatus');
 
 var executedService = function(data) {
   console.log(data);
@@ -26,7 +27,6 @@ exports.getExecutedServices = function(req, res, next) {
 
   if (typeof parameters._id != 'undefined') {
     for (param in parameters) {
-      console.log(parameters[param]);
       query[param] = parameters[param];
     }
   }
@@ -37,7 +37,7 @@ exports.getExecutedServices = function(req, res, next) {
     query['$or'] = [{scheduledDate: new Date(queryDate), executedDate: null}, {executedDate: new Date(queryDate)}];
   }
 
-  Service.find(query).populate('configService', 'code').exec(function(err, service) {
+  Service.find(query).populate('configService', 'code').populate('status', 'name').exec(function(err, service) {
     if (err) next(err); 
     else res.json(service);
   });
