@@ -37,14 +37,36 @@ common.service ('JrfService', function () {
       for(var i = 0; i <= data.length - 1; i++ ) {
         parsedData.push({
           _id : data[i]._id,
-          field: 0,
+          field: data[i].field,
           team: scope.controls.teams.findById(data[i].team, 'code' ),
-          state: 0,
+          state: data[i].state,
           quantity: data[i].quantity,
           vehicle: scope.controls.vehicles.findById(data[i].vehicle, 'plate'),
           unit: scope.controls.units.findById(data[i].unit, 'name'),
           trips: data[i].trips,
           options: data[i].options
+        });
+      };
+    };
+
+    return parsedData
+  };
+
+  this.parseRunServicetableDataEditable = function (data, scope) {
+
+    var parsedData = [];
+ 
+    if (typeof data.length !== 'undefined') {
+      for(var i = 0; i <= data.length - 1; i++ ) {
+        parsedData.push({
+          vehicle : scope.controls.vehicles.findById(data[i].vehicle, 'plate'),
+          serviceType : data[i].serviceType,
+          observations : data[i].description,
+          unit : data[i].unit,
+          team : data[i].team,
+          trips : data[i].trips,
+          images : data[i].photos,
+          code: data[i].configService.code 
         });
       };
     };

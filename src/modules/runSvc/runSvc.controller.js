@@ -18,11 +18,6 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
   }; 
 
 
-  var editExecution = function (data) {
-    // TODO: proces the data to edit in the botton area
-    console.log('data:', data);
-  };
-
   $scope.tableData = [];
 
   $scope.controls = {};
@@ -58,9 +53,65 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
     dataGet('vehicles');
   };
 
+  var editExecution = function (data) {
+    $scope.clearForm(function () {
+      $scope.formData.code = data.code;
+      $scope.formData.vehicle = data.vehicle;
+      $scope.formData.unit = data.unit;
+      $scope.formData.team = data.team;
+      $scope.formData.tripsNumber = data.trips;
+      $scope.formData.observations = data.observations;
+      $scope.images.flow.files = data.images.concat();
+    });
+  };
+
+  $scope.editCancel = function () {
+    $scope.isEditing = false;
+    $scope.clearForm();
+  };
+
+  $scope.clearForm = function (callback) {
+    $scope.formData.code = '';
+    $scope.formData.team = '';
+    $scope.formData.vehicle = '';
+    $scope.formData.unit = '';
+    $scope.formData.tripsNumber = 0;
+    $scope.formData.observations = '';
+
+    normalizeFlow(function () {
+      $scope.images.flow.cancel();
+    });
+
+    if (typeof callback === 'function') {
+      callback();
+    }
+  };
+
+  var normalizeFlow = function (callback) {
+    var incomplete = true;
+
+    while (incomplete) {
+      if ($scope.images.flow.files.length > 0) {
+        if (typeof $scope.images.flow.files[0].chunks === 'undefined') {
+          $scope.images.flow.files.splice(0, 1);
+        } else {
+          incomplete = false;
+        }
+      } else {
+        incomplete = false;
+      }
+    };
+
+    if (typeof callback === 'function') {
+      callback();
+    }
+  }
+
   $scope.updateCodes = function () {
     var formData = $scope.formData;
-    
+
+    $scope.clearForm();
+
     if ((typeof formData.contract != 'undefined') && (typeof formData.serviceType != 'undefined') && (typeof formData.zone != 'undefined'))  {
       dataGet('codes', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone);
         updateServicesTable();
@@ -73,26 +124,44 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
         var date = formData.date.toJSON().substr(0, 10);
 
         dataGet('executeService', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone + '&date=' + date, function (data) {
+          $scope.tableDataEditable = JrfService.parseRunServicetableDataEditable(data, $scope);
           $scope.tableData = JrfService.parseRunServicetableData(data, $scope);
           $scope.tableParams.reload();
         });
       }
   };
-
+// Image manipulaiton
   $scope.open = function(img) {
-    var base64;
-    var fileReader = new FileReader();
-      fileReader.onload = function (event) {
-            base64 = event.target.result;
+    if (typeof img.file !== 'undefined') {
+      var base64;
+      var fileReader = new FileReader();
+        fileReader.onload = function (event) {
+              base64 = event.target.result;
 
-            var modalInstance = $modal.open({
-                animation: $scope.animationsEnabled,
-                template: '<img width="400" class="center-block" src="' + base64 + '" >'
-            })
-        };
+              var modalInstance = $modal.open({
+                  animation: $scope.animationsEnabled,
+                  template: '<img width="400" class="center-block" src="' + base64 + '" >'
+              })
+          };
 
-    fileReader.readAsDataURL(img.file);    
+      fileReader.readAsDataURL(img.file);    
+    } else {
+      var modalInstance = $modal.open({
+          animation: $scope.animationsEnabled,
+          template: '<img width="400" class="center-block" src="/download/' + img.identifier + '" >'      
+      })
+    }
   };
+
+$scope.cancel = function (img) {
+  if (typeof img.cancel === 'function') {
+    img.cancel();
+  } else {
+    var ndx = $scope.images.flow.files.indexOf(img);
+    $scope.images.flow.files.splice(ndx, 1);
+    console.log(img)
+  }
+}
 
   // Method to GET data
   var dataGet = function (type, param, callback) {
@@ -108,17 +177,9 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
   }
 
   $scope.editExecution = function (ndx) {
-    var id = $scope.tableData[ndx]._id;
+    var exec = $scope.tableDataEditable[ndx];
 
-    connectorService.getData(connectorService.ep.serviceConf, id)
-      .then(
-        function (data) {
-          editExecution(data);
-        },
-        function (err) {
-          AlertsFactory.addAlert('danger', 'Error al editar el servicio, contacte al servicio tecnico error:' + err, true);
-        }
-      )
+    editExecution(exec);
 
   };
 
@@ -167,6 +228,9 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
         for (var ndx = 0; ndx < files.length; ndx++) {
           data.files.push({name: files[ndx].name, identifier: files[ndx].uniqueIdentifier});
         };
+
+        normalizeFlow();
+
         console.log(data.files);
         $scope.images.flow.upload();
       }
