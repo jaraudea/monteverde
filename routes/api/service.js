@@ -20,7 +20,15 @@ var executedService = function(data) {
 }
 
 exports.getExecutedServices = function(req, res, next) {
+  var parameters = req.params;
   var query = req.query;
+
+  if (typeof parameters != 'undefined') {
+    for (param in parameters) {
+      console.log(parameters[param]);
+      query[param] = parameters[param];
+    }
+  }
 
   if (typeof query.date != 'undefined') {
     var queryDate = query.date;
@@ -28,6 +36,7 @@ exports.getExecutedServices = function(req, res, next) {
     query['$or'] = [{scheduledDate: new Date(queryDate), executedDate: null}, {executedDate: new Date(queryDate)}];
   }
 
+  console.log(query);
   Service.find(query, function(err, service) {
     if (err) next(err); 
     else res.json(service);
@@ -65,14 +74,14 @@ exports.updateScheduledService = function(req, res, next) {
 
 exports.updateExecutedService = function(req, res, next) {
   var service = executedService(req.body);
-  Service.update({_id: req.body._id}, Service, function(err, response) {
+  Service.update({_id: req.params._id}, Service, function(err, response) {
     if (err) next(err);
     res.sendStatus(200);
   });
 };
 
 exports.deleteExecutedService = function(req, res, next) {
-  var serviceId = req.params.id;
+  var serviceId = req.params._id;
   Service.remove({_id: serviceId}, function(err, response) {
     if (err) next(err);
     console.log(response);
