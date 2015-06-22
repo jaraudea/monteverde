@@ -74,6 +74,7 @@ app.get('/api/service/units', unitApi.getAll);
 app.get('/api/service/configservice/codes', configServiceApi.getAllConfigCodes);
 app.get('/api/service/configservice/:code?', configServiceApi.getByCode);
 app.get('/api/service/executeService?', serviceApi.getExecutedServices);
+app.get('/api/service/services?', serviceApi.getServices);
 
 /*POST*/  
 app.post('/api/service/configservice', configServiceApi.create);
@@ -84,8 +85,8 @@ app.post('/api/service/executeService', serviceApi.executeService);
 app.put('/api/service/configservice/:code', configServiceApi.update);
 app.put('/api/service/scheduleService/:id', serviceApi.updateScheduledService);
 app.put('/api/service/executeService/:id', serviceApi.updateExecutedService);
-app.put('/api/service/approveService/:id', serviceApi.approveService);
-app.put('/api/service/disapproveService/:id', serviceApi.disapproveService);
+app.put('/api/service/approveService/:_id', serviceApi.approveService);
+app.put('/api/service/disapproveService/:_id', serviceApi.disapproveService);
 
 /*DELETE*/
 app.delete('/api/service/executeService/:id', serviceApi.deleteExecutedService);
