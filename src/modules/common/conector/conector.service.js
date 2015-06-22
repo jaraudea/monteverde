@@ -19,9 +19,13 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
     serviceConf : "/api/service/configservice/",
     vehicles : "api/service/vehicles",
     executeService : "api/service/executeService",
+    services : "/api/service/services",
     // POST
     createSrv : "api/service/executeService",
     create : "/api/service/configservice/",
+    approveSvc : "/api/service/approveService/",
+    getExecution : "/api/service/configservice",        
+    disapproveSvc : "/api/service/disapproveService/",
     // PUT
     getExecution : "/api/service/configservice",
     // DELETE
