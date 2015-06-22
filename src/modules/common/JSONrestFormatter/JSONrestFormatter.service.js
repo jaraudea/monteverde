@@ -37,7 +37,7 @@ common.service ('JrfService', function () {
       for(var i = 0; i <= data.length - 1; i++ ) {
         parsedData.push({
           _id : data[i]._id,
-          field: data[i].field,
+          field: data[i].configService.code,
           team: scope.controls.teams.findById(data[i].team, 'code' ),
           state: data[i].state,
           quantity: data[i].quantity,
