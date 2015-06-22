@@ -18,6 +18,10 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
   }; 
 
 
+  var editExecution = function (data) {
+    // TODO: proces the data to edit in the botton area
+    console.log('data:', data);
+  };
 
   $scope.tableData = [];
 
@@ -52,12 +56,6 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
     dataGet('teams');
     dataGet('units');
     dataGet('vehicles');
-  };
-
-  $scope.editExecution = function (ndx) {
-    var exec = $scope.tableData[ndx];
-
-    $scope.formData = exec;
   };
 
   $scope.updateCodes = function () {
@@ -109,6 +107,21 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
       });    
   }
 
+  $scope.editExecution = function (ndx) {
+    var id = $scope.tableData[ndx]._id;
+
+    connectorService.getData(connectorService.ep.serviceConf, id)
+      .then(
+        function (data) {
+          editExecution(data);
+        },
+        function (err) {
+          AlertsFactory.addAlert('danger', 'Error al editar el servicio, contacte al servicio tecnico error:' + err, true);
+        }
+      )
+
+  };
+
   $scope.removeExecution = function (ndx, id) {
     connectorService.removeData(connectorService.ep.deleteSrv, id)
       .then(
@@ -135,37 +148,6 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
 
       updateWorkArea(data);
     });
-  };
-
-  $scope.upload = function(){
-    $scope.images.flow.upload();
-  };
-
-
-  $scope.clearOnServiceTypeChange = function () {
-    $scope.formData.code = "";
-  }
-
-  var updateWorkArea = function (data) {
-    var formData = $scope.formData;
-    try{
-      $scope.formData.doneQuantity = (typeof data.area !== 'undefined') ? data.area : (parseInt(formData.vehicle.cubicMeters) * parseInt(formData.tripsNumber));
-    }catch(e){}
-  }
-
-  $scope.calculateWork = function (param) {
-    if(typeof param !== 'undefined') {
-      return param.plate;
-    };
-    
-    var formData = $scope.formData;
-
-    if (typeof formData.area !== 'undefined') {
-      try{
-        $scope.formData.doneQuantity = parseInt(formData.vehicle.cubicMeters) * parseInt(formData.tripsNumber);
-      }catch(e){
-      }
-    };
   };
 
   $scope.submitaddExec = function () {
@@ -206,6 +188,37 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
       AlertsFactory.addAlert('warning', 'Por favor llene todos los campos correctamente antes de agregar el servicio', true);
     }
 
+  };
+
+  $scope.upload = function(){
+    $scope.images.flow.upload();
+  };
+
+
+  $scope.clearOnServiceTypeChange = function () {
+    $scope.formData.code = "";
+  }
+
+  var updateWorkArea = function (data) {
+    var formData = $scope.formData;
+    try{
+      $scope.formData.doneQuantity = (typeof data.area !== 'undefined') ? data.area : (parseInt(formData.vehicle.cubicMeters) * parseInt(formData.tripsNumber));
+    }catch(e){}
+  }
+
+  $scope.calculateWork = function (param) {
+    if(typeof param !== 'undefined') {
+      return param.plate;
+    };
+    
+    var formData = $scope.formData;
+
+    if (typeof formData.area !== 'undefined') {
+      try{
+        $scope.formData.doneQuantity = parseInt(formData.vehicle.cubicMeters) * parseInt(formData.tripsNumber);
+      }catch(e){
+      }
+    };
   };
 
 
