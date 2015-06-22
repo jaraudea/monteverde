@@ -4,6 +4,6 @@ var mongoose = require('../data/db'),
 var positionSchema = new Schema({
   name: String,
   active: Boolean
-}, {collection: 'CompanyPositions'});
+}, {collection: 'companypositions'});
 
 module.exports = mongoose.model('CompanyPosition', taskSchema);
