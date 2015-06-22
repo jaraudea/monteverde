@@ -50,10 +50,11 @@
                 {{service.trips}}
             </td>
             <td data-title="'Estado'" sortable="'state'">
-                {{service.status}}
+                {{service.state}}
             </td>
             <td data-title="'Opciones'">
-              <div class="btn-group" role="group" aria-label="" ng-if="service.status != 'Ejecutado'">
+              <div class="btn-group" role="group" aria-label="">
+              <div class="btn-group" role="group" aria-label="">
                 <a ng-if="!service.$edit" href="" class="btn btn-primary" ng-click="editExecution($index); service.$edit = true"><i class="fa fa-pencil fa-fw"></i></a>
                 <a ng-if="service.$edit"  href="" class="btn btn-warning" ng-click="editCancel(); service.$edit = false"><i class="fa fa-times-circle fafw"></i></a>
                 <a ng-if="!service.$edit" href="" class="btn btn-danger"  ng-click="removeExecution($index, service._id)"><i class="fa fa-trash-o fa-fw"></i></a>

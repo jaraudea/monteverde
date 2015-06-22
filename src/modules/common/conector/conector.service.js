@@ -21,9 +21,9 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
     executeService : "api/service/executeService",
     // POST
     createSrv : "api/service/executeService",
-    create : "/api/service/configservice",
+    create : "/api/service/configservice/",
     // PUT
-    updateExecution : "/api/service/configservice/",
+    getExecution : "/api/service/configservice",
     // DELETE
     deleteSrv : "api/service/executeService"
   };
