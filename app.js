@@ -73,6 +73,7 @@ app.get('/api/service/vehicles', vehicleApi.getAll);
 app.get('/api/service/units', unitApi.getAll);
 app.get('/api/service/configservice/codes', configServiceApi.getAllConfigCodes);
 app.get('/api/service/configservice/:code?', configServiceApi.getByCode);
+app.get('/api/service/executeService/executionPercentage', serviceApi.getExecutionPercentage);
 app.get('/api/service/executeService/:_id?', serviceApi.getExecutedServices);
 app.get('/api/service/services?', serviceApi.getServices);
 
