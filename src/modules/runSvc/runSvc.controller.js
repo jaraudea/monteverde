@@ -14,6 +14,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
 
   var uptadeData = function (data) {
     updateServicesTable();
+    percentStatus();
     console.log('updating all data', data);
   }; 
 
@@ -28,6 +29,8 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
   $scope.images = {};
 
   $scope.vehicles = [];
+
+  $scope.percent = 0;
 
   $scope.formData.vehicle = '';
 
@@ -66,6 +69,18 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
       $scope.images.flow.files = data.images.concat();
       $scope.isEditing = true;
     });
+  var percentStatus = function () {
+    connectorService.getData(connectorService.ep.execPercent)
+      .then(
+        function (res) {
+          $scope.percent = res;
+        },
+        function (err) {
+          console.log('error:', err);
+        }
+      )
+  };
+
   };
 
   $scope.editCancel = function () {
@@ -309,8 +324,6 @@ $scope.cancel = function (img) {
     };
   };
 
-
-  $scope.percent = 25;
 
   $scope.tableParams = new ngTableParams({
       page: 1,            // show first page

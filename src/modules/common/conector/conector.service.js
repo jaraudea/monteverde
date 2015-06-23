@@ -7,6 +7,7 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
   this.ep = {
     // GET
     tasks : "/api/service/tasks/",
+    execPercent : "api/service/executeService/executionPercentage", 
     species : "/api/service/species/",
     teams : "/api/service/teams/",
     zones : "/api/service/zones/",
@@ -19,6 +20,7 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
     serviceConf : "/api/service/configservice/",
     vehicles : "api/service/vehicles",
     executeService : "api/service/executeService",
+    executeServiceById : '/api/service/executeService',
     services : "/api/service/services",
     // POST
     createSrv : "api/service/executeService",
