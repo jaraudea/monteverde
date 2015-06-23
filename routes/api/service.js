@@ -12,11 +12,17 @@ var executedService = function(data) {
     executedDate: data.date,
     vehicle: data.vehicle,
     trips: data.trips,
-    quantity: data.quantity,
+    // quantity: data.quantity,
     description: data.description,
     photos: data.photos,
     status: '556fcd97540893b44a2aef07'
   }
+
+  //XXX remove it when quantity has been defined in update
+  if (typeof data.quantity != 'undefined') {
+    service['quantity'] = data.quantity;
+  }
+  console.log(service);
   return service;
 }
 
@@ -36,9 +42,19 @@ exports.getExecutedServices = function(req, res, next) {
     query['$or'] = [{scheduledDate: new Date(queryDate), executedDate: null}, {executedDate: new Date(queryDate)}];
   }
 
-  Service.find(query).populate('configService', 'code').populate('status', 'name').exec(function(err, service) {
-    if (err) next(err);
-    res.json(service);
+  Service
+    .find(query)
+    .populate('contract')
+    .populate('serviceType')
+    .populate('zone')
+    .populate('team')
+    .populate('unit')
+    .populate('configService')
+    .populate('vehicle')
+    .populate('status')
+    .exec(function(err, service) {
+      if (err) next(err);
+      res.json(service);
    });
 }
 
@@ -81,7 +97,10 @@ exports.updateScheduledService = function(req, res, next) {
 
 exports.updateExecutedService = function(req, res, next) {
   var service = executedService(req.body);
-  Service.update({_id: req.params._id}, Service, function(err, response) {
+  console.log(req.params._id)
+  console.log(Service);
+  Service.update({_id: req.params._id}, service, function(err, response) {
+    console.log(response);
     if (err) next(err);
     res.sendStatus(200);
   });
