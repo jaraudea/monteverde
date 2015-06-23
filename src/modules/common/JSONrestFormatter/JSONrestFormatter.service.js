@@ -38,7 +38,7 @@ common.service ('JrfService', function () {
         parsedData.push({
           _id : data[i]._id,
           configService : data[i].configService,
-          field: data[i].configService.code,
+          field: (data[i].configService !== null && typeof data[i].configService !== 'undefined') ? data[i].configService.code : "",
           team: data[i].team.code,
           status: data[i].status.name,
           quantity: data[i].quantity,

@@ -132,6 +132,7 @@ app.get('/upload', function(req, res) {
 });
 
 app.get('/download/:identifier', function(req, res) {
+  res.writeHead(200, {'Content-Type': 'image/jpg' });
   flow.write(req.params.identifier, res);
 });
 /*****************/

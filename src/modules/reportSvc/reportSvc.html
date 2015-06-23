@@ -95,7 +95,7 @@
               {{service.task}}
           </td> -->
           <td data-title="'Fotos de Respaldo'">
-              <span ng-repeat="photo in service.photos">{{photo.name}}<br/></span> <!-- ng-click="open(photo.identifier)">{{photo.name}}<br/></a> -->
+              <a ng-repeat="photo in service.photos" ng-click="open(photo.identifier)">{{photo.name}}<br/></a>
           </td>
           <td data-title="'Status'" sortable="'status.name'">
               {{service.status.name}}

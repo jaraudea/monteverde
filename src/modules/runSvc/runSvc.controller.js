@@ -177,7 +177,6 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
 
         dataGet('executeService', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone + '&date=' + date, function (data) {
           $scope.tableData = JrfService.parseRunServicetableData(data, $scope);
-          console.log($scope.tableData);
           $scope.tableParams.reload();
         });
       }
@@ -264,7 +263,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
 
       $scope.formData.codeId = data._id;
 
-      calculateWork();
+      $scope.calculateWork();
     });
   };
 

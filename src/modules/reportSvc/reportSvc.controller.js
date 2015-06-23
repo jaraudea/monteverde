@@ -2,8 +2,13 @@
 
 'use strict';
 
-monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter, $q, ngTableParams, $sce, connectorService) {
+monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter, $q, ngTableParams, $sce, connectorService, socketFactory) {
   var contractId = null;
+
+  // Socket IO
+  socketFactory.on('notifyChanges', function (data) {
+    $scope.loadtabledata();
+  });
 
   $scope.tableData = [];
 
@@ -100,23 +105,11 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
     $scope.tableParams.reload();
   };
 
-  $scope.open = function(img) {
-    var base64;
-    var fileReader = new FileReader();
-    fileReader.onload = function (event) {
-      base64 = event.target.result;
-
-      var modalInstance = $modal.open({
+  $scope.open = function(imgIdentifier) {
+    $modal.open({
           animation: $scope.animationsEnabled,
-          template: '<img width="1200" class="center-block" src="' + base64 + '" >'
-      })
-    };
-
-    dataGet('downloadFile', img, function(file) {
-      fileReader.readAsDataURL(file);
+          template: '<img width="1024" class="center-block" src="/download/85856-ScreenShot2015-04-24at102659AMpng" />'
     });
-
-    console.log(img, base64, fileReader, fileReader.readAsDataURL);  
   };
 
   $scope.approveServices = function() {
