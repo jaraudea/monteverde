@@ -18,6 +18,15 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
     console.log('updating all data', data);
   }; 
 
+  $scope.$watch("query", function(newValue, oldValue){
+    if (newValue !== oldValue) {
+      if (newValue === "foo") {
+        $scope.query = "foobar";
+      }
+    }
+  });
+
+
   $scope.isEditing = false;
 
   $scope.tableData = [];
@@ -97,6 +106,10 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
             $scope.images.flow.files = data.images.concat();
             $scope.isEditing = true;
           });
+          $timeout(function () {
+            $scope.$apply();
+            console.log('digested');
+          }, 1000);
         },
         function (err) {
           console.log('error:', err);
@@ -225,6 +238,8 @@ $scope.cancel = function (img) {
 
     editExecution(id);
 
+    // $scope.$apply();
+
     console.log('id: ', id);
   };
 
@@ -273,7 +288,10 @@ $scope.cancel = function (img) {
         data.files = [];
 
         for (var ndx = 0; ndx < files.length; ndx++) {
-          data.files.push({name: files[ndx].name, identifier: files[ndx].uniqueIdentifier});
+          data.files.push({
+            name: files[ndx].name, 
+            identifier: files[ndx].uniqueIdentifier || files[ndx].identifier
+          });
         };
 
         normalizeFlow();
