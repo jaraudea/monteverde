@@ -18,6 +18,15 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
     console.log('updating all data', data);
   }; 
 
+  $scope.$watch("query", function(newValue, oldValue){
+    if (newValue !== oldValue) {
+      if (newValue === "foo") {
+        $scope.query = "foobar";
+      }
+    }
+  });
+
+
   $scope.isEditing = false;
 
   $scope.tableData = [];
