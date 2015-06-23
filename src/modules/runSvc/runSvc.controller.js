@@ -17,6 +17,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
     console.log('updating all data', data);
   }; 
 
+  $scope.isEditing = false;
 
   $scope.tableData = [];
 
@@ -55,6 +56,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
 
   var editExecution = function (data) {
     $scope.clearForm(function () {
+      $scope.formData._id = data._id;
       $scope.formData.code = data.code;
       $scope.formData.vehicle = data.vehicle;
       $scope.formData.unit = data.unit;
@@ -62,6 +64,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
       $scope.formData.tripsNumber = data.trips;
       $scope.formData.observations = data.observations;
       $scope.images.flow.files = data.images.concat();
+      $scope.isEditing = true;
     });
   };
 
@@ -71,6 +74,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
   };
 
   $scope.clearForm = function (callback) {
+    var form = $scope.addExecSvcForm;
     $scope.formData.code = '';
     $scope.formData.team = '';
     $scope.formData.vehicle = '';
@@ -79,7 +83,10 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
     $scope.formData.observations = '';
 
     normalizeFlow(function () {
-      $scope.images.flow.cancel();
+      if (typeof $scope.images.flow.cancel === 'function') {
+        $scope.images.flow.cancel();
+      };
+      form.$setPristine();
     });
 
     if (typeof callback === 'function') {
@@ -215,6 +222,7 @@ $scope.cancel = function (img) {
     var form = $scope.addExecSvcForm,
         valid = form.$valid,
         files = $scope.images.flow.files,
+        editing = $scope.isEditing;
         data = $scope.formData;
 
     console.log('data:', $scope.formData);
@@ -235,19 +243,35 @@ $scope.cancel = function (img) {
         $scope.images.flow.upload();
       }
 
-      data = JrfService.parseRunService(data);
+      data = JrfService.parseRunService(data, editing);
 
-      connectorService.setData(connectorService.ep.createSrv, data)
-        .then (
-          function (data) {
-            AlertsFactory.addAlert('success', 'Ejecucion del servicio creada', true);
-            updateServicesTable();
-            // $state.go($state.current, {}, {reload: true});
-          },
-          function (err) {
-            AlertsFactory.addAlert('danger', 'Error al crear servicio, contacte al servicio tecnico error:' + err, true);
-          }
-        );
+      if ($scope.isEditing) {
+        connectorService.editData(connectorService.ep.updateExecution, $scope.formData._id, data)
+          .then(
+            function (data) {
+              AlertsFactory.addAlert('success', 'Servicio Actualizado', true);
+              $scope.isEditing = false;
+              $scope.clearForm();
+            },
+            function (err) {
+              AlertsFactory.addAlert('danger', 'Error al actualizar el servicio');
+              $scope.isEditing = false;
+              $scope.clearForm();
+            });           
+      } else{
+        connectorService.setData(connectorService.ep.createSrv, data)
+          .then (
+            function (data) {
+              AlertsFactory.addAlert('success', 'Ejecucion del servicio creada', true);
+              updateServicesTable();
+              $scope.clearForm();
+            },
+            function (err) {
+              AlertsFactory.addAlert('danger', 'Error al crear servicio, contacte al servicio tecnico error:' + err, true);
+              $scope.clearForm();
+            }
+          );
+      }
     } else {
       AlertsFactory.addAlert('warning', 'Por favor llene todos los campos correctamente antes de agregar el servicio', true);
     }
