@@ -9,7 +9,11 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
 
   $scope.controls = {};
 
-  $scope.formData = {};
+  var date = new Date();
+  var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+  var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+  $scope.formData = {startDate: firstDay, endDate: lastDay};
 
   var init = function () {
     dataGet('contracts');
