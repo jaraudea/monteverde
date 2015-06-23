@@ -8,5 +8,8 @@ to **Build** execute following commands:
 to **Run Server** execute "gulp serverExpress"
 
 
+to **Back up Database** execute
+  - mongodump --db Monteverde --out data/dump
+
 to **Restore Database** execute
   - mongorestore -d Monteverde data/dump/Monteverde
