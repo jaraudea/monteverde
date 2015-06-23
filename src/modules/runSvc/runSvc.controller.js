@@ -55,6 +55,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
     dataGet('teams');
     dataGet('units');
     dataGet('vehicles');
+    percentStatus();
   };
 
   var editExecution = function (data) {
@@ -74,6 +75,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
       .then(
         function (res) {
           $scope.percent = res;
+          $scope.percent = res.executionPercentage;
         },
         function (err) {
           console.log('error:', err);
