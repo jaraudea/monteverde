@@ -67,7 +67,7 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
   $scope.$watch('checkboxes.checked', function(value) {
       angular.forEach($scope.services, function(item) {
           if (angular.isDefined(item._id)) {
-              if (!$scope.isApprovedOrDisapproved(item.status._id)) {
+              if ($scope.isCheckboxShowedByStatus(item.status._id)) {
                 $scope.checkboxes.items[item._id] = value;
               }
           }
@@ -143,8 +143,16 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
     }
   };
 
-  $scope.isApprovedOrDisapproved = function(status) {
-    return status == '556fcd3f540893b44a2aef03' || status == '556fcd8f540893b44a2aef06';
+  $scope.isExecutedService = function(status) {
+    return status == '556fcd97540893b44a2aef07';
+  };
+
+  $scope.isCorrectedService = function(status) {
+    return status == '556fcd73540893b44a2aef04';
+  };
+
+  $scope.isCheckboxShowedByStatus = function(status) {
+    return isExecutedService(status) || isCorrectedService(status)
   };
 
   init();

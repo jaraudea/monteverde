@@ -100,8 +100,9 @@ exports.getServices = function(req, res, next) {
     contract: req.query.contract,
     serviceType: req.query.serviceType,
     zone: req.query.zone,
-    executedDate: {$gte: new Date(req.query.startDate), $lt: new Date(req.query.endDate)}
+    $or: [ {executedDate: null, scheduledDate: {$gte: new Date(req.query.startDate), $lt: new Date(req.query.endDate)}}, {executedDate: {$gte: new Date(req.query.startDate), $lt: new Date(req.query.endDate)}}]
   }
+
   Service
     .find(query)
     .populate('configService', 'code location treeSpeciesByTask')
