@@ -42,8 +42,8 @@ common.service ('JrfService', function () {
           team: data[i].team.code,
           status: data[i].status.name,
           quantity: data[i].quantity,
-          vehicle: data[i].vehicle.plate,
-          unit: data[i].unit.name,
+          vehicle: (data[i].vehicle !== null && typeof data[i].vehicle !== 'undefined') ? data[i].vehicle.plate : "",
+          unit: (data[i].unit !== null && typeof data[i].unit !== 'undefined') ? data[i].unit.name : "",
           trips: data[i].trips,
           options: data[i].options
         });
@@ -62,8 +62,8 @@ common.service ('JrfService', function () {
         _id : data._id,
         configService : data.configService,
         contract: data.contract,
-        vehicle : data.vehicle.plate,
-        vehicleObj : data.vehicle,
+        vehicle : (typeof data.vehicle !== 'undefined') ? data.vehicle.plate : "",
+        vehicleObj : (typeof data.vehicle !== 'undefined') ? data.vehicle : {plate: ""},
         serviceType : data.serviceType.name,
         observations : data.description,
         unit : data.unit._id,

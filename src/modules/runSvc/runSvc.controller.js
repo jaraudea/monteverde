@@ -162,22 +162,27 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
 
     if ((typeof formData.contract != 'undefined') && (typeof formData.serviceType != 'undefined') && (typeof formData.zone != 'undefined'))  {
       dataGet('codes', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone);
-        updateServicesTable();
+      updateServicesTable();
     };
   };
 
   var updateServicesTable = function () {
       var formData = $scope.formData;
-      if (typeof formData.date !== 'undefined') {
+      if (typeof formData.contract != 'undefined' 
+        && typeof formData.serviceType != 'undefined' 
+        && typeof formData.zone != 'undefined' 
+        && typeof formData.date !== 'undefined') {
         // formData.date.setHours(0, -formData.date.getTimezoneOffset(), 0, 0);
         var date = formData.date.toISOString().substr(0, 10);
 
         dataGet('executeService', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone + '&date=' + date, function (data) {
           $scope.tableData = JrfService.parseRunServicetableData(data, $scope);
+          console.log($scope.tableData);
           $scope.tableParams.reload();
         });
       }
   };
+
 // Image manipulaiton
   $scope.open = function(img) {
     if (typeof img.file !== 'undefined') {
@@ -201,15 +206,15 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
     }
   };
 
-$scope.cancel = function (img) {
-  if (typeof img.cancel === 'function') {
-    img.cancel();
-  } else {
-    var ndx = $scope.images.flow.files.indexOf(img);
-    $scope.images.flow.files.splice(ndx, 1);
-    console.log(img)
-  }
-}
+  $scope.cancel = function (img) {
+    if (typeof img.cancel === 'function') {
+      img.cancel();
+    } else {
+      var ndx = $scope.images.flow.files.indexOf(img);
+      $scope.images.flow.files.splice(ndx, 1);
+      console.log(img)
+    }
+  };
 
   // Method to GET data
   var dataGet = function (type, param, callback) {

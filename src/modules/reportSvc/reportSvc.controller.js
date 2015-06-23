@@ -156,7 +156,7 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
   };
 
   $scope.isCheckboxShowedByStatus = function(status) {
-    return isExecutedService(status) || isCorrectedService(status)
+    return $scope.isExecutedService(status) || $scope.isCorrectedService(status);
   };
 
   init();
