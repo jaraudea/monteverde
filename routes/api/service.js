@@ -141,3 +141,7 @@ var truncateDate = function(date) {
   date.setMilliseconds(0);
   return date;
 };
+
+exports.getExecutionPercentage = function(req, res, next) {
+  res.json({executionPercentage: 25.5});
+}
