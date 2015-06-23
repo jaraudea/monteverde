@@ -12,7 +12,7 @@ common.service ('JrfService', function () {
       team: data.team, 
       quantity: data.doneQuantity, 
       unit: data.unit, 
-      vehicle: data.vehicle, 
+      vehicle: (typeof data.vehicle === 'object')? data.vehicle : data.vehicleObj, 
       trips: data.tripsNumber, 
       description: data.observations,
       photos: []

@@ -94,7 +94,7 @@
 
       <label class="control-label col-sm-1">Veh&iacute;culo: </label>
       <div class="col-sm-1">
-        <input class="form-control" type="text" typeahead-on-select="calculateWork()" ng-change="calculateWork()" ng-model="formData.vehicle" placeholder="Vehiculo" typeahead="vehicle as vehicle.plate for vehicle in controls.vehicles | filter:{plate:$viewValue}" required>
+        <input class="form-control" id="vehicle" type="text" typeahead-on-select="calculateWork()" ng-change="calculateWork()" ng-model="formData.vehicle" placeholder="Vehiculo" typeahead="vehicle as vehicle.plate for vehicle in controls.vehicles | filter:{plate:$viewValue}" required>
       </div>    
 
       <label class="control-label col-sm-1">Viajes: </label>
