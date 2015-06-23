@@ -8,7 +8,7 @@
 
   <label for="serviceType" class="control-label col-sm-1 double-line">Tipo de Servicio: </label>
   <div class="col-sm-2">
-    <select name="serviceType" id="serviceType" class="form-control" placeholder="seleccione" ng-model="formData.serviceType" ng-change="updateCodes(); clearOnServiceTypeChange()">
+    <select name="serviceType" id="serviceType" class="form-control" placeholder="seleccione" ng-model="formData.serviceType" ng-change="updateCodes(); clearOnServiceTypeChange(formData.serviceType)">
       <option value="" selected disabled>Seleccione</option>
       <option value="{{servTp._id}}" ng-bind="servTp.name" ng-repeat="servTp in controls.contracts.findById(formData.contract, 'serviceType')"></option>
     </select>
@@ -94,7 +94,7 @@
 
       <label class="control-label col-sm-1">Veh&iacute;culo: </label>
       <div class="col-sm-1">
-        <input class="form-control" type="text" typeahead-on-select="calculateWork()" ng-model="formData.vehicle" placeholder="Vehiculo" typeahead="vehicle as vehicle.plate for vehicle in controls.vehicles | filter:{plate:$viewValue}" required>
+        <input class="form-control" type="text" typeahead-on-select="calculateWork()" ng-change="calculateWork()" ng-model="formData.vehicle" placeholder="Vehiculo" typeahead="vehicle as vehicle.plate for vehicle in controls.vehicles | filter:{plate:$viewValue}" required>
       </div>    
 
       <label class="control-label col-sm-1">Viajes: </label>

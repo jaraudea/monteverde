@@ -2,7 +2,7 @@
 
 'use strict';
 
-monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTableParams, AlertsFactory, connectorService, $filter, JrfService, socketFactory) {
+monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, ngTableParams, AlertsFactory, connectorService, $filter, JrfService, socketFactory) {
 
   var contractId = null,
       dataSpecieTable = [];
@@ -32,6 +32,11 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
 
   $scope.percent = 0;
 
+  // fix date
+  var tt = new Date();
+  // tt.setHours(0, -tt.getTimezoneOffset(), 0, 0);
+  $scope.formData.date = tt;
+
   $scope.formData.vehicle = '';
 
   $scope.codes = [];
@@ -58,31 +63,46 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
     percentStatus();
   };
 
-  var editExecution = function (data) {
-    $scope.clearForm(function () {
-      $scope.formData._id = data._id;
-      $scope.formData.code = data.code;
-      $scope.formData.vehicle = data.vehicle;
-      $scope.formData.unit = data.unit;
-      $scope.formData.team = data.team;
-      $scope.formData.tripsNumber = data.trips;
-      $scope.formData.observations = data.observations;
-      $scope.images.flow.files = data.images.concat();
-      $scope.isEditing = true;
-    });
-  };
-
   var percentStatus = function () {
     connectorService.getData(connectorService.ep.execPercent)
       .then(
         function (res) {
-          $scope.percent = res;
           $scope.percent = res.executionPercentage;
         },
         function (err) {
           console.log('error:', err);
         }
       )
+  };
+
+  var editExecution = function (id) { 
+
+    connectorService.getData(connectorService.ep.executeServiceById, id)
+      .then(
+        function (res) {
+          var data = JrfService.parseRunServicetableDataEditable(res[0], $scope);
+
+          $scope.clearForm(function () {
+            $scope.formData._id = data._id;
+            $scope.formData.code = data.code;
+            $scope.formData.vehicle = data.vehicle;
+            $scope.formData.configService = data.configService;
+            $scope.formData.vehicleObj = data.vehicleObj;
+            $scope.formData.unit = data.unit;
+            $scope.formData.team = data.team;
+            $scope.formData.doneQuantity = data.quantity;
+            $scope.formData.area = data.area;
+            $scope.formData.tripsNumber = data.trips;
+            $scope.formData.observations = data.observations;
+            $scope.images.flow.files = data.images.concat();
+            $scope.isEditing = true;
+          });
+        },
+        function (err) {
+          console.log('error:', err);
+        }
+      )
+
   };
 
   $scope.editCancel = function () {
@@ -145,10 +165,10 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $modal, ngTablePar
   var updateServicesTable = function () {
       var formData = $scope.formData;
       if (typeof formData.date !== 'undefined') {
-        var date = formData.date.toJSON().substr(0, 10);
+        // formData.date.setHours(0, -formData.date.getTimezoneOffset(), 0, 0);
+        var date = formData.date.toISOString().substr(0, 10);
 
         dataGet('executeService', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone + '&date=' + date, function (data) {
-          $scope.tableDataEditable = JrfService.parseRunServicetableDataEditable(data, $scope);
           $scope.tableData = JrfService.parseRunServicetableData(data, $scope);
           $scope.tableParams.reload();
         });
@@ -201,10 +221,11 @@ $scope.cancel = function (img) {
   }
 
   $scope.editExecution = function (ndx) {
-    var exec = $scope.tableDataEditable[ndx];
+    var id = $scope.tableData[ndx]._id;
 
-    editExecution(exec);
+    editExecution(id);
 
+    console.log('id: ', id);
   };
 
   $scope.removeExecution = function (ndx, id) {
@@ -224,14 +245,15 @@ $scope.cancel = function (img) {
     dataGet('serviceConf', _id, function (data) {
       var data = data[0];
 
+      $scope.formData.configService = data;
       $scope.formData.unit = data.unit;
       $scope.formData.team = data.team;
       $scope.formData.codeId = data._id;
+      $scope.formData.area = data.area;
 
       $scope.formData.codeId = data._id;
 
-
-      updateWorkArea(data);
+      calculateWork();
     });
   };
 
@@ -300,15 +322,8 @@ $scope.cancel = function (img) {
   };
 
 
-  $scope.clearOnServiceTypeChange = function () {
-    $scope.formData.code = "";
-  }
-
-  var updateWorkArea = function (data) {
-    var formData = $scope.formData;
-    try{
-      $scope.formData.doneQuantity = (typeof data.area !== 'undefined') ? data.area : (parseInt(formData.vehicle.cubicMeters) * parseInt(formData.tripsNumber));
-    }catch(e){}
+  $scope.clearOnServiceTypeChange = function (type) {
+    $scope.serviceType = type;
   }
 
   $scope.calculateWork = function (param) {
@@ -318,11 +333,16 @@ $scope.cancel = function (img) {
     
     var formData = $scope.formData;
 
-    if (typeof formData.area !== 'undefined') {
+    if ($scope.serviceType !== '5563efda45051764c2e3da12') {
       try{
-        $scope.formData.doneQuantity = parseInt(formData.vehicle.cubicMeters) * parseInt(formData.tripsNumber);
+        var m3 = (typeof formData.vehicle === 'string') ? parseFloat(formData.vehicleObj.cubicMeters) : parseFloat(formData.vehicle.cubicMeters),
+            trips = parseInt(formData.tripsNumber);
+
+        $scope.formData.doneQuantity = parseFloat(trips * m3).toFixed(2);
       }catch(e){
       }
+    } else {
+      $scope.formData.doneQuantity = $scope.formData.configService.area;
     };
   };
 
