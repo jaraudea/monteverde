@@ -27,7 +27,7 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
     getExecution : "/api/service/configservice",        
     disapproveSvc : "/api/service/disapproveService/",
     // PUT
-    getExecution : "/api/service/configservice",
+    updateExecution : "/api/service/configservice/",
     // DELETE
     deleteSrv : "api/service/executeService"
   };

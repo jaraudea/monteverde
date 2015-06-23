@@ -40,7 +40,7 @@ common.service ('JrfService', function () {
       for(var i = 0; i <= data.length - 1; i++ ) {
         parsedData.push({
           _id : data[i]._id,
-          field: data[i].field || 'no existe en el JSON',
+          field: data[i].configService.code,
           team: scope.controls.teams.findById(data[i].team, 'code' ),
           status: data[i].status.name,
           quantity: data[i].quantity,
