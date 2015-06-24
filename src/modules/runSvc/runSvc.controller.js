@@ -9,7 +9,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
 
 // Socket IO
   socketFactory.on('notifyChanges', function (data) {
-    // uptadeData(data);
+    uptadeData(data);
   });  
 
   var uptadeData = function (data) {
@@ -17,7 +17,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
     percentStatus();
     console.log('updating all data', data);
   }; 
-  
+
   $scope.isEditing = false;
 
   $scope.tableData = [];
@@ -49,7 +49,10 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
 
   $scope.uploader = {
     target : "/upload",
-    testChunks : true
+    testChunks : true,
+    controllerFn: function ($flow, $file, $message) {
+      processform();
+    }
   }
   
   $scope.doneQuantity = 0;
@@ -134,26 +137,6 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
     }
   };
 
-  var normalizeFlow = function (callback) {
-    var incomplete = true;
-
-    while (incomplete) {
-      if ($scope.images.flow.files.length > 0) {
-        if (typeof $scope.images.flow.files[0].chunks === 'undefined') {
-          $scope.images.flow.files.splice(0, 1);
-        } else {
-          incomplete = false;
-        }
-      } else {
-        incomplete = false;
-      }
-    };
-
-    if (typeof callback === 'function') {
-      callback();
-    }
-  }
-
   $scope.updateCodes = function () {
     var formData = $scope.formData;
 
@@ -210,7 +193,6 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
     } else {
       var ndx = $scope.savedImages.indexOf(img);
       $scope.savedImages.splice(ndx, 1);
-      console.log(img)
     }
   };
 
@@ -231,8 +213,6 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
     var id = $scope.tableData[ndx]._id;
 
     editExecution(id);
-
-    // $scope.$apply();
 
     console.log('id: ', id);
   };
@@ -274,8 +254,6 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
         savedImages = $scope.savedImages,
         data = $scope.formData;
 
-    console.log('data:', $scope.formData);
-
     if (valid) {
 
       // add file names
@@ -297,45 +275,52 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
             identifier: savedImages[ndx].uniqueIdentifier || savedImages[ndx].identifier
           });
         };
+      };
 
-        console.log(data.files);
-        if (files.length ) $scope.images.flow.upload();
-      }
+      $scope.submittedData = JrfService.parseRunService(data, editing);
 
-      data = JrfService.parseRunService(data, editing);
-
-      if ($scope.isEditing) {
-        connectorService.editData(connectorService.ep.updateExecution, $scope.formData._id, data)
-          .then(
-            function (data) {
-              AlertsFactory.addAlert('success', 'Servicio Actualizado', true);
-              $scope.isEditing = false;
-              $scope.clearForm();
-              updateServicesTable();
-            },
-            function (err) {
-              AlertsFactory.addAlert('danger', 'Error al actualizar el servicio');
-              $scope.isEditing = false;
-              $scope.clearForm();
-            });           
-      } else{
-        connectorService.setData(connectorService.ep.createSrv, data)
-          .then (
-            function (data) {
-              AlertsFactory.addAlert('success', 'Ejecucion del servicio creada', true);
-              updateServicesTable();
-              $scope.clearForm();
-            },
-            function (err) {
-              AlertsFactory.addAlert('danger', 'Error al crear servicio, contacte al servicio tecnico error:' + err, true);
-              $scope.clearForm();
-            }
-          );
-      }
+      if (files.length ) {
+        $scope.images.flow.upload()
+      } else {
+        processform();
+      };
+      
     } else {
       AlertsFactory.addAlert('warning', 'Por favor llene todos los campos correctamente antes de agregar el servicio', true);
     }
 
+  };
+
+  var processform = function () {
+    var data = $scope.submittedData;
+    if ($scope.isEditing) {
+      connectorService.editData(connectorService.ep.updateExecution, $scope.formData._id, data)
+        .then(
+          function (data) {
+            AlertsFactory.addAlert('success', 'Servicio Actualizado', true);
+            $scope.isEditing = false;
+            $scope.clearForm();
+            updateServicesTable();
+          },
+          function (err) {
+            AlertsFactory.addAlert('danger', 'Error al actualizar el servicio');
+            $scope.isEditing = false;
+            $scope.clearForm();
+          });           
+    } else{
+      connectorService.setData(connectorService.ep.createSrv, data)
+        .then (
+          function (data) {
+            AlertsFactory.addAlert('success', 'Ejecucion del servicio creada', true);
+            updateServicesTable();
+            $scope.clearForm();
+          },
+          function (err) {
+            AlertsFactory.addAlert('danger', 'Error al crear servicio, contacte al servicio tecnico error:' + err, true);
+            $scope.clearForm();
+          }
+        );
+    }
   };
 
   $scope.upload = function(){
