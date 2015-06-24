@@ -9,7 +9,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
 
 // Socket IO
   socketFactory.on('notifyChanges', function (data) {
-    uptadeData(data);
+    // uptadeData(data);
   });  
 
   var uptadeData = function (data) {
@@ -94,7 +94,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
             $scope.formData.area = data.area;
             $scope.formData.tripsNumber = data.trips;
             $scope.formData.observations = data.observations;
-            $scope.images.flow.files = data.images.concat();
+            $scope.savedImages = data.images.concat();
             $scope.isEditing = true;
           });
           $timeout(function () {
@@ -122,13 +122,12 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
     $scope.formData.unit = '';
     $scope.formData.tripsNumber = 0;
     $scope.formData.observations = '';
+    $scope.savedImages = [];
 
-    normalizeFlow(function () {
-      if (typeof $scope.images.flow.cancel === 'function') {
-        $scope.images.flow.cancel();
-      };
-      form.$setPristine();
-    });
+    if (typeof $scope.images.flow.cancel === 'function') {
+      $scope.images.flow.cancel();
+    };
+    form.$setPristine();
 
     if (typeof callback === 'function') {
       callback();
@@ -209,8 +208,8 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
     if (typeof img.cancel === 'function') {
       img.cancel();
     } else {
-      var ndx = $scope.images.flow.files.indexOf(img);
-      $scope.images.flow.files.splice(ndx, 1);
+      var ndx = $scope.savedImages.indexOf(img);
+      $scope.savedImages.splice(ndx, 1);
       console.log(img)
     }
   };
@@ -271,7 +270,8 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
     var form = $scope.addExecSvcForm,
         valid = form.$valid,
         files = $scope.images.flow.files,
-        editing = $scope.isEditing;
+        editing = $scope.isEditing,
+        savedImages = $scope.savedImages,
         data = $scope.formData;
 
     console.log('data:', $scope.formData);
@@ -279,9 +279,10 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
     if (valid) {
 
       // add file names
-      if (files.length) {
+      if (files.length || savedImages.length) {
         data.files = [];
 
+        // add new images
         for (var ndx = 0; ndx < files.length; ndx++) {
           data.files.push({
             name: files[ndx].name, 
@@ -289,10 +290,16 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
           });
         };
 
-        normalizeFlow();
+        // if have saved images, save  
+        for (var ndx = 0; ndx < savedImages.length; ndx++) {
+          data.files.push({
+            name: savedImages[ndx].name, 
+            identifier: savedImages[ndx].uniqueIdentifier || savedImages[ndx].identifier
+          });
+        };
 
         console.log(data.files);
-        $scope.images.flow.upload();
+        if (files.length ) $scope.images.flow.upload();
       }
 
       data = JrfService.parseRunService(data, editing);
@@ -304,6 +311,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
               AlertsFactory.addAlert('success', 'Servicio Actualizado', true);
               $scope.isEditing = false;
               $scope.clearForm();
+              updateServicesTable();
             },
             function (err) {
               AlertsFactory.addAlert('danger', 'Error al actualizar el servicio');

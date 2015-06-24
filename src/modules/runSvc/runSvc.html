@@ -121,6 +121,12 @@
       <div class="col-sm-3">
         <!-- <button type="button" ng-click="upload()">subir</button>   -->
         <table class="table table table-bordered table-fixed">
+          
+          <tr  ng-repeat="img in savedImages">
+            <td><a class="font-sm" href="" ng-click="open(img)">{{img.name}}</a></td>
+            <td class="options"><a href="" ng-click="cancel(img)" class="badge"><i class="fa fa-times"></i></a></td>
+          </tr>
+          
           <tr  ng-repeat="img in $flow.files">
             <td><a class="font-sm" href="" ng-click="open(img)">{{img.name}}</a></td>
             <td class="options"><a href="" ng-click="cancel(img)" class="badge"><i class="fa fa-times"></i></a></td>
