@@ -103,13 +103,19 @@
       </div>    
     </div>
     
-    <div class="form-group row"  flow-init="uploader" flow-name="images.flow">
+    <div class="form-group row"  
+          flow-init="uploader" 
+          flow-name="images.flow" 
+          flow-complete="uploader.controllerFn($flow, $file, $message)"
+          >
       <div class="col-sm-4">
         <label for="observations" class="control-label">Descripci&oacute;n: </label>
         <textarea class="form-control" cols="30" rows="5" ng-model="formData.observations" required></textarea>
       </div>
 
       <div class="col-sm-2">
+        <!-- <button type="button" ng-click="upld()">subir</button> -->
+        <!-- <button type="button" ng-click="upload()">subir directo</button>   -->
         <label for="observations" class="control-label">Im&aacute;genes: </label>
         <div class="alert drop-area" flow-drag-enter="dropping='bg-warning'" flow-drag-leave="dropping=''" ng-class="dropping" flow-drop>
             Arrastre y suelte las imagenes ac&aacute;a 
@@ -119,7 +125,6 @@
       </div>
 
       <div class="col-sm-3">
-        <!-- <button type="button" ng-click="upload()">subir</button>   -->
         <table class="table table table-bordered table-fixed">
           
           <tr  ng-repeat="img in savedImages">
