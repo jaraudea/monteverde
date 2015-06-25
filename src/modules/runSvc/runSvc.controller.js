@@ -78,7 +78,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
       )
   };
 
-  var editExecution = function (id) { 
+  $scope.editExecution = function (id) { 
 
     connectorService.getData(connectorService.ep.executeServiceById, id)
       .then(
@@ -208,14 +208,6 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
         };
       });    
   }
-
-  $scope.editExecution = function (ndx) {
-    var id = $scope.tableData[ndx]._id;
-
-    editExecution(id);
-
-    console.log('id: ', id);
-  };
 
   $scope.removeExecution = function (ndx, id) {
     connectorService.removeData(connectorService.ep.deleteSrv, id)
