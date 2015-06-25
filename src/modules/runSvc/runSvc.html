@@ -72,7 +72,7 @@
     <div class="form-group row">
       <label for="code" class="control-label col-sm-1 double-line">C&oacute;digo / Radicado: </label>
       <div class="col-sm-1">
-        <input class="form-control" type="text" typeahead-on-select="getServiceConfig(formData.code.code)" ng-model="formData.code" typeahead="code as code.code for code in controls.codes | filter:$viewValue | limitTo:8" required>
+        <input class="form-control" type="text" typeahead-editable="false" typeahead-on-select="getServiceConfig(formData.code.code)" ng-model="formData.code" typeahead="code as code.code for code in controls.codes | filter:$viewValue | limitTo:8" required>
       </div>
 
       <label for="team" class="control-label col-sm-1">Cuadrilla: </label>
