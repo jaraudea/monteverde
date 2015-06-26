@@ -18,7 +18,7 @@ var serviceSchema = new Schema({
   description: String,
   trips: Number,
   status: { type: Schema.Types.ObjectId, ref: 'ServiceStatus' },
-  disapproveNotes: String,
+  disapprovalReason: String,
   photos: [
     {
       name: String, 

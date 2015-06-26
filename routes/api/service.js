@@ -1,28 +1,27 @@
 var Service = require('../../models/Service');
 var ServiceStatus = require('../../models/ServiceStatus');
 
-var executedService = function(data) {
-  var service = {
-    contract: data.contract,
-    serviceType: data.serviceType,
-    zone: data.zone,
-    team: data.team,
-    unit: data.unit,
-    configService: data.configService,
-    executedDate: data.date,
-    vehicle: data.vehicle,
-    trips: data.trips,
-    // quantity: data.quantity,
-    description: data.description,
-    photos: data.photos,
-    status: '556fcd97540893b44a2aef07'
-  }
+var executedService = function(data, svc) {
+  var service = {};
 
-  //XXX remove it when quantity has been defined in update
-  if (typeof data.quantity != 'undefined') {
-    service['quantity'] = data.quantity;
+  if (typeof svc != 'undefined') {
+    service = svc;
   }
-  console.log(service);
+  
+  service.contract = data.contract
+  service.serviceType = data.serviceType
+  service.zone =  data.zone
+  service.team = data.team
+  service.unit =  data.unit
+  service.configService = data.configService
+  service.executedDate = data.date
+  service.vehicle = data.vehicle
+  service.trips = data.trips
+  service.quantity = data.quantity
+  service.description = data.description
+  service.photos =data.photos
+  service.status = '556fcd97540893b44a2aef07'
+
   return service;
 }
 
@@ -83,9 +82,18 @@ exports.approveService = function(req, res, next) {
 
 exports.disapproveService = function(req, res, next) {
   var disapprovedDate = truncateDate(new Date());
-  Service.update({_id: req.params._id}, {status: '556fcd8f540893b44a2aef06', disapprovedDate: disapprovedDate}, function(err, response) {
-    // response should be { ok: 1, nModified: 1, n: 1 }
+  Service.findOne({_id: req.params._id}, function(err, service) {
     if (err) next(err);
+    if (!service) res.sendStatus(400, 'Servicio no encontrado');
+    service.status = '556fcd8f540893b44a2aef06';
+    service.disapprovedDate = disapprovedDate;
+    if (typeof service.disapprovalReason != 'undefined') {
+      service.disapprovalReason = req.body.reason + '\n------------\n' + service.disapprovalReason;
+    } else {
+      service.disapprovalReason = req.body.reason;
+    }
+    console.log(service);
+    service.save();
     res.sendStatus(200);
   });
 };
@@ -96,12 +104,16 @@ exports.updateScheduledService = function(req, res, next) {
 };
 
 exports.updateExecutedService = function(req, res, next) {
-  var service = executedService(req.body);
-  console.log(req.params._id)
-  console.log(Service);
-  Service.update({_id: req.params._id}, service, function(err, response) {
-    console.log(response);
+  Service.findOne({_id: req.params._id}, function (err, service) {
     if (err) next(err);
+    if (!service) res.sendStatus(400, 'Servicio no encontrado');
+    var oldStatus = service.status
+    var svc = executedService(req.body, service);
+    
+    if (oldStatus == '556fcd8f540893b44a2aef06' || oldStatus == '556fcd73540893b44a2aef04') { // if status is disapproved or corrected, then define status as corrected
+      svc.status = '556fcd73540893b44a2aef04'; 
+    }
+    svc.save();
     res.sendStatus(200);
   });
 };
@@ -124,8 +136,9 @@ exports.getServices = function(req, res, next) {
 
   Service
     .find(query)
-    .populate('configService', 'code location treeSpeciesByTask')
-    .populate('contract', 'client')
+    .populate('configService', 'code description location treeSpeciesByTask')
+    .populate('team', 'name')
+    .populate('contract')
     .populate('unit', 'name')
     .populate('status', 'name')
     .exec(function(err, service) {

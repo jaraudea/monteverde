@@ -46,7 +46,7 @@
       <a class="btn btn-success" ng-href="" title="Aprobar" ng-click='approveServices()'>
         <i class="fa fa-thumbs-o-up fa-fw"></i>
       </a>
-      <a class="btn btn-danger" ng-href="" title="Desaprobar" ng-click='disapproveServices()'>
+      <a class="btn btn-danger" ng-href="" title="Desaprobar" ng-click='openDisapprovalReasonModal()'>
         <i class="fa fa-thumbs-o-down fa-fw"></i>
       </a>
       <a class="btn btn-info" ng-mousedown="csv.generate()" ng-href="{{ csv.link() }}" download="servicios.csv" title="Exportar">
@@ -61,26 +61,31 @@
           <td data-title="'Lote'" sortable="'configService.code'">
               {{service.configService.code}}
           </td>
-          <td data-title="'Nombre'" sortable="'contract.client.contacts[0].name'">
-              {{service.contract.client.contacts[0].name}}
+          <td data-title="'Nombres y Descripción'" sortable="'configService.description'">
+              {{service.configService.description}}
           </td>
           <td data-title="'Dirección'" sortable="'configService.location'">
               {{service.configService.location}}
           </td>
-          <td data-title="'Teléfono'" sortable="'contract.client.contacts[0].phone'">
-              {{service.contract.client.contacts[0].phone}}
+          <td data-title="'Cuadrilla'" sortable="'team.name'">
+              {{service.team.name}}
           </td>
-          <td data-title="'Fecha de Programación'" sortable="'scheduledDate'">
-              {{ service.scheduledDate | date : 'fullDate'}}
-          </td>
-          <td data-title="'Fecha de Ejecución'" sortable="'executedDate'">
-              {{ service.executedDate | date : 'fullDate'}}
-          </td>
-          <td data-title="'Fecha de Aprobación'" sortable="'approvedDate'">
-              {{ service.approvedDate | date : 'fullDate'}}
-          </td>
-          <td data-title="'Fecha de Desaprobación'" sortable="'disapprovedDate'">
-              {{ service.disapprovedDate | date : 'fullDate'}}
+          <td data-title="'Fechas'" sortable="'executedDate'">
+              <p ng-if="service.scheduledDate">
+                <b>Programación:</b> {{ service.scheduledDate | date : 'fullDate'}}
+              </p>
+              <p ng-if="service.executedDate">
+                <b>Ejecución:</b> {{ service.executedDate | date : 'fullDate'}}
+              </p>
+              <p ng-if="service.disapprovedDate">
+                <b>Desaprobación:</b> {{ service.disapprovedDate | date : 'fullDate'}}
+              </p>
+              <p ng-if="service.correctedDate">  
+                <b>Corrección:</b> {{ service.correctedDate | date : 'fullDate'}}
+              </p> 
+              <p ng-if="service.approvedDate">
+                <b>Aprobación:</b> {{ service.approvedDate | date : 'fullDate'}}
+              </p>
           </td>
           <td data-title="'Cantidad Ejecutada'" sortable="'quantity'">
               {{service.quantity}}
@@ -103,6 +108,11 @@
           <td data-title="'Observaciones'" sortable="'description'">
               {{service.description}}
           </td>
+          <td data-title="'Razón de Desaprobación'" sortable="'disapprovalReason'">
+            <span style="white-space: pre-line">
+              {{service.disapprovalReason}}
+            </span>
+          </td>
           <td width="30" style="text-align: left" header="'ng-table/headers/checkbox.html'">
             <input type="checkbox" ng-model="checkboxes.items[service._id]" ng-show="isCheckboxShowedByStatus(service.status._id)"/>
           </td>
@@ -113,4 +123,16 @@
       </script>
     </div>
   </div>
+  <script type="text/ng-template" id="disapprovalMessageModal">
+    <div class="modal-header">
+        <h3 class="modal-title">Razón de Desaprobación</h3>
+    </div>
+    <div class="modal-body">
+        <textarea rows="4" cols="50" ng-model="disapproval.reason"></textarea>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="disapprovalServices()">Guardar</button>
+        <button class="btn btn-warning" ng-click="cancelDisapproval()">Cancelar</button>
+    </div>
+  </script>
 </div>  

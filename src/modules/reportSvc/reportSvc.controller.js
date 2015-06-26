@@ -14,6 +14,8 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
 
   $scope.controls = {};
 
+  $scope.disapproval = {};
+
   var date = new Date();
   var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
   var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
@@ -108,7 +110,7 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
   $scope.open = function(imgIdentifier) {
     $modal.open({
           animation: $scope.animationsEnabled,
-          template: '<img width="1024" class="center-block" src="/download/85856-ScreenShot2015-04-24at102659AMpng" />'
+          template: '<img width="1024" class="center-block" src="/download/' + imgIdentifier + '" />'
     });
   };
 
@@ -126,17 +128,37 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
     }
   };
 
-  $scope.disapproveServices = function() {
+  $scope.disapprovalServices = function () {
+    $scope.modalInstance.close($scope.disapproval.reason);
     var changed = false;
     for (item in $scope.checkboxes.items) {
       if ($scope.checkboxes.items[item]) {
-        connectorService.editData(connectorService.ep.disapproveSvc, item);
+        connectorService.editData(connectorService.ep.disapproveSvc, item, $scope.disapproval);
         $scope.checkboxes.items[item] = false;
         changed =  true;
       }
     }
     if (changed) {
       $scope.loadtabledata()
+    }
+  };
+
+  $scope.cancelDisapproval = function () {
+    $scope.modalInstance.dismiss('cancel');
+  };
+
+  $scope.openDisapprovalReasonModal = function() {
+    if ($scope.checkboxes.items) {
+      $scope.modalInstance = $modal.open({
+        animation: true,
+        templateUrl: 'disapprovalMessageModal',
+        scope: $scope,
+        size: 400
+      });
+
+      $scope.modalInstance.result.then(function (disapprovalReason) {
+        $scope.disapproval.reason = disapprovalReason;
+      });
     }
   };
 

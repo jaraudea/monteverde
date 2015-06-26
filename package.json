@@ -25,7 +25,6 @@
     "jsonwebtoken": "^5.0.1",
     "moment": "^2.10.3",
     "morgan": "~1.5.1",
-    "ng-dialog": "^0.4.0",
     "ng-flow": "^2.1.4",
     "ng-table": "^0.5.4",
     "satellizer": "^0.10.1",
