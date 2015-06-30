@@ -24,7 +24,6 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
 
   var init = function () {
     dataGet('contracts');
-    dataGet('zones');
   };
 
   // Method to GET data
@@ -51,8 +50,7 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
       total: $scope.tableData.length, // length of data
       getData: function($defer, params) {
         var formData = $scope.formData;
-        if ((typeof formData.contract != 'undefined') && (typeof formData.serviceType != 'undefined') && (typeof formData.zone != 'undefined') 
-          && (typeof formData.startDate != 'undefined') && (typeof formData.endDate != 'undefined'))  {
+        if (areAllFiltersSet())  {
           dataGet('services', 
             '?contract=' + formData.contract 
             + '&serviceType=' + formData.serviceType 
@@ -173,6 +171,15 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
   $scope.isCheckboxShowedByStatus = function(status) {
     return $scope.isExecutedService(status) || $scope.isCorrectedService(status);
   };
+
+  var areAllFiltersSet = function() {
+    var formData = $scope.formData;
+    return (typeof formData.contract != 'undefined') && (formData.contract != null)
+      && (typeof formData.serviceType != 'undefined') && (formData.serviceType != null)
+      && (typeof formData.zone != 'undefined') && (formData.zone != null)
+      && (typeof formData.startDate != 'undefined') && (formData.startDate != null)
+      && (typeof formData.endDate != 'undefined') && (formData.endDate != null);
+  }
 
   init();
 });

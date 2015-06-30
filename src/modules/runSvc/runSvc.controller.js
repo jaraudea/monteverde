@@ -356,7 +356,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
           var orderedData = params.sorting() ?
                   $filter('orderBy')($scope.tableData, params.orderBy()) :
                   tableData;
-
+          params.total(orderedData.length); // set total for recalc pagination
           $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
       }
    });

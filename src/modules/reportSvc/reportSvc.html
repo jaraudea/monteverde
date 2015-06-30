@@ -19,7 +19,7 @@
 
     <label for="zone" class="control-label col-sm-1">Zona: </label>
     <div class="col-sm-2">
-      <select name="zone" class="form-control" ng-model="formData.zone" ng-options="control._id as control.name for control in controls.zones" ng-change="loadtabledata()">
+      <select name="zone" class="form-control" ng-model="formData.zone" ng-options="control._id as control.name for control in controls.contracts.findById(formData.contract, 'zones')" ng-change="loadtabledata()">
         <option value="" selected disabled>Seleccione</option>
       </select>
     </div>
