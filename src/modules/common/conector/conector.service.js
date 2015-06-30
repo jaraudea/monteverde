@@ -22,6 +22,7 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
     executeService : "api/service/executeService",
     executeServiceById : '/api/service/executeService',
     services : "/api/service/services",
+    serviceInMonth: "/api/service/serviceInMonth",
     // POST
     createSrv : "api/service/executeService",
     create : "/api/service/configservice/",

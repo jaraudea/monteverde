@@ -124,6 +124,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
     var form = $scope.addExecSvcForm;
     $scope.formData.code = '';
     $scope.formData.team = '';
+    $scope.formData.doneQuantity = '';
     $scope.formData.vehicle = '';
     $scope.formData.unit = '';
     $scope.formData.tripsNumber = 0;
@@ -160,6 +161,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
         dataGet('executeService', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone + '&date=' + date, function (data) {
           $scope.tableData = JrfService.parseRunServicetableData(data, $scope);
           $scope.tableParams.reload();
+          $scope.tableParams.$params.page = 1;
         });
         percentStatus();
       }
@@ -239,49 +241,89 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
     });
   };
 
+
+  $scope.duplicateService = {};
+
   $scope.submitaddExec = function () {
     var form = $scope.addExecSvcForm,
-        valid = form.$valid,
-        files = $scope.images.flow.files,
+        data = $scope.formData,
+        valid = form.$valid;
+    if (valid) {
+      // Validates if service exist in month in order to don't duplicate it, only modify extisting one
+      dataGet('serviceInMonth', '?configService=' + data.configService._id + '&date=' + data.date, function(service) { 
+        if (service && !$scope.isEditing) {
+          $scope.duplicateService = service;
+          if($scope.isApprovedService(service.status)) { 
+            $scope.modalInstance = $modal.open({
+              animation: true,
+              templateUrl: 'existingApprovedServiceModal',
+              scope: $scope,
+              size: 100
+            });
+          } else {
+            $scope.modalInstance = $modal.open({
+              animation: true,
+              templateUrl: 'existingServiceModal',
+              scope: $scope,
+              size: 100
+            });
+          }
+        } else {
+          $scope.executeService();
+        }
+      });
+    } else {
+      AlertsFactory.addAlert('warning', 'Por favor llene todos los campos correctamente antes de agregar el servicio', true);
+    } 
+  };
+
+  $scope.closeExistingApprovedServiceModal = function() {
+    $scope.modalInstance.dismiss('close');
+    $scope.clearForm();
+  }
+
+  $scope.executeService = function() {
+    if (typeof $scope.modalInstance !== 'undefined') {
+      $scope.modalInstance.dismiss('confirm');
+    }
+    var files = $scope.images.flow.files,
         editing = $scope.isEditing,
         savedImages = $scope.savedImages,
         data = $scope.formData;
 
-    if (valid) {
+    // add file names
+    if (files.length || savedImages.length) {
+      data.files = [];
 
-      // add file names
-      if (files.length || savedImages.length) {
-        data.files = [];
-
-        // add new images
-        for (var ndx = 0; ndx < files.length; ndx++) {
-          data.files.push({
-            name: files[ndx].name, 
-            identifier: files[ndx].uniqueIdentifier || files[ndx].identifier
-          });
-        };
-
-        // if have saved images, save  
-        for (var ndx = 0; ndx < savedImages.length; ndx++) {
-          data.files.push({
-            name: savedImages[ndx].name, 
-            identifier: savedImages[ndx].uniqueIdentifier || savedImages[ndx].identifier
-          });
-        };
+      // add new images
+      for (var ndx = 0; ndx < files.length; ndx++) {
+        data.files.push({
+          name: files[ndx].name, 
+          identifier: files[ndx].uniqueIdentifier || files[ndx].identifier
+        });
       };
 
-      $scope.submittedData = JrfService.parseRunService(data, editing);
-
-      if (files.length ) {
-        $scope.images.flow.upload()
-      } else {
-        processform();
+      // if have saved images, save  
+      for (var ndx = 0; ndx < savedImages.length; ndx++) {
+        data.files.push({
+          name: savedImages[ndx].name, 
+          identifier: savedImages[ndx].uniqueIdentifier || savedImages[ndx].identifier
+        });
       };
-      
+    };
+    
+    $scope.submittedData = JrfService.parseRunService(data, editing);
+
+    if (files.length ) {
+      $scope.images.flow.upload()
     } else {
-      AlertsFactory.addAlert('warning', 'Por favor llene todos los campos correctamente antes de agregar el servicio', true);
-    }
+      processform();
+    };
+  };
 
+  $scope.cancelServiceExecution = function() {
+    $scope.modalInstance.dismiss('cancel');
+    $scope.clearForm();
   };
 
   var processform = function () {
@@ -348,7 +390,10 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
 
   $scope.tableParams = new ngTableParams({
       page: 1,            // show first page
-      count: 10           // count per page
+      count: 10,           // count per page
+      sorting: {
+        field: 'asc'
+      }
   }, {
       total: $scope.tableData.length, // length of data
       getData: function($defer, params) {
@@ -368,6 +413,10 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
       && (typeof formData.zone != 'undefined') && (formData.zone != null)
       && (typeof formData.date != 'undefined') && (formData.date != null);
   }
+
+  $scope.isApprovedService = function(status) {
+    return status === '556fcd3f540893b44a2aef03';
+  };
 
   init();
 });

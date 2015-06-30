@@ -47,7 +47,7 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
       page: 1,            // show first page
       count: 10,           // count per page
       sorting: {
-        Lote: 'asc'
+        'configService.code': 'asc'
       }
   }, {
       total: $scope.tableData.length, // length of data

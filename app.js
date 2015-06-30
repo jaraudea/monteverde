@@ -44,7 +44,7 @@ app.set('view engine', 'hbs');
 app.use('/api', expressJwt({secret: tokenConfig.secret}));
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(favicon(__dirname + '/public/images/favicon.ico'));
 app.use(logger('dev'));
 
 app.use(bodyParser.json());
@@ -76,6 +76,7 @@ app.get('/api/service/configservice/:code?', configServiceApi.getByCode);
 app.get('/api/service/executeService/executionPercentage?', serviceApi.getExecutionPercentage);
 app.get('/api/service/executeService/:_id?', serviceApi.getExecutedServices);
 app.get('/api/service/services?', serviceApi.getServices);
+app.get('/api/service/serviceInMonth?', serviceApi.getServiceInMonth);
 
 /*POST*/  
 app.post('/api/service/configservice', configServiceApi.create);

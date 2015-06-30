@@ -149,4 +149,27 @@
     </div>   
 
   </form>
+  <script type="text/ng-template" id="existingServiceModal">
+    <div class="modal-header">
+        <h3 class="modal-title">Serivicio duplicado</h3>
+    </div>
+    <div class="modal-body">
+        <p class="text-center">El servicio con código <b>{{duplicateService.configService.code}}</b>,<br><span ng-hide="duplicateService.executedDate">ya se encuentra <b>PROGRAMADO</b> para la fecha <i>{{duplicateService.scheduledDate | date : 'mediumDate'}}</i></span> <span ng-show="duplicateService.executedDate">ya se encuentra <b>EJECUTADO</b> en la fecha <i>{{duplicateService.executedDate | date : 'mediumDate'}}</i></span>,<br>desea reemplazarlo?</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="executeService()">Si</button>
+        <button class="btn btn-warning" ng-click="cancelServiceExecution()">No</button>
+    </div>
+  </script>
+  <script type="text/ng-template" id="existingApprovedServiceModal">
+    <div class="modal-header">
+        <h3 class="modal-title">Serivicio duplicado Aprobado</h3>
+    </div>
+    <div class="modal-body">
+        <p class="text-center">El servicio con código <b>{{duplicateService.configService.code}}</b>,<br>ejecutado en la fecha: <i>{{duplicateService.executedDate | date : 'mediumDate'}},<br>ya se encuentra <b>APROBADO</b> en la fecha: <i>{{duplicateService.approvedDate | date : 'mediumDate'}}</i>.</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="closeExistingApprovedServiceModal()">Ok</button>
+    </div>
+  </script>
 </div>

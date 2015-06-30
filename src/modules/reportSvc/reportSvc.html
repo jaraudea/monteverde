@@ -72,19 +72,19 @@
           </td>
           <td data-title="'Fechas'" sortable="'executedDate'">
               <p ng-if="service.scheduledDate">
-                <b>Programación:</b> {{ service.scheduledDate | date : 'fullDate'}}
+                <b>Programación:</b> {{ service.scheduledDate | date : 'mediumDate'}}
               </p>
               <p ng-if="service.executedDate">
-                <b>Ejecución:</b> {{ service.executedDate | date : 'fullDate'}}
+                <b>Ejecución:</b> {{ service.executedDate | date : 'mediumDate'}}
               </p>
               <p ng-if="service.disapprovedDate">
-                <b>Desaprobación:</b> {{ service.disapprovedDate | date : 'fullDate'}}
+                <b>Desaprobación:</b> {{ service.disapprovedDate | date : 'mediumDate'}}
               </p>
               <p ng-if="service.correctedDate">  
-                <b>Corrección:</b> {{ service.correctedDate | date : 'fullDate'}}
+                <b>Corrección:</b> {{ service.correctedDate | date : 'mediumDate'}}
               </p> 
               <p ng-if="service.approvedDate">
-                <b>Aprobación:</b> {{ service.approvedDate | date : 'fullDate'}}
+                <b>Aprobación:</b> {{ service.approvedDate | date : 'mediumDate'}}
               </p>
           </td>
           <td data-title="'Cantidad Ejecutada'" sortable="'quantity'">

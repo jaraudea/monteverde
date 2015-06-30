@@ -63,11 +63,26 @@ exports.scheduleService = function(req, res, next) {
 };
 
 exports.executeService = function(req, res, next) {
-  var service = executedService(req.body);
-  
-  Service.create(service, function(err, response) {
+  var queryDate = new Date(req.body.date);
+  var firstDay = new Date(queryDate.getFullYear(), queryDate.getMonth(), 1);
+  var lastDay = new Date(queryDate.getFullYear(), queryDate.getMonth() + 1, 0);
+  var query = { 
+    configService: req.body.configService,
+    $or: [{scheduledDate: {$gte: new Date(firstDay), $lte: new Date(lastDay)}}, {executedDate: {$gte: new Date(firstDay), $lte: new Date(lastDay)}}]
+  };
+  Service.findOne(query, function(err, svc) {
     if (err) next(err);
-     res.sendStatus(200);
+    if (svc) {
+      var service = executedService(req.body, svc);
+      service.save();
+      res.sendStatus(200);
+    } else {
+      var service = executedService(req.body);
+      Service.create(service, function(err, response) {
+        if (err) next(err);
+        res.sendStatus(200);
+      });
+    }
   });
 };
 
@@ -178,6 +193,21 @@ exports.getExecutionPercentage = function(req, res, next) {
     }
   });
 };
+
+exports.getServiceInMonth = function(req, res, next) {
+  var query = req.query;
+  if (typeof query.date != 'undefined') {
+    var queryDate = new Date(query.date);
+    var firstDay = new Date(queryDate.getFullYear(), queryDate.getMonth(), 1);
+    var lastDay = new Date(queryDate.getFullYear(), queryDate.getMonth() + 1, 0);
+    delete query['date'];
+    query['$or'] = [{scheduledDate: {$gte: new Date(firstDay), $lte: new Date(lastDay)}}, {executedDate: {$gte: new Date(firstDay), $lte: new Date(lastDay)}}];
+  }
+  Service.findOne(query).populate('configService').exec(function(err, service) {
+    if (err) next(err);
+    res.json(service);
+  });
+}
 
 var getDateFilter = function(date) {
   var dateFilter = {};
