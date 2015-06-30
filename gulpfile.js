@@ -72,6 +72,8 @@ tasks = {
         // Copy the angular map
         gulp.src(nodeModules + '/angular/*.map')
           .pipe(gulp.dest(dist + '/javascripts/vendors/'));
+        gulp.src(bowerComponents + '/ng-table-export/ng-table-export.map')
+          .pipe(gulp.dest(dist + '/javascripts/vendors/'));  
       }
     },
     templates: function () {

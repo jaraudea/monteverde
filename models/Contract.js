@@ -18,7 +18,8 @@ var contractSchema = new Schema({
       position: String,
       email: String
     }]
-  }
+  },
+  zones: [{ type: Schema.Types.ObjectId, ref: 'Zone' }]
 });
 
 module.exports = mongoose.model('Contract', contractSchema);

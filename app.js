@@ -73,7 +73,8 @@ app.get('/api/service/vehicles', vehicleApi.getAll);
 app.get('/api/service/units', unitApi.getAll);
 app.get('/api/service/configservice/codes', configServiceApi.getAllConfigCodes);
 app.get('/api/service/configservice/:code?', configServiceApi.getByCode);
-app.get('/api/service/executeService?', serviceApi.getExecutedServices);
+app.get('/api/service/executeService/executionPercentage?', serviceApi.getExecutionPercentage);
+app.get('/api/service/executeService/:_id?', serviceApi.getExecutedServices);
 app.get('/api/service/services?', serviceApi.getServices);
 
 /*POST*/  
@@ -83,13 +84,13 @@ app.post('/api/service/executeService', serviceApi.executeService);
 
 /*PUT*/
 app.put('/api/service/configservice/:code', configServiceApi.update);
-app.put('/api/service/scheduleService/:id', serviceApi.updateScheduledService);
-app.put('/api/service/executeService/:id', serviceApi.updateExecutedService);
+app.put('/api/service/scheduleService/:_id', serviceApi.updateScheduledService);
+app.put('/api/service/executeService/:_id', serviceApi.updateExecutedService);
 app.put('/api/service/approveService/:_id', serviceApi.approveService);
 app.put('/api/service/disapproveService/:_id', serviceApi.disapproveService);
 
 /*DELETE*/
-app.delete('/api/service/executeService/:id', serviceApi.deleteExecutedService);
+app.delete('/api/service/executeService/:_id', serviceApi.deleteExecutedService);
 
 /* upload (testing porpouses) this is a basic oute, please move the components to the corect files */
 // Handle uploads through Flow.js
@@ -131,6 +132,7 @@ app.get('/upload', function(req, res) {
 });
 
 app.get('/download/:identifier', function(req, res) {
+  res.writeHead(200, {'Content-Type': 'image/jpg' });
   flow.write(req.params.identifier, res);
 });
 /*****************/

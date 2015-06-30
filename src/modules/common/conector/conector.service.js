@@ -5,23 +5,33 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
   var that = this;
 
   this.ep = {
-    tasks : "/api/service/tasks",
-    species : "/api/service/species",
-    teams : "/api/service/teams",
-    zones : "/api/service/zones",
-    serviceTypes : "/api/service/servicetypes",
-    contracts : "/api/service/contracts",
-    units : "/api/service/units",
-    config : "/api/service/config/:code",
-    envAuths : "/api/service/environmentalauthorities",
-    codes : "/api/service/configservice/codes",
-    serviceConf : "/api/service/configservice",
+    // GET
+    tasks : "/api/service/tasks/",
+    execPercent : "api/service/executeService/executionPercentage", 
+    species : "/api/service/species/",
+    teams : "/api/service/teams/",
+    zones : "/api/service/zones/",
+    serviceTypes : "/api/service/servicetypes/",
+    contracts : "/api/service/contracts/",
+    units : "/api/service/units/",
+    config : "/api/service/config/:code/",
+    envAuths : "/api/service/environmentalauthorities/",
+    codes : "/api/service/configservice/codes/",
+    serviceConf : "/api/service/configservice/",
+    vehicles : "api/service/vehicles",
+    executeService : "api/service/executeService",
+    executeServiceById : '/api/service/executeService',
     services : "/api/service/services",
-    downloadFile: "/download/",
     // POST
+    createSrv : "api/service/executeService",
     create : "/api/service/configservice/",
     approveSvc : "/api/service/approveService/",
-    disapproveSvc : "/api/service/disapproveService/"
+    getExecution : "/api/service/configservice",        
+    disapproveSvc : "/api/service/disapproveService/",
+    // PUT
+    updateExecution : "/api/service/executeService/",
+    // DELETE
+    deleteSrv : "api/service/executeService"
   };
 
   socketFactory.on('notifyChanges', function (data) {
@@ -35,9 +45,9 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
 
   // Http Requests
   
-  this.getData = function (url, id) {
+  this.getData = function (url, q) {
     var defer = $q.defer(),
-        url = (id)? url + '/' + id : url;
+        url = (q)? url + '/' + q : url;
 
     $http.get(url)
       .success(function(data) {
@@ -52,8 +62,6 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
 
   this.setData = function (url, pData) {
     var defer = $q.defer();
-
-    console.log(pData);
 
     $http.post(url, pData)
       .success(function(data) {
@@ -81,9 +89,9 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
     return defer.promise;
   };
 
-  this.removeData = function (id) {
+  this.removeData = function (url, id) {
     var defer = $q.defer(),
-        url = spotsUrl + '/' + id;
+        url = url + '/' + id;
 
     $http.delete(url)
       .success(function(data) {

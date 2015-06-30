@@ -1,7 +1,6 @@
 var ConfigService = require('../../models/ConfigService');
 
 var grassService = function(data) {
-  console.log(data.period);
   var configService = {
     code: data.code,
     contract: data.contract,
@@ -68,7 +67,6 @@ exports.getByCode = function(req, res, next) {
   var query = isEmpty(req.query) ? {code: req.params.code} : req.query;
   ConfigService.find(query, function(err, configService) {
     if (err) return next(err);
-    console.log(configService);
     res.json(configService)
   });
 };

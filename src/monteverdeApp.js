@@ -6,7 +6,6 @@ var monteverde = angular.module('monteverde', [
     'ngTable',
     'ngTableExport',
     'satellizer',
-    'ngDialog',
     'uiSwitch',
     'flow'
   ]
@@ -15,7 +14,7 @@ var monteverde = angular.module('monteverde', [
 // app configuration
 monteverde.config(function ( $urlRouterProvider, $stateProvider, $authProvider) {
     // stup the Auth
-    $authProvider.baseUrl = "http://localhost:3000"
+    $authProvider.baseUrl = "http://localhost:3000"//"http://190.250.0.250:3000"
     $authProvider.loginUrl = "/login";
     $authProvider.signupUrl = "api/signup";
     // $authProvider.tokenName = "Bearer";  
@@ -80,6 +79,8 @@ monteverde.run(function ($rootScope, $location, $state, $auth) {
 
     return false;
   }; 
+
+  Date.prototype.getRealMonth = function () {return this.getMonth() + 1};
 
   $rootScope.$on( '$stateChangeStart', function(e, toState  , toParams, fromState, fromParams) { 
     var isLogin = (toState.name === "login");
