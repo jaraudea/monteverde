@@ -16,7 +16,7 @@
 
   <label for="zone" class="control-label col-sm-1">Zona: </label>
   <div class="col-sm-2">
-    <select name="zone" class="form-control" ng-model="formData.zone" ng-options="control._id as control.name for control in controls.zones" ng-change="updateCodes()">
+    <select name="zone" class="form-control" ng-model="formData.zone" ng-options="control._id as control.name for control in controls.contracts.findById(formData.contract, 'zones')" ng-change="updateCodes()">
       <option value="" selected disabled>Seleccione</option>
     </select>
   </div>
@@ -57,9 +57,6 @@
                 <a ng-if="!service.$edit" href="" class="btn btn-primary" ng-click="editExecution(service._id); service.$edit = true"><i class="fa fa-pencil fa-fw"></i></a>
                 <a ng-if="service.$edit"  href="" class="btn btn-warning" ng-click="editCancel(); service.$edit = false"><i class="fa fa-times-circle fafw"></i></a>
                 <a ng-if="!service.$edit" href="" class="btn btn-danger" ng-click="removeExecution($index, service._id)"><i class="fa fa-trash-o fa-fw"></i></a>
-            </td>                
-              </div>  
-              </div>                 
             </td>
         </tr>
     </table>

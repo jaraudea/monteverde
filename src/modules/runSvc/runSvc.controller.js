@@ -68,10 +68,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
 
   var percentStatus = function () {
     var formData = $scope.formData;
-    if (typeof formData.contract != 'undefined' 
-        && typeof formData.serviceType != 'undefined' 
-        && typeof formData.zone != 'undefined' 
-        && typeof formData.date !== 'undefined') {
+    if (areAllFiltersSet) {
       connectorService.getData(connectorService.ep.execPercent, '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone + '&date=' + formData.date)
         .then(
           function (res) {
@@ -148,7 +145,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
 
     $scope.clearForm();
 
-    if ((typeof formData.contract != 'undefined') && (typeof formData.serviceType != 'undefined') && (typeof formData.zone != 'undefined'))  {
+    if (areAllFiltersSet())  {
       dataGet('codes', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone);
       updateServicesTable();
     };
@@ -156,10 +153,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
 
   var updateServicesTable = function () {
       var formData = $scope.formData;
-      if (typeof formData.contract != 'undefined' 
-        && typeof formData.serviceType != 'undefined' 
-        && typeof formData.zone != 'undefined' 
-        && typeof formData.date !== 'undefined') {
+      if (areAllFiltersSet()) {
         // formData.date.setHours(0, -formData.date.getTimezoneOffset(), 0, 0);
         var date = formData.date.toISOString().substr(0, 10);
 
@@ -366,6 +360,14 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
           $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
       }
    });
+
+  var areAllFiltersSet = function() {
+    var formData = $scope.formData;
+    return (typeof formData.contract != 'undefined') && (formData.contract != null)
+      && (typeof formData.serviceType != 'undefined') && (formData.serviceType != null)
+      && (typeof formData.zone != 'undefined') && (formData.zone != null)
+      && (typeof formData.date != 'undefined') && (formData.date != null);
+  }
 
   init();
 });
