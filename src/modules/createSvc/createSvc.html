@@ -20,7 +20,7 @@
     <div class="col-sm-2">
       <select name="zone" id="zone" class="form-control" ng-model="formData.zone">
         <option value="" disabled>Seleccione</option>
-        <option value="{{zone._id}}" ng-bind="zone.name" ng-repeat="zone in controls.zones"></option>
+        <option value="{{zone._id}}" ng-bind="zone.name" ng-repeat="zone in controls.contracts.findById(formData.contract, 'zones')"></option>
       </select>
     </div>
   </div>

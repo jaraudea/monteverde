@@ -88,11 +88,10 @@ exports.disapproveService = function(req, res, next) {
     service.status = '556fcd8f540893b44a2aef06';
     service.disapprovedDate = disapprovedDate;
     if (typeof service.disapprovalReason != 'undefined') {
-      service.disapprovalReason = req.body.reason + '\n------------\n' + service.disapprovalReason;
+      service.disapprovalReason = disapprovedDate.toISOString().substr(0, 10) + ': ' + req.body.reason + '\n' + service.disapprovalReason;
     } else {
       service.disapprovalReason = req.body.reason;
     }
-    console.log(service);
     service.save();
     res.sendStatus(200);
   });
@@ -131,7 +130,7 @@ exports.getServices = function(req, res, next) {
     contract: req.query.contract,
     serviceType: req.query.serviceType,
     zone: req.query.zone,
-    $or: [ {executedDate: null, scheduledDate: {$gte: new Date(req.query.startDate), $lt: new Date(req.query.endDate)}}, {executedDate: {$gte: new Date(req.query.startDate), $lt: new Date(req.query.endDate)}}]
+    $or: [ {executedDate: null, scheduledDate: {$gte: req.query.startDate, $lte: req.query.endDate}}, {executedDate: {$gte: req.query.startDate, $lte: req.query.endDate}}]
   }
 
   Service
@@ -148,6 +147,7 @@ exports.getServices = function(req, res, next) {
 };
 
 var truncateDate = function(date) {
+  // date.setTimeZone('UTC'); //define time zone in nodejs
   date.setHours(0);
   date.setMinutes(0);
   date.setSeconds(0);
@@ -156,5 +156,39 @@ var truncateDate = function(date) {
 };
 
 exports.getExecutionPercentage = function(req, res, next) {
-  res.json({executionPercentage: 25.5});
-}
+  var dateFilter = getDateFilter(new Date(req.query.date));
+  var query = {
+    contract: req.query.contract,
+    serviceType: req.query.serviceType,
+    zone: req.query.zone
+  };
+  var allScheduledQuery = query;
+  allScheduledQuery['scheduledDate'] = {$lte: dateFilter.endDate, $gte: dateFilter.startDate};
+  Service.count(allScheduledQuery , function(err, response) {
+    if (response === 0) {
+      res.json({executionPercentage: ""});
+    } else {
+      var allExecutedQuery = query;
+      allExecutedQuery['executedDate'] = {$lte: dateFilter.endDate, $gte: dateFilter.startDate };
+      allExecutedQuery['status'] = {$ne: '556fcda1540893b44a2aef08'};
+      Service.count(allExecutedQuery, function(err, response1) {
+        var result = ((response1 / response) * 100)
+        res.json({executionPercentage: result.toFixed(2)});
+      });
+    }
+  });
+};
+
+var getDateFilter = function(date) {
+  var dateFilter = {};
+  if (date.getDate() > 15) {
+    var firstDay = new Date(date.getFullYear(), date.getMonth(), 16, 0, 0, 0);
+    var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59);
+    dateFilter = {startDate: firstDay, endDate: lastDay};
+  } else {
+    var firstDay = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0);
+    var lastDay = new Date(date.getFullYear(), date.getMonth(), 15, 23, 59, 59);
+    dateFilter = {startDate: firstDay, endDate: lastDay};
+  }
+  return dateFilter;
+};

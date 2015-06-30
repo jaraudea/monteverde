@@ -67,15 +67,21 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
   };
 
   var percentStatus = function () {
-    connectorService.getData(connectorService.ep.execPercent)
-      .then(
-        function (res) {
-          $scope.percent = res.executionPercentage;
-        },
-        function (err) {
-          console.log('error:', err);
-        }
+    var formData = $scope.formData;
+    if (typeof formData.contract != 'undefined' 
+        && typeof formData.serviceType != 'undefined' 
+        && typeof formData.zone != 'undefined' 
+        && typeof formData.date !== 'undefined') {
+      connectorService.getData(connectorService.ep.execPercent, '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone + '&date=' + formData.date)
+        .then(
+          function (res) {
+            $scope.percent = res.executionPercentage;
+          },
+          function (err) {
+            console.log('error:', err);
+          }
       )
+    }
   };
 
   $scope.editExecution = function (id) { 
@@ -161,6 +167,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
           $scope.tableData = JrfService.parseRunServicetableData(data, $scope);
           $scope.tableParams.reload();
         });
+        percentStatus();
       }
   };
 
