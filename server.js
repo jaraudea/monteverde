@@ -13,7 +13,6 @@ io.on('connection', ioConnection);
 
 function ioConnection(socket) {
 	global.socket = socket;
-  console.log(io.sockets)
   global.sockets = io.sockets;
 };
 

@@ -40,33 +40,25 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
   }
 
   $scope.$watch("filter.$", function () {
-    $scope.tableParams.reload();
+    $scope.loadtabledata();
   });
 
   $scope.tableParams = new ngTableParams({
       page: 1,            // show first page
-      count: 10           // count per page
+      count: 10,           // count per page
+      sorting: {
+        Lote: 'asc'
+      }
   }, {
       total: $scope.tableData.length, // length of data
       getData: function($defer, params) {
-        var formData = $scope.formData;
-        if (areAllFiltersSet())  {
-          dataGet('services', 
-            '?contract=' + formData.contract 
-            + '&serviceType=' + formData.serviceType 
-            + '&zone=' + formData.zone 
-            + '&startDate=' + formData.startDate 
-            + '&endDate=' + formData.endDate, 
-            function(svcs) {
-              var filteredData = $filter('filter')(svcs, $scope.filter);
-              var orderedData = params.sorting() ?
-                $filter('orderBy')(filteredData, params.orderBy()) :
-                filteredData;
+        var filteredData = $filter('filter')($scope.tableData, $scope.filter);
+        var orderedData = params.sorting() ? 
+          $filter('orderBy')(filteredData, params.orderBy()) :
+          filteredData;
 
-              params.total(orderedData.length); // set total for recalc pagination
-              $defer.resolve($scope.services = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-          });
-        }
+        params.total(orderedData.length); // set total for recalc pagination
+        $defer.resolve($scope.services = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
       }
   });
 
@@ -102,7 +94,20 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
   }, true);
 
   $scope.loadtabledata = function () {
-    $scope.tableParams.reload();
+    var formData = $scope.formData;
+    if (areAllFiltersSet())  {
+      dataGet('services', 
+        '?contract=' + formData.contract 
+        + '&serviceType=' + formData.serviceType 
+        + '&zone=' + formData.zone 
+        + '&startDate=' + formData.startDate 
+        + '&endDate=' + formData.endDate, 
+        function(svcs) {
+          $scope.tableData = svcs;
+          $scope.tableParams.reload();
+          $scope.tableParams.$params.page = 1;
+      });
+    }
   };
 
   $scope.open = function(imgIdentifier) {
