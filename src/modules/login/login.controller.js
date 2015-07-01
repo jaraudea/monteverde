@@ -11,7 +11,7 @@ monteverde.controller ('loginCtrl', function ($scope, $state, $scope, $auth, Ale
         $state.go('createSvc');
       })
       .catch(function (response) {
-        console.log('log fail',response)
+        AlertsFactory.addAlert('danger', 'Error: Usuario y/o Contraseña son invalidos.', true);
       })
   } 
 

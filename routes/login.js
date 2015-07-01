@@ -8,18 +8,18 @@ exports.form = function(req, res) {
 };
 
 var authenticate = function(name, pass, fn) {
-	User.findOne({}, function(err, user) {
+	User.findOne({username: name}, function(err, user) {
 		if (err) return fn(err);
-		if (!user) return fn();
+		if (!user) return fn(new Error('Usuario y/o contraseña invalidos.'));
+		if (user.password !== pass) return fn(new Error('Usuario y/o contraseña invalidos.'));
 		fn(err, user);
 	});
 };
 
 exports.authenticate = function (req, res, next) {
-  //if is invalid, return 401
-  authenticate(req.body.username, req.body.password, function(err, user) {
+  authenticate(req.body.username, req.body.pwd, function(err, user) {
 	  if (err) {
-	    res.send(401, 'Usuario o Contraseña incorrectas.');
+	    res.send(401, err);
 	    return;
 	  }
 	  // We are sending the profile inside the token

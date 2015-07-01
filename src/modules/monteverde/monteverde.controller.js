@@ -8,6 +8,7 @@ monteverde.controller('monteverdeCtrl', function ($scope, $auth, connectorServic
     }, 
     function() {
       $scope.userLogged = $auth.isAuthenticated();
+      $scope.user = $auth.getPayload();
     }
   );
 

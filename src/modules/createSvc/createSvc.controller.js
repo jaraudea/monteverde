@@ -56,21 +56,21 @@ monteverde.controller('createSvcCtrl', function ($state, $scope, ngTableParams, 
     connectorService.setData(connectorService.ep.create, data)
       .then(
         function (data) {
-          AlertsFactory.addAlert('success', 'Servicio creado, codigo: ' + code);
+          AlertsFactory.addAlert('success', 'Servicio creado, codigo: ' + code, true);
           $state.go($state.current, {}, {reload: true});
         },
         function (err) {
-          AlertsFactory.addAlert('danger', 'Error al crear el servicio: ' + code);
+          AlertsFactory.addAlert('danger', 'Error al crear el servicio: ' + code, true);
         });
     } else {
       connectorService.editData(connectorService.ep.create, code, data)
         .then(
           function (data) {
-            AlertsFactory.addAlert('success', 'Servicio Actualizado, codigo: ' + code);
+            AlertsFactory.addAlert('success', 'Servicio Actualizado, codigo: ' + code, true);
             $state.go($state.current, {}, {reload: true});
           },
           function (err) {
-            AlertsFactory.addAlert('danger', 'Error al crear el servicio: ' + code);
+            AlertsFactory.addAlert('danger', 'Error al crear el servicio: ' + code, true);
           });      
     }
   }
