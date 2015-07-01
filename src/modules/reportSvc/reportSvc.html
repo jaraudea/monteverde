@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <div class="form-group row">
-    <label for="contract" class="control-label col-sm-1">Contrato: </label>
+    <label for="contract" class="control-label col-sm-1">Contrato:</label>
     <div class="col-sm-2">
       <select name="contract" class="form-control" ng-model="formData.contract" 
         ng-options="contract._id as contract.contractNumber for contract in controls.contracts"
@@ -9,7 +9,7 @@
       </select>
     </div>
 
-    <label for="serviceType" class="control-label col-sm-1 double-line">Tipo de Servicio: </label>
+    <label for="serviceType" class="control-label col-sm-1 double-line">Tipo de Servicio:</label>
     <div class="col-sm-2">
       <select name="serviceType" id="serviceType" class="form-control" placeholder="seleccione" ng-model="formData.serviceType" ng-change="loadtabledata()">
         <option value="" selected disabled>Seleccione</option>
@@ -17,7 +17,7 @@
       </select>
     </div>
 
-    <label for="zone" class="control-label col-sm-1">Zona: </label>
+    <label for="zone" class="control-label col-sm-1">Zona:</label>
     <div class="col-sm-2">
       <select name="zone" class="form-control" ng-model="formData.zone" ng-options="control._id as control.name for control in controls.contracts.findById(formData.contract, 'zones')" ng-change="loadtabledata()">
         <option value="" selected disabled>Seleccione</option>
@@ -25,11 +25,11 @@
     </div>
 
     <div class="col-sm-3">
-      <label for="startDate" class="control-label">Fecha Inicio: </label>
+      <label for="startDate" class="control-label">Fecha Inicio:</label>
       <div>
         <input id="startDate" type="date" class="form-control" ng-model="formData.startDate" ng-change="loadtabledata()">
       </div>
-      <label for="endDate" class="control-label">Fecha Fin: </label>
+      <label for="endDate" class="control-label">Fecha Fin:</label>
       <div>
         <input id="endDate" type="date" class="form-control" ng-model="formData.endDate" ng-change="loadtabledata()">
       </div>
@@ -39,7 +39,7 @@
   <br/>
   <div class="row">
     <div class="form-inline col-sm-8">
-      <label for="filter" class="control-label col-sm-1">Filtro:</label>
+      <label for="filter" class="control-label col-sm-1">Filtro: </label>
       <input id="filter" class="form-control col-sm-7" type="text" ng-model="filter.$"></input>
     </div>
     <div class="form-group col-sm-4 text-right">
@@ -102,7 +102,7 @@
           <td data-title="'Fotos de Respaldo'">
               <a ng-repeat="photo in service.photos" ng-click="open(photo.identifier)">{{photo.name}}<br/></a>
           </td>
-          <td data-title="'Status'" sortable="'status.name'">
+          <td data-title="'Estado'" sortable="'status.name'">
               {{service.status.name}}
           </td>
           <td data-title="'Observaciones'" sortable="'description'">

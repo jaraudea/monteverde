@@ -1,29 +1,37 @@
 <div class="form-group row">
-  <label for="contract" class="control-label col-sm-1">Contrato: </label>
-  <div class="col-sm-2">
-    <select name="contract" class="form-control" ng-model="formData.contract" ng-options="contract._id as contract.contractNumber for contract in controls.contracts" ng-change="updateCodes()">
-      <option value="" selected disabled>Seleccione</option>
-    </select>
+  <div class="col-sm-3">
+    <label for="contract" class="control-label">Contrato: </label>
+    <div>
+      <select name="contract" class="form-control" ng-model="formData.contract" ng-options="contract._id as contract.contractNumber for contract in controls.contracts" ng-change="updateCodes()">
+        <option value="" selected disabled>Seleccione</option>
+      </select>
+    </div>
+  </div>
+  
+  <div class="col-sm-3">
+    <label for="serviceType" class="control-label">Tipo de Servicio: </label>
+    <div>
+      <select name="serviceType" id="serviceType" class="form-control" placeholder="seleccione" ng-model="formData.serviceType" ng-change="updateCodes(); clearOnServiceTypeChange(formData.serviceType)">
+        <option value="" selected disabled>Seleccione</option>
+        <option value="{{servTp._id}}" ng-bind="servTp.name" ng-repeat="servTp in controls.contracts.findById(formData.contract, 'serviceType')"></option>
+      </select>
+    </div>
   </div>
 
-  <label for="serviceType" class="control-label col-sm-1 double-line">Tipo de Servicio: </label>
-  <div class="col-sm-2">
-    <select name="serviceType" id="serviceType" class="form-control" placeholder="seleccione" ng-model="formData.serviceType" ng-change="updateCodes(); clearOnServiceTypeChange(formData.serviceType)">
-      <option value="" selected disabled>Seleccione</option>
-      <option value="{{servTp._id}}" ng-bind="servTp.name" ng-repeat="servTp in controls.contracts.findById(formData.contract, 'serviceType')"></option>
-    </select>
+  <div class="col-sm-3">
+    <label for="zone" class="control-label">Zona: </label>
+    <div>
+      <select name="zone" class="form-control" ng-model="formData.zone" ng-options="control._id as control.name for control in controls.contracts.findById(formData.contract, 'zones')" ng-change="updateCodes()">
+        <option value="" selected disabled>Seleccione</option>
+      </select>
+    </div>
   </div>
 
-  <label for="zone" class="control-label col-sm-1">Zona: </label>
-  <div class="col-sm-2">
-    <select name="zone" class="form-control" ng-model="formData.zone" ng-options="control._id as control.name for control in controls.contracts.findById(formData.contract, 'zones')" ng-change="updateCodes()">
-      <option value="" selected disabled>Seleccione</option>
-    </select>
-  </div>
-
-  <label for="zone" class="control-label col-sm-1">Fecha: </label>
-  <div class="col-sm-2">
-    <input type="date" class="form-control" ng-model="formData.date" ng-change="updateCodes()">
+  <div class="col-sm-3">
+    <label for="date" class="control-label">Fecha: </label>
+    <div>
+      <input type="date" class="form-control" ng-model="formData.date" ng-change="updateCodes()">
+    </div>
   </div>
 </div>      
   
@@ -67,35 +75,37 @@
   
   <form class="form-horizontal container-fluid" name="addExecSvcForm" ng-submit="submitaddExec()" novalidate>
     <div class="form-group row">
-      <label for="code" class="control-label col-sm-1 double-line">C&oacute;digo / Radicado: </label>
-      <div class="col-sm-1">
+      <label for="code" class="control-label col-sm-2 double-line">C&oacute;digo / Radicado: </label>
+      <div class="col-sm-4">
         <input class="form-control" type="text" typeahead-editable="false" typeahead-on-select="getServiceConfig(formData.code.code)" ng-model="formData.code" typeahead="code as code.code for code in controls.codes | filter:$viewValue | limitTo:8" required>
       </div>
 
-      <label for="team" class="control-label col-sm-1">Cuadrilla: </label>
-      <div class="col-sm-1">
+      <label for="team" class="control-label col-sm-2">Cuadrilla: </label>
+      <div class="col-sm-4">
         <select name="team" id="team" class="form-control" ng-model="formData.team" required>
           <option value="" selected disabled>Seleccione</option>
           <option value="{{team._id}}" ng-bind="team.name" ng-repeat="team in controls.teams"></option>
         </select>
       </div>
+    </div>
+    <div class="form-group row">
+      <label class="control-label double-line col-sm-2">Cantidad trabajada: </label>
+      <span class="control-label col-sm-4" ng-bind="formData.doneQuantity"></span>
 
-      <label class="control-label double-line col-sm-1">Cantidad trabajada: </label>
-      <span class="control-label col-sm-1" ng-bind="formData.doneQuantity"></span>
-
-      <label for="unity" class="control-label col-sm-1">Unidad: </label>
-      <div class="col-sm-1">
+      <label for="unity" class="control-label col-sm-2">Unidad: </label>
+      <div class="col-sm-4">
         <select class="form-control" ng-model="formData.unit" ng-options="unit._id as unit.name for unit in controls.units" required>
         </select>
       </div>
-
-      <label class="control-label col-sm-1">Veh&iacute;culo: </label>
-      <div class="col-sm-1">
+    </div>
+    <div class="form-group row">
+      <label class="control-label col-sm-2">Veh&iacute;culo: </label>
+      <div class="col-sm-4">
         <input class="form-control" id="vehicle" type="text" typeahead-editable="false" typeahead-on-select="calculateWork()" ng-change="calculateWork()" ng-model="formData.vehicle" placeholder="Vehiculo" typeahead="vehicle as vehicle.plate for vehicle in controls.vehicles | filter:{plate:$viewValue}" required>
       </div>    
 
-      <label class="control-label col-sm-1">Viajes: </label>
-      <div class="col-sm-1">
+      <label class="control-label col-sm-2">Viajes: </label>
+      <div class="col-sm-4">
         <input class="form-control" type="number" ng-model="formData.tripsNumber" ng-change="calculateWork()" required>
       </div>    
     </div>
@@ -105,7 +115,7 @@
           flow-name="images.flow" 
           flow-complete="uploader.controllerFn($flow, $file, $message)"
           >
-      <div class="col-sm-4">
+      <div class="col-sm-6">
         <label for="observations" class="control-label">Descripci&oacute;n: </label>
         <textarea class="form-control" cols="30" rows="5" ng-model="formData.observations" required></textarea>
       </div>
@@ -121,7 +131,7 @@
         <input type="file" flow-btn />
       </div>
 
-      <div class="col-sm-3">
+      <div class="col-sm-2">
         <table class="table table table-bordered table-fixed">
           
           <tr  ng-repeat="img in savedImages">
@@ -136,7 +146,7 @@
         </table>
       </div>
       
-      <div class="col-sm-3">
+      <div class="col-sm-2">
         <h2 ng-bind="percent + '%'"></h2>
       </div>
     </div>

@@ -1,23 +1,23 @@
 <form class="form-horizontal container-fluid" name="createSvcForm" ng-submit="createSvcForm.$valid && createSvc.submitcreateSvc()">
   <div class="form-group row">
     <label for="contract" class="control-label col-sm-1">Contrato: </label>
-    <div class="col-sm-2">
-      <select name="contract" class="form-control" ng-model="formData.contract">
+    <div class="col-sm-3">
+      <select id="contract" name="contract" class="form-control" ng-model="formData.contract">
         <option value="" selected disabled>Seleccione</option>
         <option value="{{contract._id}}" ng-bind="contract.contractNumber"   ng-repeat="contract in controls.contracts"></option>
       </select>
     </div>
 
-    <label for="serviceType" class="control-label col-sm-2">Tipo de Servicio: </label>
-    <div class="col-sm-2">
+    <label for="serviceType" class="control-label col-sm-1 double-line">Tipo de Servicio: </label>
+    <div class="col-sm-3">
       <select name="serviceType" id="serviceType" class="form-control" placeholder="seleccione" ng-model="formData.serviceType">
         <option value="" selected disabled>Seleccione</option>
         <option value="{{servTp._id}}" ng-bind="servTp.name" ng-repeat="servTp in controls.contracts.findById(formData.contract, 'serviceType')"></option>
       </select>
     </div>
 
-    <label for="zone" class="control-label col-sm-2">Zona: </label>
-    <div class="col-sm-2">
+    <label for="zone" class="control-label col-sm-1">Zona: </label>
+    <div class="col-sm-3">
       <select name="zone" id="zone" class="form-control" ng-model="formData.zone">
         <option value="" disabled>Seleccione</option>
         <option value="{{zone._id}}" ng-bind="zone.name" ng-repeat="zone in controls.contracts.findById(formData.contract, 'zones')"></option>
@@ -26,13 +26,14 @@
   </div>
 
   <div class="form-group row">
-    <label for="code" class="control-label col-sm-1 double-line">C&oacute;digo / Radicado: </label>
-    <div class="col-sm-2">
-      <input class="form-control" type="text" typeahead-on-select="getServiceConfig(formData.code)" ng-model="formData.code" typeahead="field for field in codes | filter:$viewValue | limitTo:8" >
+    <label for="code" class="control-label col-sm-1" ng-hide="formData.serviceType == '5563efe645051764c2e3da13'">C&oacute;digo: </label>
+    <label for="code" class="control-label col-sm-1" ng-show="formData.serviceType == '5563efe645051764c2e3da13'">Radicado: </label>
+    <div class="col-sm-3">
+      <input id="code" class="form-control" type="text" typeahead-on-select="getServiceConfig(formData.code)" ng-model="formData.code" typeahead="field for field in codes | filter:$viewValue | limitTo:8" >
     </div>
 
-    <label for="team" class="control-label col-sm-2">Cuadrilla: </label>
-    <div class="col-sm-2">
+    <label for="team" class="control-label col-sm-1">Cuadrilla: </label>
+    <div class="col-sm-3">
       <select name="team" id="team" class="form-control" ng-model="formData.team">
         <option value="" selected disabled>Seleccione</option>
         <option value="{{team._id}}" ng-bind="team.name" ng-repeat="team in controls.teams"></option>
@@ -40,9 +41,9 @@
     </div>
 
     <div ng-if="formData.serviceType == '5563efe645051764c2e3da13'">
-      <label for="envAuth" class="control-label col-sm-2">Autoridad Ambiental: </label>
-      <div class="col-sm-2">
-          <select class="form-control" ng-model="formData.envAuthority">
+      <label for="envAuth" class="control-label col-sm-1">Autoridad Ambiental: </label>
+      <div class="col-sm-3">
+          <select id="envAuth" class="form-control" ng-model="formData.envAuthority">
             <option value="" selected disabled>Seleccione</option>
             <option value="{{envAuthority._id}}" ng-bind="envAuthority.name" ng-repeat="envAuthority in controls.envAuths"></option>
           </select>
@@ -50,15 +51,11 @@
     </div>
 
     <div ng-if="formData.serviceType == '5563efda45051764c2e3da12'">
-      <label for="area" class="control-label col-sm-2">Area: </label>
-      <div class="col-sm-2">
+      <label for="area" class="control-label col-sm-1">Area: </label>
+      <div class="col-sm-3">
         <input class="form-control" type="text" id="area" name="area" ng-model="formData.area">
       </div>
     </div>
-
-  </div>
-
-  <div class="form-group row">
   </div>
 
   <div class="form-group row">
@@ -68,14 +65,14 @@
     </div>
 
     <label for="period" class="control-label col-sm-1">Quincena: </label>
-    <div class="col-sm-2">
+    <div class="col-sm-3">
       <select name="period" id="period" class="form-control" ng-options="name for (name, value) in {'Primera': 1, 'Segunda': 2} track by value" ng-model="formData.period">
         <option value="" disabled>Seleccione</option>
       </select>
     </div>
 
-    <label for="unity" class="control-label col-sm-2">Unidad: </label>
-    <div class="col-sm-2">
+    <label for="unity" class="control-label col-sm-1">Unidad: </label>
+    <div class="col-sm-3">
       <select name="unit" id="unit" class="form-control" ng-model="formData.unit">
         <option value="" disabled>Seleccione</option>
         <option value="{{unit._id}}" ng-bind="unit.name" ng-repeat="unit in controls.units"></option>
@@ -91,7 +88,7 @@
 
     <label for="active" class="control-label col-sm-1">Activo: </label>
     <div class="col-sm-3">
-      <switch name="active" ng-model="formData.active" class="green small"></switch>
+      <switch id="active" name="active" ng-model="formData.active" class="green small"></switch>
     </div>
   </div>
 
