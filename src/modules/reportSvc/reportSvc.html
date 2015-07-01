@@ -1,29 +1,32 @@
 <div class="container-fluid">
   <div class="form-group row">
-    <label for="contract" class="control-label col-sm-1">Contrato:</label>
-    <div class="col-sm-2">
-      <select name="contract" class="form-control" ng-model="formData.contract" 
-        ng-options="contract._id as contract.contractNumber for contract in controls.contracts"
-        ng-change="loadtabledata()">
-        <option value="" selected disabled>Seleccione</option>
-      </select>
+    <div class="col-sm-3">
+      <label for="contract" class="control-label">Contrato:</label>
+      <div>
+        <select name="contract" class="form-control" ng-model="formData.contract" 
+          ng-options="contract._id as contract.contractNumber for contract in controls.contracts"
+          ng-change="loadtabledata()">
+          <option value="" selected disabled>Seleccione</option>
+        </select>
+      </div>
     </div>
-
-    <label for="serviceType" class="control-label col-sm-1 double-line">Tipo de Servicio:</label>
-    <div class="col-sm-2">
-      <select name="serviceType" id="serviceType" class="form-control" placeholder="seleccione" ng-model="formData.serviceType" ng-change="loadtabledata()">
-        <option value="" selected disabled>Seleccione</option>
-        <option value="{{servTp._id}}" ng-bind="servTp.name" ng-repeat="servTp in controls.contracts.findById(formData.contract, 'serviceType')"></option>
-      </select>
+    <div class="col-sm-3">
+      <label for="serviceType" class="control-label">Tipo de Servicio:</label>
+      <div>
+        <select name="serviceType" id="serviceType" class="form-control" placeholder="seleccione" ng-model="formData.serviceType" ng-change="loadtabledata()">
+          <option value="" selected disabled>Seleccione</option>
+          <option value="{{servTp._id}}" ng-bind="servTp.name" ng-repeat="servTp in controls.contracts.findById(formData.contract, 'serviceType')"></option>
+        </select>
+      </div>
     </div>
-
-    <label for="zone" class="control-label col-sm-1">Zona:</label>
-    <div class="col-sm-2">
-      <select name="zone" class="form-control" ng-model="formData.zone" ng-options="control._id as control.name for control in controls.contracts.findById(formData.contract, 'zones')" ng-change="loadtabledata()">
-        <option value="" selected disabled>Seleccione</option>
-      </select>
+    <div class="col-sm-3">
+      <label for="zone" class="control-label">Zona:</label>
+      <div>
+        <select name="zone" class="form-control" ng-model="formData.zone" ng-options="control._id as control.name for control in controls.contracts.findById(formData.contract, 'zones')" ng-change="loadtabledata()">
+          <option value="" selected disabled>Seleccione</option>
+        </select>
+      </div>
     </div>
-
     <div class="col-sm-3">
       <label for="startDate" class="control-label">Fecha Inicio:</label>
       <div>
@@ -40,7 +43,7 @@
   <div class="row">
     <div class="form-inline col-sm-8">
       <label for="filter" class="control-label col-sm-1">Filtro: </label>
-      <input id="filter" class="form-control col-sm-7" type="text" ng-model="filter.$"></input>
+      <input id="filter" class="form-control" type="text" ng-model="filter.$"></input>
     </div>
     <div class="form-group col-sm-4 text-right">
       <a class="btn btn-success" ng-href="" title="Aprobar" ng-click='approveServices()'>
