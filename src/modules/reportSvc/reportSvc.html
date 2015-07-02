@@ -1,141 +1,139 @@
-<div class="container-fluid">
-  <div class="form-group row">
-    <div class="col-sm-3">
-      <label for="contract" class="control-label">Contrato:</label>
-      <div>
-        <select name="contract" class="form-control" ng-model="formData.contract" 
-          ng-options="contract._id as contract.contractNumber for contract in controls.contracts"
-          ng-change="loadtabledata()">
-          <option value="" selected disabled>Seleccione</option>
-        </select>
-      </div>
-    </div>
-    <div class="col-sm-3">
-      <label for="serviceType" class="control-label">Tipo de Servicio:</label>
-      <div>
-        <select name="serviceType" id="serviceType" class="form-control" placeholder="seleccione" ng-model="formData.serviceType" ng-change="loadtabledata()">
-          <option value="" selected disabled>Seleccione</option>
-          <option value="{{servTp._id}}" ng-bind="servTp.name" ng-repeat="servTp in controls.contracts.findById(formData.contract, 'serviceType')"></option>
-        </select>
-      </div>
-    </div>
-    <div class="col-sm-3">
-      <label for="zone" class="control-label">Zona:</label>
-      <div>
-        <select name="zone" class="form-control" ng-model="formData.zone" ng-options="control._id as control.name for control in controls.contracts.findById(formData.contract, 'zones')" ng-change="loadtabledata()">
-          <option value="" selected disabled>Seleccione</option>
-        </select>
-      </div>
-    </div>
-    <div class="col-sm-3">
-      <label for="startDate" class="control-label">Fecha Inicio:</label>
-      <div>
-        <input id="startDate" type="date" class="form-control" ng-model="formData.startDate" ng-change="loadtabledata()">
-      </div>
-      <label for="endDate" class="control-label">Fecha Fin:</label>
-      <div>
-        <input id="endDate" type="date" class="form-control" ng-model="formData.endDate" ng-change="loadtabledata()">
-      </div>
-    </div>
-  </div> 
-  <br/>
-  <br/>
-  <div class="row">
-    <div class="form-inline col-sm-8">
-      <label for="filter" class="control-label col-sm-1">Filtro: </label>
-      <input id="filter" class="form-control" type="text" ng-model="filter.$"></input>
-    </div>
-    <div class="form-group col-sm-4 text-right">
-      <a class="btn btn-success" ng-href="" title="Aprobar" ng-click='approveServices()'>
-        <i class="fa fa-thumbs-o-up fa-fw"></i>
-      </a>
-      <a class="btn btn-danger" ng-href="" title="Desaprobar" ng-click='openDisapprovalReasonModal()'>
-        <i class="fa fa-thumbs-o-down fa-fw"></i>
-      </a>
-      <a class="btn btn-info" ng-mousedown="csv.generate()" ng-href="{{ csv.link() }}" download="servicios.csv" title="Exportar">
-        <i class="fa fa-list-alt fa-fw"></i>
-      </a>
+<div class="form-group row">
+  <div class="col-sm-3">
+    <label for="contract" class="control-label">Contrato:</label>
+    <div>
+      <select name="contract" class="form-control" ng-model="formData.contract" 
+        ng-options="contract._id as contract.contractNumber for contract in controls.contracts"
+        ng-change="loadtabledata()">
+        <option value="" selected disabled>Seleccione</option>
+      </select>
     </div>
   </div>
-  <div class="form-group row">
-    <div class="col-sm-12">
-      <table ng-table="tableParams" show-filter="true" class="table table-bordered" export-csv="csv">
-        <tr ng-repeat="service in $data">
-          <td data-title="'Lote'" sortable="'configService.code'">
-              {{service.configService.code}}
-          </td>
-          <td data-title="'Nombres y Descripción'" sortable="'configService.description'">
-              {{service.configService.description}}
-          </td>
-          <td data-title="'Dirección'" sortable="'configService.location'">
-              {{service.configService.location}}
-          </td>
-          <td data-title="'Cuadrilla'" sortable="'team.name'">
-              {{service.team.name}}
-          </td>
-          <td data-title="'Fechas'" sortable="'executedDate'">
-              <p ng-if="service.scheduledDate">
-                <b>Programación:</b> {{ service.scheduledDate | date : 'mediumDate'}}
-              </p>
-              <p ng-if="service.executedDate">
-                <b>Ejecución:</b> {{ service.executedDate | date : 'mediumDate'}}
-              </p>
-              <p ng-if="service.disapprovedDate">
-                <b>Desaprobación:</b> {{ service.disapprovedDate | date : 'mediumDate'}}
-              </p>
-              <p ng-if="service.correctedDate">  
-                <b>Corrección:</b> {{ service.correctedDate | date : 'mediumDate'}}
-              </p> 
-              <p ng-if="service.approvedDate">
-                <b>Aprobación:</b> {{ service.approvedDate | date : 'mediumDate'}}
-              </p>
-          </td>
-          <td data-title="'Cantidad Ejecutada'" sortable="'quantity'">
-              {{service.quantity}}
-          </td>
-          <td data-title="'Unidad'" sortable="'unit.name'">
-              {{service.unit.name}}
-          </td>
-          <!-- <td data-title="'Especie'" sortable="'specie'">
-              {{service.configService.specie}}
-          </td>
-          <td data-title="'Tarea'" sortable="'task'">
-              {{service.task}}
-          </td> -->
-          <td data-title="'Fotos de Respaldo'">
-              <a ng-repeat="photo in service.photos" ng-click="open(photo.identifier)">{{photo.name}}<br/></a>
-          </td>
-          <td data-title="'Estado'" sortable="'status.name'">
-              {{service.status.name}}
-          </td>
-          <td data-title="'Observaciones'" sortable="'description'">
-              {{service.description}}
-          </td>
-          <td data-title="'Razón de Desaprobación'" sortable="'disapprovalReason'">
-            <span style="white-space: pre-line">
-              {{service.disapprovalReason}}
-            </span>
-          </td>
-          <td width="30" style="text-align: left" header="'ng-table/headers/checkbox.html'">
-            <input type="checkbox" ng-model="checkboxes.items[service._id]" ng-show="isCheckboxShowedByStatus(service.status._id)"/>
-          </td>
-        </tr>
-      </table>
-      <script type="text/ng-template" id="ng-table/headers/checkbox.html">
-        <input type="checkbox" ng-model="checkboxes.checked" id="select_all" name="filter-checkbox" value="" />
-      </script>
+  <div class="col-sm-3">
+    <label for="serviceType" class="control-label">Tipo de Servicio:</label>
+    <div>
+      <select name="serviceType" id="serviceType" class="form-control" placeholder="seleccione" ng-model="formData.serviceType" ng-change="loadtabledata()">
+        <option value="" selected disabled>Seleccione</option>
+        <option value="{{servTp._id}}" ng-bind="servTp.name" ng-repeat="servTp in controls.contracts.findById(formData.contract, 'serviceType')"></option>
+      </select>
     </div>
   </div>
-  <script type="text/ng-template" id="disapprovalMessageModal">
-    <div class="modal-header">
-        <h3 class="modal-title">Razón de Desaprobación</h3>
+  <div class="col-sm-3">
+    <label for="zone" class="control-label">Zona:</label>
+    <div>
+      <select name="zone" class="form-control" ng-model="formData.zone" ng-options="control._id as control.name for control in controls.contracts.findById(formData.contract, 'zones')" ng-change="loadtabledata()">
+        <option value="" selected disabled>Seleccione</option>
+      </select>
     </div>
-    <div class="modal-body">
-        <textarea rows="4" cols="50" ng-model="disapproval.reason"></textarea>
+  </div>
+  <div class="col-sm-3">
+    <label for="startDate" class="control-label">Fecha Inicio:</label>
+    <div>
+      <input id="startDate" type="date" class="form-control" ng-model="formData.startDate" ng-change="loadtabledata()">
     </div>
-    <div class="modal-footer">
-        <button class="btn btn-primary" ng-click="disapprovalServices()">Guardar</button>
-        <button class="btn btn-warning" ng-click="cancelDisapproval()">Cancelar</button>
+    <label for="endDate" class="control-label">Fecha Fin:</label>
+    <div>
+      <input id="endDate" type="date" class="form-control" ng-model="formData.endDate" ng-change="loadtabledata()">
     </div>
-  </script>
-</div>  
+  </div>
+</div> 
+<br/>
+<br/>
+<div class="row">
+  <div class="form-inline col-sm-8">
+    <label for="filter" class="control-label col-sm-1">Filtro: </label>
+    <input id="filter" class="form-control" type="text" ng-model="filter.$"></input>
+  </div>
+  <div class="form-group col-sm-4 text-right">
+    <a class="btn btn-success" ng-href="" title="Aprobar" ng-click='approveServices()'>
+      <i class="fa fa-thumbs-o-up fa-fw"></i>
+    </a>
+    <a class="btn btn-danger" ng-href="" title="Desaprobar" ng-click='openDisapprovalReasonModal()'>
+      <i class="fa fa-thumbs-o-down fa-fw"></i>
+    </a>
+    <a class="btn btn-info" ng-mousedown="csv.generate()" ng-href="{{ csv.link() }}" download="servicios.csv" title="Exportar">
+      <i class="fa fa-list-alt fa-fw"></i>
+    </a>
+  </div>
+</div>
+<div class="form-group row">
+  <div class="col-sm-12">
+    <table ng-table="tableParams" show-filter="true" class="table table-bordered" export-csv="csv">
+      <tr ng-repeat="service in $data">
+        <td data-title="'Lote'" sortable="'configService.code'">
+            {{service.configService.code}}
+        </td>
+        <td data-title="'Nombres y Descripción'" sortable="'configService.description'">
+            {{service.configService.description}}
+        </td>
+        <td data-title="'Dirección'" sortable="'configService.location'">
+            {{service.configService.location}}
+        </td>
+        <td data-title="'Cuadrilla'" sortable="'team.name'">
+            {{service.team.name}}
+        </td>
+        <td data-title="'Fechas'" sortable="'executedDate'">
+            <p ng-if="service.scheduledDate">
+              <b>Programación:</b> {{ service.scheduledDate | date : 'mediumDate'}}
+            </p>
+            <p ng-if="service.executedDate">
+              <b>Ejecución:</b> {{ service.executedDate | date : 'mediumDate'}}
+            </p>
+            <p ng-if="service.disapprovedDate">
+              <b>Desaprobación:</b> {{ service.disapprovedDate | date : 'mediumDate'}}
+            </p>
+            <p ng-if="service.correctedDate">  
+              <b>Corrección:</b> {{ service.correctedDate | date : 'mediumDate'}}
+            </p> 
+            <p ng-if="service.approvedDate">
+              <b>Aprobación:</b> {{ service.approvedDate | date : 'mediumDate'}}
+            </p>
+        </td>
+        <td data-title="'Cantidad Ejecutada'" sortable="'quantity'">
+            {{service.quantity}} {{service.unit.name}}
+        </td>
+        <!--<td data-title="'Unidad'" sortable="'unit.name'">
+            {{service.unit.name}}
+        </td>
+        <td data-title="'Especie'" sortable="'specie'">
+            {{service.configService.specie}}
+        </td>
+        <td data-title="'Tarea'" sortable="'task'">
+            {{service.task}}
+        </td> -->
+        <td data-title="'Fotos de Respaldo'">
+            <a ng-repeat="photo in service.photos" ng-click="open(photo.identifier)">{{photo.name}}<br/></a>
+        </td>
+        <td data-title="'Estado'" sortable="'status.name'">
+            {{service.status.name}}
+        </td>
+        <td data-title="'Observaciones'" sortable="'description'">
+            {{service.description}}
+        </td>
+        <td data-title="'Razón de Desaprobación'" sortable="'disapprovalReason'">
+          <span style="white-space: pre-line">
+            {{service.disapprovalReason}}
+          </span>
+        </td>
+        <td width="30" style="text-align: left" header="'ng-table/headers/checkbox.html'">
+          <input type="checkbox" ng-model="checkboxes.items[service._id]" ng-show="isCheckboxShowedByStatus(service.status._id)"/>
+        </td>
+      </tr>
+    </table>
+    <script type="text/ng-template" id="ng-table/headers/checkbox.html">
+      <input type="checkbox" ng-model="checkboxes.checked" id="select_all" name="filter-checkbox" value="" />
+    </script>
+  </div>
+</div>
+<script type="text/ng-template" id="disapprovalMessageModal">
+  <div class="modal-header">
+      <h3 class="modal-title">Razón de Desaprobación</h3>
+  </div>
+  <div class="modal-body">
+      <textarea rows="4" cols="50" ng-model="disapproval.reason"></textarea>
+  </div>
+  <div class="modal-footer">
+      <button class="btn btn-primary" ng-click="disapprovalServices()">Guardar</button>
+      <button class="btn btn-warning" ng-click="cancelDisapproval()">Cancelar</button>
+  </div>
+</script>

@@ -75,7 +75,8 @@
   
   <form class="form-horizontal container-fluid" name="addExecSvcForm" ng-submit="submitaddExec()" novalidate>
     <div class="form-group row">
-      <label for="code" class="control-label col-sm-2 double-line">C&oacute;digo / Radicado: </label>
+      <label for="code" class="control-label col-sm-2 double-line" ng-hide="formData.serviceType == '5563efe645051764c2e3da13'">C&oacute;digo: </label>
+      <label for="code" class="control-label col-sm-2 double-line" ng-show="formData.serviceType == '5563efe645051764c2e3da13'">Radicado: </label>
       <div class="col-sm-4">
         <input class="form-control" type="text" typeahead-editable="false" typeahead-on-select="getServiceConfig(formData.code.code)" ng-model="formData.code" typeahead="code as code.code for code in controls.codes | filter:$viewValue | limitTo:8" required>
       </div>
@@ -101,12 +102,12 @@
     <div class="form-group row">
       <label class="control-label col-sm-2">Veh&iacute;culo: </label>
       <div class="col-sm-4">
-        <input class="form-control" id="vehicle" type="text" typeahead-editable="false" typeahead-on-select="calculateWork()" ng-change="calculateWork()" ng-model="formData.vehicle" placeholder="Vehiculo" typeahead="vehicle as vehicle.plate for vehicle in controls.vehicles | filter:{plate:$viewValue}" required>
+        <input class="form-control" id="vehicle" type="text" typeahead-editable="false" typeahead-on-select="calculateWork()" ng-change="calculateWork()" ng-model="formData.vehicle" placeholder="Vehiculo" typeahead="vehicle as vehicle.plate for vehicle in controls.vehicles | filter:{plate:$viewValue}">
       </div>    
 
       <label class="control-label col-sm-2">Viajes: </label>
       <div class="col-sm-4">
-        <input class="form-control" type="number" ng-model="formData.tripsNumber" ng-change="calculateWork()" required>
+        <input class="form-control" type="number" ng-model="formData.tripsNumber" ng-change="calculateWork()">
       </div>    
     </div>
     
@@ -125,7 +126,7 @@
         <!-- <button type="button" ng-click="upload()">subir directo</button>   -->
         <label for="observations" class="control-label">Im&aacute;genes: </label>
         <div class="alert drop-area" flow-drag-enter="dropping='bg-warning'" flow-drag-leave="dropping=''" ng-class="dropping" flow-drop>
-            Arrastre y suelte las imagenes ac&aacute;a 
+            Arrastre y suelte las imagenes ac&aacute; 
         </div>
 
         <input type="file" flow-btn />
