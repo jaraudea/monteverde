@@ -39,7 +39,7 @@ if (app.get('env') === 'production') {
 	// 	});
 	// });
 
-	port = parseInt(process.env.PORT, 10) || 80
+	port = parseInt(process.env.PORT, 10) || 8080
 }
 app.set('port', port);
 
