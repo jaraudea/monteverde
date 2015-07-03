@@ -15,8 +15,13 @@ var executedService = function(data, svc) {
   service.unit =  data.unit
   service.configService = data.configService
   service.executedDate = data.date
-  service.vehicle = data.vehicle
-  service.trips = data.trips
+  console.log(data.vehicle);
+  service.vehicle = data.vehicle;
+  if (data.trips === null) {
+    service.trips = undefined;
+  } else {
+    service.trips = data.trips;
+  }
   service.quantity = data.quantity
   service.description = data.description
   service.photos =data.photos
@@ -127,8 +132,10 @@ exports.updateExecutedService = function(req, res, next) {
     if (oldStatus == '556fcd8f540893b44a2aef06' || oldStatus == '556fcd73540893b44a2aef04') { // if status is disapproved or corrected, then define status as corrected
       svc.status = '556fcd73540893b44a2aef04'; 
     }
-    svc.save();
-    res.sendStatus(200);
+    svc.save(function(err, data) {
+      if (err) next(err);
+      res.sendStatus(200);
+    });
   });
 };
 
@@ -221,4 +228,37 @@ var getDateFilter = function(date) {
     dateFilter = {startDate: firstDay, endDate: lastDay};
   }
   return dateFilter;
+};
+
+exports.getScheduledServicesWithoutExecution = function(req, res, next) {
+  var currentDate = new Date();
+  currentDate.setDate(currentDate.getDate() - 2);
+  Service.find({scheduledDate: {$lt: currentDate}, executedDate: null}, 'scheduledDate configService')
+    .populate('configService', 'code')
+    .exec(function(err, services) {
+      if (err) next(err);
+      res.json(services);
+  });
+};
+
+exports.getScheduledServicesWithoutApprobation = function(req, res, next) {
+  var currentDate = new Date();
+  currentDate.setDate(currentDate.getDate() - 3);
+  Service.find({scheduledDate: {$lt: currentDate}, executedDate: {$ne: null} ,approvedDate: null}, 'scheduledDate configService')
+    .populate('configService', 'code')
+    .exec(function(err, services) {
+      if (err) next(err);
+      res.json(services);
+  });
+};
+
+exports.getOldDisapprovedServices = function(req, res, next) {
+  var currentDate = new Date();
+  currentDate.setDate(currentDate.getDate() - 1);
+  Service.find({disapprovedDate: {$lt: currentDate}, status: '556fcd8f540893b44a2aef06'}, 'disapprovedDate configService')
+    .populate('configService', 'code')
+    .exec(function(err, services) {
+      if (err) next(err);
+      res.json(services);
+  });
 };

@@ -127,7 +127,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
     $scope.formData.doneQuantity = '';
     $scope.formData.vehicle = '';
     $scope.formData.unit = '';
-    $scope.formData.tripsNumber = 0;
+    $scope.formData.tripsNumber = '';
     $scope.formData.observations = '';
     $scope.savedImages = [];
 
@@ -311,7 +311,11 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
         });
       };
     };
-    
+
+    if (data.vehicle === "") { // clean up the vehicleObj if vehicle was cleaned
+      data.vehicleObj = undefined;
+    }
+        
     $scope.submittedData = JrfService.parseRunService(data, editing);
 
     if (files.length ) {

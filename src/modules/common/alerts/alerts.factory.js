@@ -24,6 +24,15 @@ common.factory('AlertsFactory', function ($rootScope, $timeout) {
     }, 500);
   }; 
 
+  factory.closeAllAlerts = function() {
+    for(i=0; i < $rootScope.alerts.length; i++) {
+      var alert = $rootScope.alerts[i];
+      $timeout (function () {
+        factory.closeAlert(i, alert);
+      }, 500)
+    }
+  };
+
   $rootScope.addAlert = factory.addAlert;
 
   $rootScope.closeAlert = factory.closeAlert;

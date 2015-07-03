@@ -23,6 +23,9 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
     executeServiceById : '/api/service/executeService',
     services : "/api/service/services",
     serviceInMonth: "/api/service/serviceInMonth",
+    scheduledSvcsWoExecution: "/api/service/scheduledServicesWoExecution",
+    scheduledSvcsWoApprobation: "/api/service/scheduledServicesWoApprobation",
+    oldDisapprovedSvcs: "/api/service/oldDisapprovedServices",
     // POST
     createSrv : "api/service/executeService",
     create : "/api/service/configservice/",

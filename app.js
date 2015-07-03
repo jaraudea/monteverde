@@ -77,6 +77,9 @@ app.get('/api/service/executeService/executionPercentage?', serviceApi.getExecut
 app.get('/api/service/executeService/:_id?', serviceApi.getExecutedServices);
 app.get('/api/service/services?', serviceApi.getServices);
 app.get('/api/service/serviceInMonth?', serviceApi.getServiceInMonth);
+app.get('/api/service/scheduledServicesWoExecution', serviceApi.getScheduledServicesWithoutExecution);
+app.get('/api/service/scheduledServicesWoApprobation', serviceApi.getScheduledServicesWithoutApprobation);
+app.get('/api/service/oldDisapprovedServices', serviceApi.getOldDisapprovedServices);
 
 /*POST*/  
 app.post('/api/service/configservice', configServiceApi.create);
