@@ -8,6 +8,7 @@ var expressJwt = require('express-jwt');
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 var flow = require('./flow/flow-node.js')('uploaded');
+var cors = require('cors');
 
 var restObserver = require('./middleware/restObserver');
 
@@ -34,6 +35,8 @@ var tokenConfig = require('./token/config');
 var ACCESS_CONTROLL_ALLOW_ORIGIN = false;
 
 var app = express();
+
+app.use(cors());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
