@@ -1,89 +1,93 @@
-<div class="container-fluid">
-  <form action="" class="form-horizontal">
-    <div class="form-group row">
-      <label for="contract" class="control-label col-sm-1">Contrato: </label>
-      <div class="col-sm-2">
-        <select name="contract" id="contract" class="form-control">
-          <option value="">Cxxxxx</option>
-          <option value="">Cxxxxx</option>
-          <option value="">Cxxxxx</option>
-        </select>
-      </div>
-
-      <label for="serviceType" class="control-label col-sm-1 double-line">Tipo de Servicio: </label>
-      <div class="col-sm-2">
-        <select name="serviceType" id="serviceType" class="form-control" placeholder="seleccione" ng-model="serviceType">
-          <option value="" selected disabled>Seleccione</option>
-          <option value="1">Tala y Poda</option>
-          <option value="2">Zonas Verdes</option>
-        </select>
-      </div>
-
-      <label for="zone" class="control-label col-sm-1">Zona: </label>
-      <div class="col-sm-2">
-        <select name="zone" id="zone" class="form-control">
-          <option value="">Cxxxxx</option>
-          <option value="">Cxxxxx</option>
-          <option value="">Cxxxxx</option>
-        </select>
-      </div>
-
-      <label for="zone" class="control-label col-sm-1">Fecha: </label>
-      <div class="col-sm-2">
-        <input type="date" class="form-control" name="scheduleDate" id="scheduleDate">
-      </div>
-    </div>      
-  </form>
+<div class="form-group row">
+  <div class="col-sm-3">
+    <label for="contract" class="control-label">Contrato: </label>
+    <div>
+      <select name="contract" class="form-control" ng-model="formData.contract" ng-options="contract._id as contract.contractNumber for contract in controls.contracts" ng-change="updateConfigServiceCodes()">
+        <option value="" selected disabled>Seleccione</option>
+      </select>
+    </div>
+  </div>
   
-  <div class="row">
-    <div class="col-sm-12">
-      <table ng-table="tableParams" class="table table-bordered">
-          <tr ng-repeat="service in $data">
-              <td data-title="'Lote'" sortable="'field'">
-                  {{service.field}}
-              </td>
-              <td data-title="'Cuadrilla'" sortable="'team'">
-                  {{service.team}}
-              </td>
-              <td data-title="'Estado'" sortable="'state'">
-                  {{service.state}}
-              </td>
-              <td data-title="'Opciones'">
-                  {{service.options}}
-              </td>
-          </tr>
-      </table>
+  <div class="col-sm-3">
+    <label for="serviceType" class="control-label">Tipo de Servicio: </label>
+    <div>
+      <select name="serviceType" id="serviceType" class="form-control" placeholder="seleccione" ng-model="formData.serviceType" ng-change="updateConfigServiceCodes();">
+        <option value="" selected disabled>Seleccione</option>
+        <option value="{{servTp._id}}" ng-bind="servTp.name" ng-repeat="servTp in controls.contracts.findById(formData.contract, 'serviceType')"></option>
+      </select>
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-sm-3">
-      <h2>{{percent}}%</h2>
-    </div>
-
-    <div class=" col-sm-9">
-      <form action="" class="form-horizontal contaner-fluid well well-lg">
-        <div class="form-group row">
-          <label for="field" class="control-label col-sm-1">Lote: </label>
-          <div class="col-sm-2">
-            <input class="form-control" type="text" name="field" ng-model="field" typeahead="field for field in fields | filter:$viewValue | limitTo:8" >
-          </div>        
-
-          <label for="team" class="control-label col-sm-1">Cuadrilla: </label>
-          <div class="col-sm-2">
-            <input class="form-control" type="text" name="team" ng-model="team" typeahead="team for team in teams | filter:$viewValue | limitTo:8">
-          </div>        
-
-          <label for="vehicle" class="control-label col-sm-1">Vehiculo: </label>
-          <div class="col-sm-2">
-            <input class="form-control" type="text" id="vehicle" name="vehicle" ng-model="vehicle" typeahead="vehicle for vehicle in vehicles | filter:$viewValue | limitTo:8">
-          </div>        
-
-          <div class="col-sm-3">
-            <input class="form-control btn btn-success" type="submit" value="Adicionar lote">
-          </div>        
-        </div>        
-      </form>
+  <div class="col-sm-3">
+    <label for="zone" class="control-label">Zona: </label>
+    <div>
+      <select name="zone" class="form-control" ng-model="formData.zone" ng-options="control._id as control.name for control in controls.contracts.findById(formData.contract, 'zones')" ng-change="updateConfigServiceCodes()">
+        <option value="" selected disabled>Seleccione</option>
+      </select>
     </div>
   </div>
-</div>  
+
+  <div class="col-sm-3">
+    <label for="date" class="control-label">Fecha: </label>
+    <div>
+      <input type="date" class="form-control" ng-model="formData.date" ng-change="updateConfigServiceCodes()">
+    </div>
+  </div>
+</div>
+  
+<div class="row form-group">
+  <div class="col-sm-12">
+    <table ng-table="tableParams" class="table table-bordered">
+        <tr ng-repeat="service in $data">
+            <td data-title="'Lote'" sortable="'configService.code'">
+                {{service.configService.code}}
+            </td>
+            <td data-title="'Cuadrilla'" sortable="'team'">
+                {{service.team}}
+            </td>
+            <td data-title="'Cantidad trabajada'" sortable="'quantity'">
+                {{service.quantity}}
+            </td>
+            <td data-title="'Unidad'" sortable="'unit'">
+                {{service.unit.name}}
+            </td>
+            <td data-title="'Estado'" sortable="'status'">
+                {{service.status.name}}
+            </td>
+            <td data-title="'Opciones'">
+              <div class="btn-group" role="group" aria-label="" ng-if="service.status.name == 'Programado'">
+                <a href="" class="btn btn-danger" ng-click="removeScheduling(service._id)"><i class="fa fa-trash-o fa-fw"></i></a>
+            </td>
+        </tr>
+    </table>
+  </div>
+</div>
+
+<div ng-show="formData.contract && formData.serviceType && formData.zone && formData.date">
+  <form class="form-horizontal container-fluid" name="addSchedSvcForm" ng-submit="submitaddSched()" novalidate>
+    <div class="form-group row">
+      <div class="col-sm-2">
+        <h2 ng-bind="percent + '%'"></h2>
+      </div>
+
+      <label for="code" class="control-label col-sm-1 double-line" ng-hide="formData.serviceType == '5563efe645051764c2e3da13'">C&oacute;digo: </label>
+      <label for="code" class="control-label col-sm-1 double-line" ng-show="formData.serviceType == '5563efe645051764c2e3da13'">Radicado: </label>
+      <div class="col-sm-3">
+        <input class="form-control" type="text" typeahead-editable="false" typeahead-on-select="getServiceConfig(formData.code.code)" ng-model="formData.code" typeahead="code as code.code for code in controls.codes | filter:$viewValue | limitTo:8" required>
+      </div>
+
+      <label for="team" class="control-label col-sm-1">Cuadrilla: </label>
+      <div class="col-sm-3">
+        <select name="team" id="team" class="form-control" ng-model="formData.team" required>
+          <option value="" selected disabled>Seleccione</option>
+          <option value="{{team._id}}" ng-bind="team.name" ng-repeat="team in controls.teams"></option>
+        </select>
+      </div>      
+      
+      <div class="col-sm-2 text-center">
+        <input class="btn btn-success" type="submit" value="Guardar Programaci&oacute;n">
+        <input class="btn btn-warning" type="reset" value="Limpiar">
+      </div>
+    </div> 
+  </form>
+</div> 

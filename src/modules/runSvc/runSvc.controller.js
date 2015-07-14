@@ -58,7 +58,6 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
   $scope.doneQuantity = 0;
 
   var init = function () {
-    dataGet('zones');
     dataGet('contracts');
     dataGet('teams');
     dataGet('units');
