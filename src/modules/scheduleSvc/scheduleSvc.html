@@ -43,7 +43,7 @@
                 {{service.configService.code}}
             </td>
             <td data-title="'Cuadrilla'" sortable="'team'">
-                {{service.team}}
+                {{service.team.name}}
             </td>
             <td data-title="'Cantidad trabajada'" sortable="'quantity'">
                 {{service.quantity}}
@@ -66,24 +66,25 @@
 <div ng-show="formData.contract && formData.serviceType && formData.zone && formData.date">
   <form class="form-horizontal container-fluid" name="addSchedSvcForm" ng-submit="submitaddSched()" novalidate>
     <div class="form-group row">
-      <div class="col-sm-2">
+      <div class="col-sm-1">
         <h2 ng-bind="percent + '%'"></h2>
       </div>
-
-      <label for="code" class="control-label col-sm-1 double-line" ng-hide="formData.serviceType == '5563efe645051764c2e3da13'">C&oacute;digo: </label>
-      <label for="code" class="control-label col-sm-1 double-line" ng-show="formData.serviceType == '5563efe645051764c2e3da13'">Radicado: </label>
+      <div class="col-sm-1">
+        <label for="code" class="control-label" ng-hide="formData.serviceType == '5563efe645051764c2e3da13'">C&oacute;digo: </label>
+        <label for="code" class="control-label" ng-show="formData.serviceType == '5563efe645051764c2e3da13'">Radicado: </label>
+      </div>
       <div class="col-sm-3">
         <input class="form-control" type="text" typeahead-editable="false" typeahead-on-select="getServiceConfig(formData.code.code)" ng-model="formData.code" typeahead="code as code.code for code in controls.codes | filter:$viewValue | limitTo:8" required>
       </div>
-
-      <label for="team" class="control-label col-sm-1">Cuadrilla: </label>
+      <div class="col-sm-1">
+        <label for="team" class="control-label">Cuadrilla: </label>
+      </div>
       <div class="col-sm-3">
         <select name="team" id="team" class="form-control" ng-model="formData.team" required>
           <option value="" selected disabled>Seleccione</option>
           <option value="{{team._id}}" ng-bind="team.name" ng-repeat="team in controls.teams"></option>
         </select>
       </div>      
-      
       <div class="col-sm-2 text-center">
         <input class="btn btn-success" type="submit" value="Guardar Programaci&oacute;n">
         <input class="btn btn-warning" type="reset" value="Limpiar">
@@ -91,3 +92,30 @@
     </div> 
   </form>
 </div> 
+<script type="text/ng-template" id="existingScheduledServiceModal">
+    <div class="modal-header">
+        <h3 class="modal-title">Serivicio duplicado</h3>
+    </div>
+    <div class="modal-body">
+        <p class="text-center">El servicio con código <b>{{duplicateService.configService.code}}</b>,<br><span>ya se encuentra <b>PROGRAMADO</b> para la fecha <i>{{duplicateService.scheduledDate | date : 'mediumDate'}}</i></span>,<br>desea reemplazarlo?
+        </p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="scheduleService()">Si</button>
+        <button class="btn btn-warning" ng-click="cancelServiceScheduling()">No</button>
+    </div>
+  </script>
+  <script type="text/ng-template" id="existingServiceModal">
+    <div class="modal-header">
+        <h3 class="modal-title">Serivicio duplicado</h3>
+    </div>
+    <div class="modal-body">
+        <p class="text-center">El servicio con código <b>{{duplicateService.configService.code}}</b>,<br>
+          <span ng-hide='duplicateService.approvedDate'>ya se encuentra <b>EJECUTADO</b> en la fecha: <i>{{duplicateService.executedDate | date : 'mediumDate'}}</i></span>
+          <span ng-show='duplicateService.approvedDate'>ya se encuentra <b>APROBADO</b> en la fecha: <i>{{duplicateService.approvedDate | date : 'mediumDate'}}</i></span>.
+        </p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="closeExistingServiceModal()">Ok</button>
+    </div>
+  </script>

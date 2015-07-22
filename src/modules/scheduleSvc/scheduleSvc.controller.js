@@ -1,6 +1,6 @@
 'use strict';
 
-monteverde.controller('scheduleSvcCtrl', function ($state, $scope, $filter, ngTableParams, AlertsFactory, connectorService) {
+monteverde.controller('scheduleSvcCtrl', function ($state, $scope, $filter, $modal, ngTableParams, AlertsFactory, connectorService, socketFactory, JrfService) {
 
   $scope.formData = {};
 
@@ -8,7 +8,21 @@ monteverde.controller('scheduleSvcCtrl', function ($state, $scope, $filter, ngTa
 
   $scope.tableData = [];
 
-  $scope.formData.date = new Date();
+  var tt = new Date();
+  tt.setHours(0, -tt.getTimezoneOffset(), 0, 0);
+
+  $scope.formData.date = tt;
+
+  $scope.percent = "";
+
+  // Socket IO
+  socketFactory.on('notifyChanges', function (data) {
+    uptadeData(data);
+  });
+
+  var uptadeData = function (data) {
+    updateServicesTable();
+  }; 
 
   var areAllFiltersSet = function() {
     var formData = $scope.formData;
@@ -40,6 +54,7 @@ monteverde.controller('scheduleSvcCtrl', function ($state, $scope, $filter, ngTa
     var form = $scope.addSchedSvcForm;
     $scope.formData.code = '';
     $scope.formData.team = '';
+    form.$setPristine();
 
     if (typeof callback === 'function') {
       callback();
@@ -49,9 +64,9 @@ monteverde.controller('scheduleSvcCtrl', function ($state, $scope, $filter, ngTa
   $scope.tableParams = new ngTableParams({
       page: 1,            // show first page
       count: 10,           // count per page
-      // sorting: {
-      //   "configService.code": 'asc'
-      // }
+      sorting: {
+        "configService.code": 'asc'
+      }
   }, {
       total: $scope.tableData.length, // length of data
       getData: function($defer, params) {
@@ -75,14 +90,69 @@ monteverde.controller('scheduleSvcCtrl', function ($state, $scope, $filter, ngTa
     };
   };
 
+  $scope.duplicateService = {};
+
   $scope.submitaddSched = function () {
+    var form = $scope.addSchedSvcForm,
+        data = $scope.formData; 
+    if (form.$valid) {
+      // Validates if service exist in month in order to don't duplicate it, only modify extisting one
+      dataGet('serviceInMonth', '?configService=' + data.configService._id + '&date=' + data.date, function(service) { 
+        if (service) {
+          $scope.duplicateService = service;
+          if(service.status == '556fcda1540893b44a2aef08') { 
+            $scope.modalInstance = $modal.open({
+              animation: true,
+              templateUrl: 'existingScheduledServiceModal',
+              scope: $scope,
+              size: 100
+            });
+          } else {
+            $scope.modalInstance = $modal.open({
+              animation: true,
+              templateUrl: 'existingServiceModal',
+              scope: $scope,
+              size: 100
+            });
+          }
+        } else {
+          $scope.scheduleService();
+        }
+      });
+    } else {
+      AlertsFactory.addAlert('warning', 'Por favor llene todos los campos correctamente antes de programar el servicio', true); 
+    }
+  };
+
+  $scope.scheduleService = function() {
+    if (typeof $scope.modalInstance !== 'undefined') {
+      $scope.modalInstance.dismiss('confirm');
+    }
+    var data = $scope.formData;
+    $scope.submittedData = JrfService.parseScheduleService(data);
+    processform();
+  };
+
+  var processform = function () {
+    var data = $scope.submittedData;
+    connectorService.setData(connectorService.ep.scheduleSrv, data)
+      .then (
+        function (data) {
+          AlertsFactory.addAlert('success', 'Servicio programado', true);
+          updateServicesTable();
+          $scope.clearForm();
+        },
+        function (err) {
+          AlertsFactory.addAlert('danger', 'Error al programar servicio, contacte al servicio tecnico: error:' + err, true);
+          $scope.clearForm();
+        }
+    );
   };
 
   var updateServicesTable = function () {
       var formData = $scope.formData;
       if (areAllFiltersSet()) {
-        dataGet('executeService', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone + '&date=' + formData.date, function (data) {
-          console.log(data);
+        dataGet('getScheduledServices', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone + '&date=' + formData.date, function (data) {
           $scope.tableData = data;
           $scope.tableParams.reload();
           $scope.tableParams.$params.page = 1;
@@ -91,7 +161,7 @@ monteverde.controller('scheduleSvcCtrl', function ($state, $scope, $filter, ngTa
   };
 
   $scope.getServiceConfig = function (_id) {
-    dataGet('serviceConf', _id, function (data) {
+    dataGet('serviceConf', "?code="+_id+"&contract="+$scope.formData.contract+"&serviceType="+$scope.formData.serviceType+"&zone="+$scope.formData.zone, function (data) {
       var data = data[0];
 
       $scope.formData.configService = data;
@@ -112,6 +182,16 @@ monteverde.controller('scheduleSvcCtrl', function ($state, $scope, $filter, ngTa
           AlertsFactory.addAlert('danger', 'Error al eliminar servicio, contacte al servicio tecnico error:' + err, true);
         }
       )
+  }
+
+  $scope.cancelServiceScheduling = function() {
+    $scope.modalInstance.dismiss('cancel');
+    $scope.clearForm();
+  };
+
+  $scope.closeExistingServiceModal = function() {
+    $scope.modalInstance.dismiss('close');
+    $scope.clearForm();
   }
 
   init();

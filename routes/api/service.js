@@ -30,6 +30,25 @@ var executedService = function(data, svc) {
   return service;
 }
 
+var scheduledService = function(data, svc) {
+  var service = {};
+
+  if (typeof svc != 'undefined') {
+    service = svc;
+  }
+  
+  service.contract = data.contract
+  service.serviceType = data.serviceType
+  service.zone =  data.zone
+  service.team = data.team
+  service.unit =  data.unit
+  service.configService = data.configService
+  service.scheduledDate = data.date
+  service.status = '556fcda1540893b44a2aef08'
+
+  return service;
+}
+
 exports.getExecutedServices = function(req, res, next) {
   var parameters = req.params;
   var query = req.query;
@@ -43,7 +62,7 @@ exports.getExecutedServices = function(req, res, next) {
   if (typeof query.date != 'undefined') {
     var queryDate = query.date;
     delete query['date'];
-    query['$or'] = [{scheduledDate: new Date(queryDate), executedDate: null}, {executedDate: new Date(queryDate)}];
+    query['$or'] = [{scheduledDate: queryDate, executedDate: null}, {executedDate: queryDate}];
   }
 
   Service
@@ -63,8 +82,27 @@ exports.getExecutedServices = function(req, res, next) {
 }
 
 exports.scheduleService = function(req, res, next) {
-  console.log(req);
-  res.sendStatus(200);
+  var queryDate = new Date(req.body.date);
+  var firstDay = new Date(queryDate.getFullYear(), queryDate.getMonth(), 1);
+  var lastDay = new Date(queryDate.getFullYear(), queryDate.getMonth() + 1, 0);
+  var query = { 
+    configService: req.body.configService,
+    $or: [{scheduledDate: {$gte: new Date(firstDay), $lte: new Date(lastDay)}}, {executedDate: {$gte: new Date(firstDay), $lte: new Date(lastDay)}}]
+  };
+  Service.findOne(query, function(err, svc) {
+    if (err) next(err);
+    if (svc) {
+      var service = scheduledService(req.body, svc);
+      service.save();
+      res.sendStatus(200);
+    } else {
+      var service = scheduledService(req.body);
+      Service.create(service, function(err, response) {
+        if (err) next(err);
+        res.sendStatus(200);
+      });
+    }
+  });
 };
 
 exports.executeService = function(req, res, next) {
@@ -262,3 +300,35 @@ exports.getOldDisapprovedServices = function(req, res, next) {
       res.json(services);
   });
 };
+
+exports.getScheduledServices = function(req, res, next) {
+  var parameters = req.params;
+  var query = req.query;
+
+  if (typeof parameters._id != 'undefined') {
+    for (param in parameters) {
+      query[param] = parameters[param];
+    }
+  }
+
+  if (typeof query.date != 'undefined') {
+    var queryDate = query.date;
+    delete query['date'];
+    query['$or'] = [{scheduledDate: queryDate}];
+  }
+
+  Service
+    .find(query)
+    .populate('contract')
+    .populate('serviceType')
+    .populate('zone')
+    .populate('team')
+    .populate('unit')
+    .populate('configService')
+    .populate('vehicle')
+    .populate('status')
+    .exec(function(err, service) {
+      if (err) next(err);
+      res.json(service);
+   });
+}

@@ -57,7 +57,7 @@ var configService = function(data) {
 }
 
 exports.getAllConfigCodes = function(req, res, next) {
-  ConfigService.find(req.query, 'code', function(err, configServiceCode) {
+  ConfigService.find(req.query, 'code').sort('code').exec(function(err, configServiceCode) {
     if (err) return next(err);
     res.json(configServiceCode);
   });

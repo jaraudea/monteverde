@@ -83,6 +83,7 @@ app.get('/api/service/serviceInMonth?', serviceApi.getServiceInMonth);
 app.get('/api/service/scheduledServicesWoExecution', serviceApi.getScheduledServicesWithoutExecution);
 app.get('/api/service/scheduledServicesWoApprobation', serviceApi.getScheduledServicesWithoutApprobation);
 app.get('/api/service/oldDisapprovedServices', serviceApi.getOldDisapprovedServices);
+app.get('/api/service/scheduledService/:_id?', serviceApi.getScheduledServices);
 
 /*POST*/  
 app.post('/api/service/configservice', configServiceApi.create);

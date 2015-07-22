@@ -15,7 +15,6 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
   var uptadeData = function (data) {
     updateServicesTable();
     percentStatus();
-    console.log('updating all data', data);
   }; 
 
   $scope.isEditing = false;
@@ -34,7 +33,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
 
   // fix date
   var tt = new Date();
-  // tt.setHours(0, -tt.getTimezoneOffset(), 0, 0);
+  tt.setHours(0, -tt.getTimezoneOffset(), 0, 0);
   $scope.formData.date = tt;
 
   $scope.formData.vehicle = '';
@@ -155,9 +154,9 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
       var formData = $scope.formData;
       if (areAllFiltersSet()) {
         // formData.date.setHours(0, -formData.date.getTimezoneOffset(), 0, 0);
-        var date = formData.date.toISOString().substr(0, 10);
+        // var date = formData.date.toISOString().substr(0, 10);
 
-        dataGet('executeService', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone + '&date=' + date, function (data) {
+        dataGet('executeService', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone + '&date=' + formData.date, function (data) {
           $scope.tableData = JrfService.parseRunServicetableData(data, $scope);
           $scope.tableParams.reload();
           $scope.tableParams.$params.page = 1;
@@ -225,7 +224,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
   }
 
   $scope.getServiceConfig = function (_id) {
-    dataGet('serviceConf', _id, function (data) {
+    dataGet('serviceConf', "?code="+_id+"&contract="+$scope.formData.contract+"&serviceType="+$scope.formData.serviceType+"&zone="+$scope.formData.zone, function (data) {
       var data = data[0];
 
       $scope.formData.configService = data;
@@ -233,8 +232,6 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
       $scope.formData.team = data.team;
       $scope.formData.codeId = data._id;
       $scope.formData.area = data.area;
-
-      $scope.formData.codeId = data._id;
 
       $scope.calculateWork();
     });

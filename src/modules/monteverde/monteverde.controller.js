@@ -72,7 +72,7 @@ monteverde.controller('monteverdeCtrl', function ($scope, $auth, connectorServic
   }
 
   var init = function () {
-    showServicesAlert();
+    // showServicesAlert();
   };
 
   init();

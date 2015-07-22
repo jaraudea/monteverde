@@ -8,7 +8,8 @@ common.service ('JrfService', function () {
       contract: data.contract, 
       serviceType: data.serviceType, 
       zone: data.zone, 
-      date: data.date.toJSON().substr(0, 10), 
+      date: data.date, 
+      // date: data.date.toJSON().substr(0, 10), 
       team: data.team, 
       quantity: data.doneQuantity, 
       unit: data.unit, 
@@ -79,6 +80,20 @@ common.service ('JrfService', function () {
     };
 
     return parsedData
+  };
+
+  this.parseScheduleService = function(data) {
+    parsedData = {
+      configService : data.configService._id,
+      contract: data.contract,
+      serviceType : data.serviceType,
+      team : data.team,
+      zone : data.zone,
+      unit: data.configService.unit,
+      date: data.date
+    };
+
+    return parsedData;
   };
 
 });

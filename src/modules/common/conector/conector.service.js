@@ -26,26 +26,19 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
     scheduledSvcsWoExecution: "/api/service/scheduledServicesWoExecution",
     scheduledSvcsWoApprobation: "/api/service/scheduledServicesWoApprobation",
     oldDisapprovedSvcs: "/api/service/oldDisapprovedServices",
+    getScheduledServices : "api/service/scheduledService",
     // POST
     createSrv : "api/service/executeService",
     create : "/api/service/configservice/",
     approveSvc : "/api/service/approveService/",
     getExecution : "/api/service/configservice",        
     disapproveSvc : "/api/service/disapproveService/",
+    scheduleSrv : "api/service/scheduleService",
     // PUT
     updateExecution : "/api/service/executeService/",
     // DELETE
     deleteSrv : "api/service/executeService"
   };
-
-  socketFactory.on('notifyChanges', function (data) {
-    that.uptadeData();
-    console.log('Socket.io test log:', data);
-  });  
-
-  this.uptadeData = function () {
-    console.log('updating all data');
-  }; 
 
   // Http Requests
   
