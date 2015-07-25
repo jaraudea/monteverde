@@ -2,7 +2,7 @@
   <div class="col-sm-3">
     <label for="contract" class="control-label">Contrato: </label>
     <div>
-      <select name="contract" class="form-control" ng-model="formData.contract" ng-options="contract._id as contract.contractNumber for contract in controls.contracts" ng-change="updateConfigServiceCodes()">
+      <select id="contract" name="contract" class="form-control" ng-model="formData.contract" ng-options="contract._id as contract.contractNumber for contract in controls.contracts" ng-change="updateConfigServiceCodes()">
         <option value="" selected disabled>Seleccione</option>
       </select>
     </div>
@@ -21,7 +21,7 @@
   <div class="col-sm-3">
     <label for="zone" class="control-label">Zona: </label>
     <div>
-      <select name="zone" class="form-control" ng-model="formData.zone" ng-options="control._id as control.name for control in controls.contracts.findById(formData.contract, 'zones')" ng-change="updateConfigServiceCodes()">
+      <select id="zone" name="zone" class="form-control" ng-model="formData.zone" ng-options="control._id as control.name for control in controls.contracts.findById(formData.contract, 'zones')" ng-change="updateConfigServiceCodes()">
         <option value="" selected disabled>Seleccione</option>
       </select>
     </div>
@@ -30,7 +30,7 @@
   <div class="col-sm-3">
     <label for="date" class="control-label">Fecha: </label>
     <div>
-      <input type="date" class="form-control" ng-model="formData.date" ng-change="updateConfigServiceCodes()">
+      <input id="date" type="date" class="form-control" ng-model="formData.date" ng-change="updateConfigServiceCodes()">
     </div>
   </div>
 </div>
@@ -57,6 +57,7 @@
             <td data-title="'Opciones'">
               <div class="btn-group" role="group" aria-label="" ng-if="service.status.name == 'Programado'">
                 <a href="" class="btn btn-danger" ng-click="removeScheduling(service._id)"><i class="fa fa-trash-o fa-fw"></i></a>
+              </div>
             </td>
         </tr>
     </table>
@@ -74,7 +75,7 @@
         <label for="code" class="control-label" ng-show="formData.serviceType == '5563efe645051764c2e3da13'">Radicado: </label>
       </div>
       <div class="col-sm-3">
-        <input class="form-control" type="text" typeahead-editable="false" typeahead-on-select="getServiceConfig(formData.code.code)" ng-model="formData.code" typeahead="code as code.code for code in controls.codes | filter:$viewValue | limitTo:8" required>
+        <input id="code" class="form-control" type="text" typeahead-editable="false" typeahead-on-select="getServiceConfig(formData.code.code)" ng-model="formData.code" typeahead="code as code.code for code in controls.codes | filter:$viewValue | limitTo:8" required>
       </div>
       <div class="col-sm-1">
         <label for="team" class="control-label">Cuadrilla: </label>

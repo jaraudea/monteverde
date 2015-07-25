@@ -2,7 +2,7 @@
   <div class="col-sm-3">
     <label for="contract" class="control-label">Contrato:</label>
     <div>
-      <select name="contract" class="form-control" ng-model="formData.contract" 
+      <select id="contract" name="contract" class="form-control" ng-model="formData.contract"
         ng-options="contract._id as contract.contractNumber for contract in controls.contracts"
         ng-change="loadtabledata()">
         <option value="" selected disabled>Seleccione</option>
@@ -21,7 +21,7 @@
   <div class="col-sm-3">
     <label for="zone" class="control-label">Zona:</label>
     <div>
-      <select name="zone" class="form-control" ng-model="formData.zone" ng-options="control._id as control.name for control in controls.contracts.findById(formData.contract, 'zones')" ng-change="loadtabledata()">
+      <select id="zone" name="zone" class="form-control" ng-model="formData.zone" ng-options="control._id as control.name for control in controls.contracts.findById(formData.contract, 'zones')" ng-change="loadtabledata()">
         <option value="" selected disabled>Seleccione</option>
       </select>
     </div>
@@ -42,7 +42,7 @@
 <div class="row">
   <div class="form-inline col-sm-8">
     <label for="filter" class="control-label col-sm-1">Filtro: </label>
-    <input id="filter" class="form-control" type="text" ng-model="filter.$"></input>
+    <input id="filter" class="form-control" type="text" ng-model="filter.$"/>
   </div>
   <div class="form-group col-sm-4 text-right">
     <a class="btn btn-success" ng-href="" title="Aprobar" ng-click='approveServices()'>
@@ -56,9 +56,9 @@
     </a>
   </div>
 </div>
-<div class="form-group row">
+<div class="row form-group">
   <div class="col-sm-12">
-    <table ng-table="tableParams" show-filter="true" class="table table-bordered" export-csv="csv">
+    <table ng-table="tableParams" class="table table-bordered" export-csv="csv">
       <tr ng-repeat="service in $data">
         <td data-title="'Lote'" sortable="'configService.code'">
             {{service.configService.code}}

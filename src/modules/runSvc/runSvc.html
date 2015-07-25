@@ -2,7 +2,7 @@
   <div class="col-sm-3">
     <label for="contract" class="control-label">Contrato: </label>
     <div>
-      <select name="contract" class="form-control" ng-model="formData.contract" ng-options="contract._id as contract.contractNumber for contract in controls.contracts" ng-change="updateCodes()">
+      <select id="contract" name="contract" class="form-control" ng-model="formData.contract" ng-options="contract._id as contract.contractNumber for contract in controls.contracts" ng-change="updateCodes()">
         <option value="" selected disabled>Seleccione</option>
       </select>
     </div>
@@ -21,7 +21,7 @@
   <div class="col-sm-3">
     <label for="zone" class="control-label">Zona: </label>
     <div>
-      <select name="zone" class="form-control" ng-model="formData.zone" ng-options="control._id as control.name for control in controls.contracts.findById(formData.contract, 'zones')" ng-change="updateCodes()">
+      <select id="zone" name="zone" class="form-control" ng-model="formData.zone" ng-options="control._id as control.name for control in controls.contracts.findById(formData.contract, 'zones')" ng-change="updateCodes()">
         <option value="" selected disabled>Seleccione</option>
       </select>
     </div>
@@ -30,7 +30,7 @@
   <div class="col-sm-3">
     <label for="date" class="control-label">Fecha: </label>
     <div>
-      <input type="date" class="form-control" ng-model="formData.date" ng-change="updateCodes()">
+      <input id="date" type="date" class="form-control" ng-model="formData.date" ng-change="updateCodes()">
     </div>
   </div>
 </div>      
@@ -65,6 +65,7 @@
                 <a ng-if="!service.$edit" href="" class="btn btn-primary" ng-click="editExecution(service._id); service.$edit = true"><i class="fa fa-pencil fa-fw"></i></a>
                 <a ng-if="service.$edit"  href="" class="btn btn-warning" ng-click="editCancel(); service.$edit = false"><i class="fa fa-times-circle fafw"></i></a>
                 <a ng-if="!service.$edit" href="" class="btn btn-danger" ng-click="removeExecution($index, service._id)"><i class="fa fa-trash-o fa-fw"></i></a>
+              </div>
             </td>
         </tr>
     </table>
@@ -78,7 +79,7 @@
       <label for="code" class="control-label col-sm-2 double-line" ng-hide="formData.serviceType == '5563efe645051764c2e3da13'">C&oacute;digo: </label>
       <label for="code" class="control-label col-sm-2 double-line" ng-show="formData.serviceType == '5563efe645051764c2e3da13'">Radicado: </label>
       <div class="col-sm-4">
-        <input class="form-control" type="text" typeahead-editable="false" typeahead-on-select="getServiceConfig(formData.code.code)" ng-model="formData.code" typeahead="code as code.code for code in controls.codes | filter:$viewValue | limitTo:8" required>
+        <input id="code" class="form-control" type="text" typeahead-editable="false" typeahead-on-select="getServiceConfig(formData.code.code)" ng-model="formData.code" typeahead="code as code.code for code in controls.codes | filter:$viewValue | limitTo:8" required>
       </div>
 
       <label for="team" class="control-label col-sm-2">Cuadrilla: </label>
@@ -95,7 +96,7 @@
 
       <label for="unity" class="control-label col-sm-2">Unidad: </label>
       <div class="col-sm-4">
-        <select class="form-control" ng-model="formData.unit" ng-options="unit._id as unit.name for unit in controls.units" required>
+        <select id="unity" class="form-control" ng-model="formData.unit" ng-options="unit._id as unit.name for unit in controls.units" required>
         </select>
       </div>
     </div>
@@ -118,7 +119,7 @@
           >
       <div class="col-sm-6">
         <label for="observations" class="control-label">Descripci&oacute;n: </label>
-        <textarea class="form-control" cols="30" rows="5" ng-model="formData.observations" required></textarea>
+        <textarea id="observations" class="form-control" cols="30" rows="5" ng-model="formData.observations" required></textarea>
       </div>
 
       <div class="col-sm-2">
@@ -177,7 +178,7 @@
         <h3 class="modal-title">Serivicio duplicado Aprobado</h3>
     </div>
     <div class="modal-body">
-        <p class="text-center">El servicio con código <b>{{duplicateService.configService.code}}</b>,<br>ejecutado en la fecha: <i>{{duplicateService.executedDate | date : 'mediumDate'}},<br>ya se encuentra <b>APROBADO</b> en la fecha: <i>{{duplicateService.approvedDate | date : 'mediumDate'}}</i>.</p>
+        <p class="text-center">El servicio con código <b>{{duplicateService.configService.code}}</b>,<br/>ejecutado en la fecha: <i>{{duplicateService.executedDate | date : 'mediumDate'}}</i>,<br/>ya se encuentra <b>APROBADO</b> en la fecha: <i>{{duplicateService.approvedDate | date : 'mediumDate'}}</i>.</p>
     </div>
     <div class="modal-footer">
         <button class="btn btn-primary" ng-click="closeExistingApprovedServiceModal()">Ok</button>

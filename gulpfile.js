@@ -100,7 +100,7 @@ tasks = {
         gulp.src([
             nodeModules + '/font-awesome/css/font-awesome.css',
             nodeModules + '/angular-ui-switch/angular-ui-switch.css',
-            nodeModules + '/bootstrap/dist/css/bootstrap.css',
+            src + '/styles/bootstrap.css',
             nodeModules + '/ng-table/dist/ng-table.css'
           ])
           .pipe(sourcemaps.init())

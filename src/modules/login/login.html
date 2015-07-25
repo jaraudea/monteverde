@@ -2,14 +2,14 @@
   <h2>Iniciar Sesión</h2>
   <form action="" class="form-horizontal" name="loginForm" ng-submit="loginForm.$valid && login.submitLogin()">
     <div class="form-group row">
-      <label for="pwd" class="control-label col-sm-1">Usuario </label>
+      <label for="user" class="control-label col-sm-1">Usuario </label>
       <div class="col-sm-12">
-        <input type="text" class="form-control" ng-model="login.user.username">
+        <input id="user" type="text" class="form-control" ng-model="login.user.username">
       </div>
 
       <label for="pwd" class="control-label col-sm-1">contrase&ntilde;a </label>
       <div class="col-sm-12">
-        <input type="password" class="form-control"  ng-model="login.user.pwd">
+        <input id="pwd" type="password" class="form-control"  ng-model="login.user.pwd">
       </div>
     </div>
 
