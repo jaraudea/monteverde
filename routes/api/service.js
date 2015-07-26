@@ -206,15 +206,6 @@ exports.getServices = function(req, res, next) {
   });
 };
 
-var truncateDate = function(date) {
-  // date.setTimeZone('UTC'); //define time zone in nodejs
-  date.setHours(0);
-  date.setMinutes(0);
-  date.setSeconds(0);
-  date.setMilliseconds(0);
-  return date;
-};
-
 exports.getExecutionPercentage = function(req, res, next) {
   var dateFilter = getDateFilter(new Date(req.query.date));
   var query = {
@@ -293,6 +284,7 @@ exports.getScheduledServicesWithoutApprobation = function(req, res, next) {
 exports.getOldDisapprovedServices = function(req, res, next) {
   var currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 1);
+	console.log(currentDate.getTimezoneOffset())
   Service.find({disapprovedDate: {$lt: currentDate}, status: '556fcd8f540893b44a2aef06'}, 'disapprovedDate configService')
     .populate('configService', 'code')
     .exec(function(err, services) {

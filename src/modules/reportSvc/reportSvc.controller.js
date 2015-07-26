@@ -2,7 +2,7 @@
 
 'use strict';
 
-monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter, $q, ngTableParams, $sce, connectorService, socketFactory) {
+monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter, $q, ngTableParams, $sce, connectorService, socketFactory, dateTimeHelper) {
   var contractId = null;
 
   // Socket IO
@@ -17,8 +17,8 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
   $scope.disapproval = {};
 
   var date = new Date();
-  var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-  var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+  var firstDay = dateTimeHelper.truncateDateTime(new Date(date.getFullYear(), date.getMonth(), 1));
+  var lastDay = dateTimeHelper.truncateDateTime(new Date(date.getFullYear(), date.getMonth() + 1, 0));
 
   $scope.formData = {startDate: firstDay, endDate: lastDay};
 
@@ -96,12 +96,14 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
   $scope.loadtabledata = function () {
     var formData = $scope.formData;
     if (areAllFiltersSet())  {
-      dataGet('services', 
+	    var startDate = dateTimeHelper.truncateDateTime(formData.startDate)
+	    var endDate = dateTimeHelper.truncateDateTime(formData.endDate)
+	    dataGet('services',
         '?contract=' + formData.contract 
         + '&serviceType=' + formData.serviceType 
         + '&zone=' + formData.zone 
-        + '&startDate=' + formData.startDate 
-        + '&endDate=' + formData.endDate, 
+        + '&startDate=' + startDate
+        + '&endDate=' + endDate,
         function(svcs) {
           $scope.tableData = svcs;
           $scope.tableParams.reload();

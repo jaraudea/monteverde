@@ -1,6 +1,6 @@
 'use strict';
 
-monteverde.controller('scheduleSvcCtrl', function ($state, $scope, $filter, $modal, ngTableParams, AlertsFactory, connectorService, socketFactory, JrfService) {
+monteverde.controller('scheduleSvcCtrl', function ($state, $scope, $filter, $modal, ngTableParams, AlertsFactory, connectorService, socketFactory, JrfService, dateTimeHelper) {
 
   $scope.formData = {};
 
@@ -8,10 +8,7 @@ monteverde.controller('scheduleSvcCtrl', function ($state, $scope, $filter, $mod
 
   $scope.tableData = [];
 
-  var tt = new Date();
-  tt.setHours(0, -tt.getTimezoneOffset(), 0, 0);
-
-  $scope.formData.date = tt;
+  $scope.formData.date = dateTimeHelper.truncateDateTime(new Date());
 
   $scope.percent = "";
 
@@ -96,8 +93,8 @@ monteverde.controller('scheduleSvcCtrl', function ($state, $scope, $filter, $mod
     var form = $scope.addSchedSvcForm,
         data = $scope.formData; 
     if (form.$valid) {
-      // Validates if service exist in month in order to don't duplicate it, only modify extisting one
-      dataGet('serviceInMonth', '?configService=' + data.configService._id + '&date=' + data.date, function(service) { 
+	    var schdSvc = dateTimeHelper.truncateDateTime(data.date)
+      dataGet('serviceInMonth', '?configService=' + data.configService._id + '&date=' + schdSvc, function(service) {
         if (service) {
           $scope.duplicateService = service;
           if(service.status == '556fcda1540893b44a2aef08') { 
@@ -152,7 +149,8 @@ monteverde.controller('scheduleSvcCtrl', function ($state, $scope, $filter, $mod
   var updateServicesTable = function () {
       var formData = $scope.formData;
       if (areAllFiltersSet()) {
-        dataGet('getScheduledServices', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone + '&date=' + formData.date, function (data) {
+	      var schdSvc = dateTimeHelper.truncateDateTime(formData.date)
+        dataGet('getScheduledServices', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone + '&date=' + schdSvc, function (data) {
           $scope.tableData = data;
           $scope.tableParams.reload();
           $scope.tableParams.$params.page = 1;

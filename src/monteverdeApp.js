@@ -17,15 +17,15 @@ monteverde.config(function ( $urlRouterProvider, $stateProvider, $authProvider) 
     $authProvider.baseUrl = "http://localhost:3000"//"http://190.250.0.250:3000"
     $authProvider.loginUrl = "/login";
     $authProvider.signupUrl = "api/signup";
-    // $authProvider.tokenName = "Bearer";  
+    // $authProvider.tokenName = "Bearer";
     $authProvider.tokenPrefix = "monteverde";
 
     // When no url finds a match redirect to /
     $urlRouterProvider.otherwise('/createSvc');
-    
+
     // Setup the basic routes
-    
-    // route to home 
+
+    // route to home
     $stateProvider
       // route to login
       .state('login', {
@@ -48,19 +48,26 @@ monteverde.config(function ( $urlRouterProvider, $stateProvider, $authProvider) 
         templateUrl : 'views/reportSvc/reportSvc.html',
         url : '/reportSvc'
       })
-      // route to report services
+      // route to run services
       .state('runSvc', {
         controller : 'runSvcCtrl',
         controllerAs : 'runSvc',
         templateUrl : 'views/runSvc/runSvc.html',
         url : '/runSvc'
       })
-      // route to report services
+      // route to schedule services
       .state('scheduleSvc', {
         controller : 'scheduleSvcCtrl',
         controllerAs : 'scheduleSvc',
         templateUrl : 'views/scheduleSvc/scheduleSvc.html',
         url : '/scheduleSvc'
+      })
+      // route to create trips
+      .state('createTrip', {
+        controller : 'createTripCtrl',
+        controllerAs : 'createTrip',
+        templateUrl : 'views/createTrip/createTrip.html',
+        url : '/createTrip'
       });
 });
 

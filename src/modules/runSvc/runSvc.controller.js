@@ -2,7 +2,7 @@
 
 'use strict';
 
-monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, ngTableParams, AlertsFactory, connectorService, $filter, JrfService, socketFactory) {
+monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, ngTableParams, AlertsFactory, connectorService, $filter, JrfService, socketFactory, dateTimeHelper) {
 
   var contractId = null,
       dataSpecieTable = [];
@@ -31,20 +31,11 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
 
   $scope.percent = 0;
 
-  // fix date
-  var tt = new Date();
-  tt.setHours(0, -tt.getTimezoneOffset(), 0, 0);
-  $scope.formData.date = tt;
+  $scope.formData.date = dateTimeHelper.truncateDateTime(new Date());
 
   $scope.formData.vehicle = '';
 
   $scope.codes = [];
-
-  $scope.dateOptions = {
-    formatYear: 'yy',
-    startingDay: 1,
-    language: 'es'
-  };
 
   $scope.uploader = {
     target : "/upload",
@@ -67,7 +58,8 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
   var percentStatus = function () {
     var formData = $scope.formData;
     if (areAllFiltersSet) {
-      connectorService.getData(connectorService.ep.execPercent, '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone + '&date=' + formData.date)
+	    var runSvcDate = dateTimeHelper.truncateDateTime(formData.date)
+      connectorService.getData(connectorService.ep.execPercent, '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone + '&date=' + runSvcDate)
         .then(
           function (res) {
             $scope.percent = res.executionPercentage;
@@ -153,10 +145,8 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
   var updateServicesTable = function () {
       var formData = $scope.formData;
       if (areAllFiltersSet()) {
-        // formData.date.setHours(0, -formData.date.getTimezoneOffset(), 0, 0);
-        // var date = formData.date.toISOString().substr(0, 10);
-
-        dataGet('executeService', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone + '&date=' + formData.date, function (data) {
+	      var runSvcDate = dateTimeHelper.truncateDateTime(formData.date)
+        dataGet('executeService', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone + '&date=' + runSvcDate, function (data) {
           $scope.tableData = JrfService.parseRunServicetableData(data, $scope);
           $scope.tableParams.reload();
           $scope.tableParams.$params.page = 1;
@@ -246,8 +236,9 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
         valid = form.$valid;
     if (valid) {
       // Validates if service exist in month in order to don't duplicate it, only modify extisting one
-      dataGet('serviceInMonth', '?configService=' + data.configService._id + '&date=' + data.date, function(service) { 
-        if (service && !$scope.isEditing) {
+	    var runSvcDate = dateTimeHelper.truncateDateTime(data.date)
+      dataGet('serviceInMonth', '?configService=' + data.configService._id + '&date=' + runSvcDate, function(service) {
+        if (service && isScheduledService(service.status) == false) {
           $scope.duplicateService = service;
           if($scope.isApprovedService(service.status)) { 
             $scope.modalInstance = $modal.open({
@@ -415,8 +406,12 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
   }
 
   $scope.isApprovedService = function(status) {
-    return status === '556fcd3f540893b44a2aef03';
-  };
+		return status === '556fcd3f540893b44a2aef03';
+	};
+
+	var isScheduledService = function(status) {
+		return status === '556fcda1540893b44a2aef08';
+	};
 
   init();
 });

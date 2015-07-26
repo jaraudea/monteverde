@@ -28,6 +28,7 @@ var vehicleApi = require('./routes/api/vehicle')
 
 var configServiceApi = require('./routes/api/configservice')
 var serviceApi = require('./routes/api/service')
+var tripApi = require('./routes/api/trip')
 
 var tokenConfig = require('./token/config');
 
@@ -84,11 +85,13 @@ app.get('/api/service/scheduledServicesWoExecution', serviceApi.getScheduledServ
 app.get('/api/service/scheduledServicesWoApprobation', serviceApi.getScheduledServicesWithoutApprobation);
 app.get('/api/service/oldDisapprovedServices', serviceApi.getOldDisapprovedServices);
 app.get('/api/service/scheduledService/:_id?', serviceApi.getScheduledServices);
+app.get('/api/trip?', tripApi.get);
 
 /*POST*/  
 app.post('/api/service/configservice', configServiceApi.create);
 app.post('/api/service/scheduleService', serviceApi.scheduleService);
 app.post('/api/service/executeService', serviceApi.executeService);
+app.post('/api/trip', tripApi.create);
 
 /*PUT*/
 app.put('/api/service/configservice/:code', configServiceApi.update);
@@ -96,9 +99,11 @@ app.put('/api/service/scheduleService/:_id', serviceApi.updateScheduledService);
 app.put('/api/service/executeService/:_id', serviceApi.updateExecutedService);
 app.put('/api/service/approveService/:_id', serviceApi.approveService);
 app.put('/api/service/disapproveService/:_id', serviceApi.disapproveService);
+app.put('/api/trip/:_id', tripApi.update);
 
 /*DELETE*/
 app.delete('/api/service/executeService/:_id', serviceApi.deleteExecutedService);
+app.delete('/api/trip/:_id', tripApi.delete);
 
 /* upload (testing porpouses) this is a basic oute, please move the components to the corect files */
 // Handle uploads through Flow.js

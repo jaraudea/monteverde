@@ -1,20 +1,19 @@
 // JSON rest formatter service
 'use strict';
 
-common.service ('JrfService', function () { 
+common.service ('JrfService', function () {
   this.parseRunService = function (data, editing) {
     var parsedData = {
       configService : data.configService,
       contract: data.contract, 
       serviceType: data.serviceType, 
       zone: data.zone, 
-      date: data.date, 
-      // date: data.date.toJSON().substr(0, 10), 
+      date: data.date,
       team: data.team, 
       quantity: data.doneQuantity, 
-      unit: data.unit, 
-      vehicle: (typeof data.vehicle === 'object')? data.vehicle : data.vehicleObj, 
-      trips: data.tripsNumber, 
+      unit: data.unit,
+      vehicle: (typeof data.vehicle === 'object')? data.vehicle : data.vehicleObj,
+      trips: data.tripsNumber,
       description: data.observations,
       photos: []
     };
