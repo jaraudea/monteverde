@@ -1,5 +1,7 @@
 var Service = require('../../models/Service');
 var ServiceStatus = require('../../models/ServiceStatus');
+var ConfigService = require('../../models/ConfigService');
+var dateTimeHelper = require('../../helpers/DateTimeHelper');
 
 var executedService = function(data, svc) {
   var service = {};
@@ -130,7 +132,7 @@ exports.executeService = function(req, res, next) {
 };
 
 exports.approveService = function(req, res, next) {
-  var approvedDate = truncateDate(new Date());
+  var approvedDate = dateTimeHelper.truncateDateTime(new Date());
   Service.update({_id: req.params._id}, {status: '556fcd3f540893b44a2aef03', approvedDate: approvedDate}, function(err, response) {
     // response should be { ok: 1, nModified: 1, n: 1 }
     if (err) next(err);
@@ -139,7 +141,7 @@ exports.approveService = function(req, res, next) {
 };
 
 exports.disapproveService = function(req, res, next) {
-  var disapprovedDate = truncateDate(new Date());
+  var disapprovedDate = dateTimeHelper.truncateDateTime(new Date());
   Service.findOne({_id: req.params._id}, function(err, service) {
     if (err) next(err);
     if (!service) res.sendStatus(400, 'Servicio no encontrado');
@@ -284,7 +286,6 @@ exports.getScheduledServicesWithoutApprobation = function(req, res, next) {
 exports.getOldDisapprovedServices = function(req, res, next) {
   var currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 1);
-	console.log(currentDate.getTimezoneOffset())
   Service.find({disapprovedDate: {$lt: currentDate}, status: '556fcd8f540893b44a2aef06'}, 'disapprovedDate configService')
     .populate('configService', 'code')
     .exec(function(err, services) {
@@ -323,4 +324,34 @@ exports.getScheduledServices = function(req, res, next) {
       if (err) next(err);
       res.json(service);
    });
+}
+
+exports.getSchedulingPercentage = function(req, res, next) {
+	var date = new Date(req.query.date)
+	var dateFilter = getDateFilter(date)
+	var period = date.getDate() > 15 ?  2 : 1
+
+	var svcsInPeriodQuery = {
+		contract: req.query.contract,
+		serviceType: req.query.serviceType,
+		zone: req.query.zone
+	};
+	svcsInPeriodQuery['period'] = period;
+
+	ConfigService.count(svcsInPeriodQuery, function(err, response) {
+		if (response === 0) {
+			res.json({schedulingPercentage: ""});
+		} else {
+			var query = {
+				contract: req.query.contract,
+				serviceType: req.query.serviceType,
+				zone: req.query.zone
+			};
+			query['scheduledDate'] = {$lte: dateFilter.endDate, $gte: dateFilter.startDate };
+			Service.count(query, function(err, response1) {
+				var result = ((response1 / response) * 100)
+				res.json({schedulingPercentage: result.toFixed(2)});
+			});
+		}
+	});
 }

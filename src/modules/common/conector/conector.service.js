@@ -27,7 +27,9 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
     scheduledSvcsWoApprobation: "/api/service/scheduledServicesWoApprobation",
     oldDisapprovedSvcs: "/api/service/oldDisapprovedServices",
     getScheduledServices : "api/service/scheduledService",
+	  getSchedPercentage: "/api/service/scheduledService/schedulingPercentage",
 	  getTrip: "/api/trip",
+	  getTrips: "/api/trip/trips",
     // POST
     createSrv : "api/service/executeService",
     create : "/api/service/configservice/",
@@ -36,6 +38,8 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
     disapproveSvc : "/api/service/disapproveService/",
     scheduleSrv : "api/service/scheduleService",
 		createTrip: "/api/trip",
+	  approveTrip : "/api/trip/approve/",
+	  disapproveTrip : "/api/trip/disapprove/",
     // PUT
     updateExecution : "/api/service/executeService/",
 	  updateTrip: "/api/trip/",

@@ -9,6 +9,8 @@ var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 var flow = require('./flow/flow-node.js')('uploaded');
 var cors = require('cors');
+var FileStreamRotator = require('file-stream-rotator');
+var fs = require('fs');
 
 var restObserver = require('./middleware/restObserver');
 
@@ -36,6 +38,17 @@ var tokenConfig = require('./token/config');
 var ACCESS_CONTROLL_ALLOW_ORIGIN = false;
 
 var app = express();
+var logDirectory = __dirname + '/log'
+
+// ensure log directory exists
+fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
+
+// create a rotating write stream
+var accessLogStream = FileStreamRotator.getStream({
+	filename: logDirectory + '/access-%DATE%.log',
+	frequency: 'daily',
+	verbose: false
+})
 
 app.use(cors());
 
@@ -49,7 +62,7 @@ app.use('/api', expressJwt({secret: tokenConfig.secret}));
 
 // uncomment after placing your favicon in /public
 app.use(favicon(__dirname + '/public/images/favicon.ico'));
-app.use(logger('dev'));
+app.use(logger(':date[web] :method :url :status :response-time ms - :res[content-length]', {stream: accessLogStream}));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -84,8 +97,10 @@ app.get('/api/service/serviceInMonth?', serviceApi.getServiceInMonth);
 app.get('/api/service/scheduledServicesWoExecution', serviceApi.getScheduledServicesWithoutExecution);
 app.get('/api/service/scheduledServicesWoApprobation', serviceApi.getScheduledServicesWithoutApprobation);
 app.get('/api/service/oldDisapprovedServices', serviceApi.getOldDisapprovedServices);
-app.get('/api/service/scheduledService/:_id?', serviceApi.getScheduledServices);
-app.get('/api/trip?', tripApi.get);
+app.get('/api/service/scheduledService?', serviceApi.getScheduledServices);
+app.get('/api/service/scheduledService/schedulingPercentage?', serviceApi.getSchedulingPercentage);
+app.get('/api/trip?', tripApi.getTrip);
+app.get('/api/trip/trips?', tripApi.getTrips);
 
 /*POST*/  
 app.post('/api/service/configservice', configServiceApi.create);
@@ -100,6 +115,8 @@ app.put('/api/service/executeService/:_id', serviceApi.updateExecutedService);
 app.put('/api/service/approveService/:_id', serviceApi.approveService);
 app.put('/api/service/disapproveService/:_id', serviceApi.disapproveService);
 app.put('/api/trip/:_id', tripApi.update);
+app.put('/api/trip/approve/:_id', tripApi.approveTrip);
+app.put('/api/trip/disapprove/:_id', tripApi.disapproveTrip);
 
 /*DELETE*/
 app.delete('/api/service/executeService/:_id', serviceApi.deleteExecutedService);

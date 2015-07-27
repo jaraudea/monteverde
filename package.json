@@ -20,6 +20,7 @@
     "express-handlebars": "^2.0.1",
     "express-jwt": "^3.0.1",
     "file": "^0.2.2",
+    "file-stream-rotator": "0.0.6",
     "font-awesome": "^4.3.0",
     "gulp": "^3.8.11",
     "jsonwebtoken": "^5.0.1",

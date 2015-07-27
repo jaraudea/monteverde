@@ -19,9 +19,8 @@ monteverde.controller('createTripCtrl', function ($state, $scope, ngTableParams,
 			&& typeof data.zone !== 'undefined' && typeof data.date !== 'undefined' && typeof data.vehicle !== 'undefined') {
 			var tripDate = dateTimeHelper.truncateDateTime(data.date)
 			dataGet('getTrip', '?contract='+data.contract + '&serviceType=' + data.serviceType + '&zone=' + data.zone + '&tripDate=' + tripDate + '&vehicle=' + data.vehicle,
-				function(trips) {
-					if (typeof trips !== 'undefined' && trips.length > 0) {
-						var trip = trips[0]
+				function(trip) {
+					if (typeof trip !== 'undefined' && trip !== null) {
 						$scope.formData.contract = trip.contract
 						$scope.formData.serviceType = trip.serviceType
 						$scope.formData.zone = trip.zone
@@ -79,6 +78,7 @@ monteverde.controller('createTripCtrl', function ($state, $scope, ngTableParams,
 
 	$scope.clearTripNumber = function() {
 		$scope.formData.tripsNumber = ''
+		$scope.formData.id = undefined
 	}
 
   $scope.reset = function() {

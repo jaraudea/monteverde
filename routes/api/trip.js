@@ -1,4 +1,5 @@
-var Trip = require('../../models/Trip');
+var Trip = require('../../models/Trip')
+var TripStatus = require('../../models/TripStatus');
 var dateTimeHelper = require('../../helpers/DateTimeHelper')
 
 var createTripObj = function(data) {
@@ -8,7 +9,8 @@ var createTripObj = function(data) {
     zone: data.zone,
     tripDate: data.date,
     vehicle: data.vehicle,
-	  tripsNumber: data.tripsNumber
+	  tripsNumber: data.tripsNumber,
+	  status: '55b555a69e52ff86df79d7fb'
   }
   return trip
 }
@@ -39,9 +41,51 @@ exports.delete = function(req, res, next) {
   })
 }
 
-exports.get = function(req, res, next) {
-	Trip.find(req.query, function(err, trips) {
+exports.getTrip = function(req, res, next) {
+	Trip.findOne(req.query, function(err, trip) {
 		if (err) next(err);
-		res.json(trips);
+		res.json(trip);
+	})
+}
+
+exports.getTrips = function(req, res, next) {
+	var query = {
+		contract: req.query.contract,
+		serviceType: req.query.serviceType,
+		zone: req.query.zone,
+		tripDate: {$gte: req.query.startDate, $lte: req.query.endDate}
+	}
+
+	Trip.find(query)
+		.populate('vehicle', 'plate')
+		.populate('status', 'name')
+		.exec(function(err, trips) {
+			if (err) next(err)
+			res.json(trips)
+		})
+}
+
+exports.approveTrip = function(req, res, next) {
+	var approvedDate = dateTimeHelper.truncateDateTime(new Date())
+	Trip.update({_id: req.params._id}, {status: '55b555659e52ff86df79d7f9', approvedDate: approvedDate}, function(err, response) {
+		if (err) next(err)
+		res.sendStatus(200)
+	})
+}
+
+exports.disapproveTrip = function(req, res, next) {
+	var disapprovedDate = dateTimeHelper.truncateDateTime(new Date())
+	Trip.findOne({_id: req.params._id}, function(err, trip) {
+		if (err) next(err)
+		if (!trip) res.sendStatus(400, 'Viaje no encontrado')
+		trip.status = '55b555789e52ff86df79d7fa'
+		trip.disapprovedDate = disapprovedDate
+		if (typeof trip.disapprovalReason != 'undefined') {
+			trip.disapprovalReason = disapprovedDate.toISOString().substr(0, 10) + ': ' + req.body.reason + '\n' + service.disapprovalReason
+		} else {
+			trip.disapprovalReason = req.body.reason
+		}
+		trip.save()
+		res.sendStatus(200)
 	})
 }

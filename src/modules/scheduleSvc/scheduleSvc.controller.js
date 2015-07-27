@@ -155,6 +155,7 @@ monteverde.controller('scheduleSvcCtrl', function ($state, $scope, $filter, $mod
           $scope.tableParams.reload();
           $scope.tableParams.$params.page = 1;
         });
+	      percentStatus();
       }
   };
 
@@ -191,6 +192,22 @@ monteverde.controller('scheduleSvcCtrl', function ($state, $scope, $filter, $mod
     $scope.modalInstance.dismiss('close');
     $scope.clearForm();
   }
+
+	var percentStatus = function () {
+		var formData = $scope.formData;
+		if (areAllFiltersSet) {
+			var scheduledSvcDate = dateTimeHelper.truncateDateTime(formData.date)
+			connectorService.getData(connectorService.ep.getSchedPercentage, '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone + '&date=' + scheduledSvcDate)
+				.then(
+				function (res) {
+					$scope.percent = res.schedulingPercentage;
+				},
+				function (err) {
+					console.log('error:', err)
+				}
+			)
+		}
+	}
 
   init();
 });

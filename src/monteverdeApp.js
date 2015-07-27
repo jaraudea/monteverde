@@ -68,7 +68,13 @@ monteverde.config(function ( $urlRouterProvider, $stateProvider, $authProvider) 
         controllerAs : 'createTrip',
         templateUrl : 'views/createTrip/createTrip.html',
         url : '/createTrip'
-      });
+      })
+	    .state('tripReport', {
+		    controller : 'tripReportCtrl',
+		    controllerAs : 'tripReport',
+		    templateUrl : 'views/tripReport/tripReport.html',
+		    url : '/tripReport'
+	    });
 });
 
 // app run
