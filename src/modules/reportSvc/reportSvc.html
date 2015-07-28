@@ -139,39 +139,18 @@
   </div>
 </script>
 <script type="text/ng-template" id="photosModal">
-	<div class="carousel" id="slider" style="margin-left: 20px;">
-		<label class="labelSecurity">Fotos del Servicio</label><br />
-		<div class="carousel-inner">
-			<div class="item" ng-class="{active:!$index}" ng-repeat="photo in photos">
-				<!--<span>/download/{{ photo.identifier }}</span>-->
-				<img src="/download/{{ photo.identifier }}" class="img-responsive">
-			</div>
-		</div>
-		<a class="carousel-control right" href="#slider" data-slide="next"></a>
-		<a class="carousel-control left" href="#slider" data-slide="prev"></a>
-	</div>
-	<!--<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">-->
-		<!--&lt;!&ndash; Indicators &ndash;&gt;-->
-		<!--<ol class="carousel-indicators">-->
-			<!--<li data-target="#carousel-example-generic" ng-class="{active:!$index}" data-slide-to="{{$index}}" ng-repeat="photo in photos"></li>-->
-		<!--</ol>-->
-
-		<!--&lt;!&ndash; Wrapper for slides &ndash;&gt;-->
-		<!--<div class="carousel-inner" role="listbox">-->
-			<!--<div class="item" ng-repeat="photo in photos">-->
-				<!--<img src="/download/{{ photo.identifier }}" alt="photo.name">-->
-					<!--<div class="carousel-caption"></div>-->
-			<!--</div>-->
-		<!--</div>-->
-
-		<!--&lt;!&ndash; Controls &ndash;&gt;-->
-		<!--<a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">-->
-			<!--<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>-->
-			<!--<span class="sr-only">Anterior</span>-->
-		<!--</a>-->
-		<!--<a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">-->
-			<!--<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>-->
-			<!--<span class="sr-only">Siguiente</span>-->
-		<!--</a>-->
-	<!--</div>-->
+    <div>
+        <div>
+            <carousel interval="myInterval" no-wrap="noWrapSlides">
+                <slide ng-repeat="slide in slides" active="slide.active">
+                    <span>{{slide.image}}</span>
+                    <img ng-src="{{slide.image}}" style="margin:auto;" class="img-responsive">
+                    <div class="carousel-caption">
+                        <h4>Slide {{$index}}</h4>
+                        <p>{{slide.text}}</p>
+                    </div>
+                </slide>
+            </carousel>
+        </div>
+    </div>
 </script>

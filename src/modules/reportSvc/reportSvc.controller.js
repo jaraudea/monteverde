@@ -112,10 +112,22 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
     }
   };
 
-	$scope.photos = []
+  $scope.myInterval = 5000;
+  $scope.noWrapSlides = false;
+  $scope.slides = [];
+
+  $scope.addSlide = function(photo) {
+      $scope.slides.push({
+        image: '/download/' + photo.identifier,
+        text: photo.name
+    });
+  };
 
   $scope.openPhotosModal = function(photos) {
-	  $scope.photos = photos
+    $scope.slides = [];
+    for (i = 0, len = photos.length; i < len; i++) {
+      $scope.addSlide(photos[i]);
+    }
     $modal.open({
       animation: $scope.animationsEnabled,
 	    templateUrl: 'photosModal',
