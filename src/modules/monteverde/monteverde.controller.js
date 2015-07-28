@@ -1,7 +1,7 @@
 // main controller
 'use strict';
 
-monteverde.controller('monteverdeCtrl', function ($scope, $auth, connectorService, socketFactory, AlertsFactory) {
+monteverde.controller('monteverdeCtrl', function ($scope, $auth, $location, connectorService, socketFactory, AlertsFactory) {
 
 
   $scope.scheduledSvcsWoExec = [];
@@ -70,6 +70,10 @@ monteverde.controller('monteverdeCtrl', function ($scope, $auth, connectorServic
     }
     return data;
   }
+
+	$scope.isActive = function (viewLocation) {
+		return viewLocation === $location.path();
+	};
 
   var init = function () {
     showServicesAlert();

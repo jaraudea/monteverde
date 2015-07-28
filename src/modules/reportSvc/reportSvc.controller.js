@@ -112,10 +112,14 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
     }
   };
 
-  $scope.open = function(imgIdentifier) {
+	$scope.photos = []
+
+  $scope.openPhotosModal = function(photos) {
+	  $scope.photos = photos
     $modal.open({
-          animation: $scope.animationsEnabled,
-          template: '<img width="1024" class="center-block" src="/download/' + imgIdentifier + '" />'
+      animation: $scope.animationsEnabled,
+	    templateUrl: 'photosModal',
+	    scope: $scope
     });
   };
 

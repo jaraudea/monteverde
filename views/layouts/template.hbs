@@ -46,15 +46,15 @@
           </div>  
         </div>
           
-        <div class="row ">           
+        <div class="row ">
             <nav class="col-sm-12" ng-if="userLogged">
               <ul class="nav nav-tabs">
-                <li class="btn btn-default"><a href ui-sref="createSvc">Crear Servicio</a></li>
-                <li class="btn btn-default"><a href ui-sref="scheduleSvc">Programar Servicio</a></li>
-                <li class="btn btn-default"><a href ui-sref="runSvc">Ejecutar Servicio</a></li>
-                <li class="btn btn-default"><a href ui-sref="reportSvc">Reporte de Servicios</a></li>
-                <li class="btn btn-default"><a href ui-sref="createTrip">Crear Viaje</a></li>
-	              <li class="btn btn-default"><a href ui-sref="tripReport">Reporte de Viajes</a></li>
+                <li ng-class="{ active: isActive('/createSvc')}"><a href ui-sref="createSvc">Crear Servicio</a></li>
+                <li ng-class="{ active: isActive('/scheduleSvc')}"><a href ui-sref="scheduleSvc">Programar Servicio</a></li>
+                <li ng-class="{ active: isActive('/runSvc')}"><a href ui-sref="runSvc">Ejecutar Servicio</a></li>
+                <li ng-class="{ active: isActive('/reportSvc')}"><a href ui-sref="reportSvc">Reporte de Servicios</a></li>
+                <li ng-class="{ active: isActive('/createTrip')}"><a href ui-sref="createTrip">Crear Viaje</a></li>
+	              <li ng-class="{ active: isActive('/tripReport')}"><a href ui-sref="tripReport">Reporte de Viajes</a></li>
               </ul>
             </nav>
         </div>
