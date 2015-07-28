@@ -2,7 +2,7 @@
 
 'use strict';
 
-monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter, $q, ngTableParams, $sce, connectorService, socketFactory, dateTimeHelper) {
+monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter, $q, ngTableParams, $sce, connectorService, socketFactory, dateTimeHelper, serviceTypeHelper) {
   var contractId = null;
 
   // Socket IO
@@ -59,6 +59,9 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
 
         params.total(orderedData.length); // set total for recalc pagination
         $defer.resolve($scope.services = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+        var serviceType = $scope.formData.serviceType
+        params.isPrunningService = serviceTypeHelper.isPrunningService(serviceType)
+        params.isGrassService = serviceTypeHelper.isGrassService(serviceType)
       }
   });
 
@@ -202,6 +205,10 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
       && (typeof formData.zone != 'undefined') && (formData.zone != null)
       && (typeof formData.startDate != 'undefined') && (formData.startDate != null)
       && (typeof formData.endDate != 'undefined') && (formData.endDate != null);
+  }
+
+  $scope.isPhotosEmpty = function(photos) {
+      return photos.length <= 0
   }
 
   init();

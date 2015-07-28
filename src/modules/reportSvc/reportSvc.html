@@ -60,8 +60,11 @@
   <div class="col-sm-12">
     <table ng-table="tableParams" class="table table-bordered" export-csv="csv">
       <tr ng-repeat="service in $data">
-        <td data-title="'Lote'" sortable="'configService.code'">
+        <td data-title="'Lote'" sortable="'configService.code'" ng-show="tableParams.isGrassService">
             {{service.configService.code}}
+        </td>
+        <td data-title="'Radicado'" sortable="'configService.code'" ng-show="tableParams.isPrunningService">
+              {{service.configService.code}}
         </td>
         <td data-title="'Nombres y Descripción'" sortable="'configService.description'">
             {{service.configService.description}}
@@ -92,17 +95,14 @@
         <td data-title="'Cantidad Ejecutada'" sortable="'quantity'">
             {{service.quantity}} {{service.unit.name}}
         </td>
-        <!--<td data-title="'Unidad'" sortable="'unit.name'">
-            {{service.unit.name}}
-        </td>
-        <td data-title="'Especie'" sortable="'specie'">
+        <td data-title="'Especie'" sortable="'specie'" ng-show="tableParams.isPrunningService">
             {{service.configService.specie}}
         </td>
-        <td data-title="'Tarea'" sortable="'task'">
+        <td data-title="'Tarea'" sortable="'task'" ng-show="tableParams.isPrunningService">
             {{service.task}}
-        </td> -->
+        </td>
         <td data-title="'Fotos de Respaldo'" class="text-center">
-	        <a ng-click="openPhotosModal(service.photos)"><i class="fa fa-camera fa-2x"></i></a>
+	        <a ng-click="openPhotosModal(service.photos)" ng-show="!isPhotosEmpty(service.photos)"><i class="fa fa-camera fa-2x"></i></a>
             <!--<a ng-repeat="photo in service.photos" ng-click="open(photo.identifier)">{{photo.name}}<br/></a>-->
         </td>
         <td data-title="'Estado'" sortable="'status.name'">
