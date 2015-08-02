@@ -51,11 +51,14 @@
     <a class="btn btn-danger" ng-href="" title="Desaprobar" ng-click='openDisapprovalReasonModal()'>
       <i class="fa fa-thumbs-o-down fa-fw"></i>
     </a>
+    <a class="btn btn-info" ng-mousedown="csv.generate()" ng-href="{{ csv.link() }}" download="trips.csv" title="Exportar">
+      <i class="fa fa-list-alt fa-fw"></i>
+    </a>
   </div>
 </div>
 <div class="row form-group">
   <div class="col-sm-12">
-    <table ng-table="tableParams" class="table table-bordered">
+    <table ng-table="tableParams" class="table table-bordered" export-csv="csv">
       <tr ng-repeat="trip in $data">
         <td data-title="'Veh&iacute;culo'" sortable="'vehicle.plate'">
             {{trip.vehicle.plate}}

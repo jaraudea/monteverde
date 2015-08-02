@@ -51,6 +51,7 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
       }
   }, {
       total: $scope.tableData.length, // length of data
+      counts: [10, 50, 100, 10000],
       getData: function($defer, params) {
         var filteredData = $filter('filter')($scope.tableData, $scope.filter);
         var orderedData = params.sorting() ? 
