@@ -2,6 +2,8 @@
 Monteverde
 
 to **Build** execute following commands:
+  - brew install imagemagick
+  - brew install graphicsmagick
   - npm install
   - gulp
 

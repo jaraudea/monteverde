@@ -1,7 +1,8 @@
 var fs = require('fs'),
     path = require('path'),
     util = require('util'),
-    Stream = require('stream').Stream; 
+    Stream = require('stream').Stream
+    gm = require('gm');
 
 module.exports = flow = function(temporaryFolder) {
     var $ = this;
@@ -119,6 +120,9 @@ module.exports = flow = function(temporaryFolder) {
                         if (exists) {
                             currentTestChunk++;
                             if (currentTestChunk > numberOfChunks) {
+
+                                //Reduce Image quality
+                                reduceImageQuality(chunkFilename);
                                 callback('done', filename, original_filename, identifier);
                             } else {
                                 // Recursion
@@ -134,7 +138,7 @@ module.exports = flow = function(temporaryFolder) {
         } else {
             callback(validation, filename, original_filename, identifier);
         }
-    };
+};
 
     // Pipe chunks directly in to an existsing WritableStream
     //   r.write(identifier, response);
@@ -208,3 +212,14 @@ module.exports = flow = function(temporaryFolder) {
 
     return $;
 };
+
+var reduceImageQuality = function(filename) {
+    gm(filename).quality(30).write(filename, function(err) {
+        if (err) {
+            throw err
+        } else {
+            console.log("Quality reduce to 30% done for " + filename);
+
+        }
+    });
+}

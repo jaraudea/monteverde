@@ -62,7 +62,7 @@ app.use('/api', expressJwt({secret: tokenConfig.secret}));
 
 // uncomment after placing your favicon in /public
 app.use(favicon(__dirname + '/public/images/favicon.ico'));
-app.use(logger(':date[web] :method :url :status :response-time ms - :res[content-length]', {stream: accessLogStream}));
+app.use(logger(':date[web] :method :url :status :response-time ms - :res[content-length]'));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));

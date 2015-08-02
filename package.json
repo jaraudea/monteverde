@@ -22,6 +22,7 @@
     "file": "^0.2.2",
     "file-stream-rotator": "0.0.6",
     "font-awesome": "^4.3.0",
+    "gm": "^1.18.1",
     "gulp": "^3.8.11",
     "jsonwebtoken": "^5.0.1",
     "moment": "^2.10.3",
