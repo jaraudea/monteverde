@@ -82,7 +82,13 @@ monteverde.config(function ( $urlRouterProvider, $stateProvider, $authProvider, 
 });
 
 // app run
-monteverde.run(function ($rootScope, $location, $state, $auth, $modal, $timeout) {
+monteverde.run(function ($rootScope, $location, $state, $auth, $modal) {
+
+  $rootScope.statesAllowedByRol = {
+    'Administrador': 'All',
+    'Coordinador' : 'scheduleSvc,runSvc,createTrip',
+    'Interventor' : 'reportSvc,tripReport'
+  };
 
   //some helpers
   Array.prototype.findById = function(_id, spectedData) {
@@ -114,6 +120,14 @@ monteverde.run(function ($rootScope, $location, $state, $auth, $modal, $timeout)
         e.preventDefault(); // stop current execution
         $state.go('login'); // go to login
     };
+
+    var userRol = $auth.getPayload().rol
+    var statesAllowed = $rootScope.statesAllowedByRol[userRol.name]
+    if (statesAllowed != 'All' && statesAllowed.split(",").indexOf(toState.name) < 0) {
+      e.preventDefault(); // stop current execution
+      if (userRol.name==='Coordinador') $state.go('scheduleSvc');
+      else if (userRol.name==='Interventor') $state.go('reportSvc');
+    }
   });
 
   $rootScope.appBusy = function (isBusy) {

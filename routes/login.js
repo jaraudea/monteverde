@@ -1,6 +1,7 @@
 // var tokenUtil = require('../auth/token');
 var jwt = require('jsonwebtoken');
 var User = require('../models/User');
+var Rol = require('../models/Rol');
 var tokenConfig = require('../token/config');
 
 exports.form = function(req, res) {
@@ -8,7 +9,7 @@ exports.form = function(req, res) {
 };
 
 var authenticate = function(name, pass, fn) {
-	User.findOne({username: name}, function(err, user) {
+	User.findOne({username: name}).populate('rol', 'name').exec(function(err, user) {
 		if (err) return fn(err);
 		if (!user) return fn(new Error('Usuario y/o contraseña invalidos.'));
 		if (user.password !== pass) return fn(new Error('Usuario y/o contraseña invalidos.'));

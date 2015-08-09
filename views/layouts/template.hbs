@@ -34,7 +34,7 @@
         <nav class="nav navbar navbar-default">
           <div class="container-fluid">
             <span class="navbar-text">Usuario: \{{user.name}}</span>
-            <button type="button" class="btn btn-danger navbar-btn navbar-right" ng-click="logout('login')">Cerrar Sesi&oacute;n</button>
+            <button type="button" class="btn btn-danger navbar-btn navbar-right" ng-click="clearAlerts(); logout('login')">Cerrar Sesi&oacute;n</button>
           </div>
         </nav>
 
@@ -49,12 +49,12 @@
         <div class="row ">
             <nav class="col-sm-12" ng-if="userLogged">
               <ul class="nav nav-tabs">
-                <li ng-class="{ active: isActive('/createSvc')}"><a href ui-sref="createSvc">Configurar Servicio</a></li>
-                <li ng-class="{ active: isActive('/scheduleSvc')}"><a href ui-sref="scheduleSvc">Programar Servicio</a></li>
-                <li ng-class="{ active: isActive('/runSvc')}"><a href ui-sref="runSvc">Ejecutar Servicio</a></li>
-                <li ng-class="{ active: isActive('/reportSvc')}"><a href ui-sref="reportSvc">Reporte de Servicios</a></li>
-                <li ng-class="{ active: isActive('/createTrip')}"><a href ui-sref="createTrip">Crear Viaje</a></li>
-	              <li ng-class="{ active: isActive('/tripReport')}"><a href ui-sref="tripReport">Reporte de Viajes</a></li>
+                <li ng-class="{ active: isActive('/createSvc')}" ng-if="showTabByStateRol('createSvc')"><a href ui-sref="createSvc">Configurar Servicio</a></li>
+                <li ng-class="{ active: isActive('/scheduleSvc')}" ng-if="showTabByStateRol('scheduleSvc')"><a href ui-sref="scheduleSvc">Programar Servicio</a></li>
+                <li ng-class="{ active: isActive('/runSvc')}" ng-if="showTabByStateRol('runSvc')"><a href ui-sref="runSvc">Ejecutar Servicio</a></li>
+                <li ng-class="{ active: isActive('/reportSvc')}" ng-if="showTabByStateRol('reportSvc')"><a href ui-sref="reportSvc">Reporte de Servicios</a></li>
+                <li ng-class="{ active: isActive('/createTrip')}" ng-if="showTabByStateRol('createTrip')"><a href ui-sref="createTrip">Crear Viaje</a></li>
+	              <li ng-class="{ active: isActive('/tripReport')}" ng-if="showTabByStateRol('tripReport')"><a href ui-sref="tripReport">Reporte de Viajes</a></li>
               </ul>
             </nav>
         </div>

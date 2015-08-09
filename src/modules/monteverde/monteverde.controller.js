@@ -1,7 +1,7 @@
 // main controller
 'use strict';
 
-monteverde.controller('monteverdeCtrl', function ($scope, $auth, $location, connectorService, socketFactory, AlertsFactory) {
+monteverde.controller('monteverdeCtrl', function ($rootScope, $scope, $auth, $location, connectorService, socketFactory, AlertsFactory) {
 
 
   $scope.scheduledSvcsWoExec = [];
@@ -12,7 +12,8 @@ monteverde.controller('monteverdeCtrl', function ($scope, $auth, $location, conn
 
   // Socket IO
   socketFactory.on('notifyChanges', function (data) {
-    // showServicesAlert();
+    //$scope.clearAlerts();
+    //showServicesAlert();
   });
 
   $scope.$watch(function () {
@@ -28,7 +29,6 @@ monteverde.controller('monteverdeCtrl', function ($scope, $auth, $location, conn
   $scope.logout = $auth.logout; 
 
   var showServicesAlert = function() {
-    AlertsFactory.closeAllAlerts();
     dataGet('scheduledSvcsWoExecution', '', function(services) {
       var data = convertServicesToAlertInfo(services);
       if (data.length > 0) {
@@ -47,6 +47,10 @@ monteverde.controller('monteverdeCtrl', function ($scope, $auth, $location, conn
         AlertsFactory.addAlert('danger', 'Los siguientes servicios "En Corrección" y aun no han sido corregidos:\n' + data.join(", "));  
       }
     });
+  }
+
+  $scope.clearAlerts = function() {
+    AlertsFactory.closeAllAlerts();
   }
 
   // Method to GET data
@@ -75,5 +79,10 @@ monteverde.controller('monteverdeCtrl', function ($scope, $auth, $location, conn
 	$scope.isActive = function (viewLocation) {
 		return viewLocation === $location.path();
 	};
+
+  $scope.showTabByStateRol = function(stateName) {
+    var statesByRol = $rootScope.statesAllowedByRol[$scope.user.rol.name]
+    return statesByRol == 'All' || statesByRol.split(',').indexOf(stateName) > -1
+  }
 
 });
