@@ -12,9 +12,11 @@ var monteverde = angular.module('monteverde', [
 );
 
 // app configuration
-monteverde.config(function ( $urlRouterProvider, $stateProvider, $authProvider) {
+monteverde.config(function ( $urlRouterProvider, $stateProvider, $authProvider, $httpProvider) {
     // stup the Auth
-    $authProvider.baseUrl = "http://localhost:3000"//"http://190.250.0.250:3000"
+     $authProvider.baseUrl = "http://localhost:3000"
+    //$authProvider.baseUrl = "http://localhost:8080"
+    //$authProvider.baseUrl = "http://181.137.197.33:8080"
     $authProvider.loginUrl = "/login";
     $authProvider.signupUrl = "api/signup";
     // $authProvider.tokenName = "Bearer";
@@ -75,10 +77,12 @@ monteverde.config(function ( $urlRouterProvider, $stateProvider, $authProvider) 
 		    templateUrl : 'views/tripReport/tripReport.html',
 		    url : '/tripReport'
 	    });
+
+  $httpProvider.interceptors.push("httpInterceptor");
 });
 
 // app run
-monteverde.run(function ($rootScope, $location, $state, $auth) {
+monteverde.run(function ($rootScope, $location, $state, $auth, $modal, $timeout) {
 
   //some helpers
   Array.prototype.findById = function(_id, spectedData) {
@@ -111,4 +115,22 @@ monteverde.run(function ($rootScope, $location, $state, $auth) {
         $state.go('login'); // go to login
     };
   });
+
+  $rootScope.appBusy = function (isBusy) {
+    if (isBusy) {
+      $rootScope.modalInstance = $modal.open({
+        animation: false,
+        template: '<div class="col-sm-12"><img id="loadingSpinner" onload=\'if(document.getElementById("loadingSpinner"))document.getElementById("loadingSpinner").parentNode.parentNode.className=""\' width="100%" src="/images/loading.gif"></div>',
+        backdrop: false,
+        keyboard: false,
+        windowClass:"loading-modal-window",
+        size: "lg",
+        scope: $rootScope
+      });
+      $rootScope.isBusy=true;
+    } else if (typeof $rootScope.modalInstance !== 'undefined') {
+      $rootScope.modalInstance.dismiss('cancel');
+      $rootScope.isBusy=false;
+    }
+  };
 });

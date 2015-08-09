@@ -123,20 +123,20 @@ module.exports = flow = function(temporaryFolder) {
 
                                 //Reduce Image quality
                                 reduceImageQuality(chunkFilename);
-                                callback('done', filename, original_filename, identifier);
+                                callback('done', filename, identifier);
                             } else {
                                 // Recursion
                                 testChunkExists();
                             }
                         } else {
-                            callback('partly_done', filename, original_filename, identifier);
+                            callback('partly_done', filename, identifier);
                         }
                     });
                 };
                 testChunkExists();
             });
         } else {
-            callback(validation, filename, original_filename, identifier);
+            callback(validation, filename, identifier);
         }
 };
 

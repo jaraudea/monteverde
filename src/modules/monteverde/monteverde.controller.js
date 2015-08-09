@@ -21,6 +21,7 @@ monteverde.controller('monteverdeCtrl', function ($scope, $auth, $location, conn
     function() {
       $scope.userLogged = $auth.isAuthenticated();
       $scope.user = $auth.getPayload();
+      if($auth.isAuthenticated()) showServicesAlert();
     }
   );
 
@@ -74,11 +75,5 @@ monteverde.controller('monteverdeCtrl', function ($scope, $auth, $location, conn
 	$scope.isActive = function (viewLocation) {
 		return viewLocation === $location.path();
 	};
-
-  var init = function () {
-    showServicesAlert();
-  };
-
-  init();
 
 });

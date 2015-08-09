@@ -2,17 +2,17 @@
 
 'use strict';
 
-monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, ngTableParams, AlertsFactory, connectorService, $filter, JrfService, socketFactory, dateTimeHelper) {
+monteverde.controller('runSvcCtrl', function ($rootScope, $state, $scope, $timeout, $modal, ngTableParams, AlertsFactory, connectorService, $filter, JrfService, socketFactory, dateTimeHelper) {
 
   var contractId = null,
       dataSpecieTable = [];
 
 // Socket IO
   socketFactory.on('notifyChanges', function (data) {
-    uptadeData(data);
+    updateData(data);
   });  
 
-  var uptadeData = function (data) {
+  var updateData = function (data) {
     updateServicesTable();
     percentStatus();
   }; 
@@ -39,10 +39,21 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
 
   $scope.uploader = {
     target : "/upload",
-    testChunks : true,
-    controllerFn: function ($flow, $file, $message) {
+    chunkSize: 1024 * 1024 * 1024,
+    simultaneousUploads: 1,
+    progressCallbacksInterval: 1000,
+    testChunks : false,
+    controllerFn: function ($flow, $file, $message, $rootScope) {
       processform();
     }
+  }
+
+  $scope.openLoadingModal = function() {
+    $rootScope.appBusy(true)
+  }
+
+  $scope.closeLoadingModal = function() {
+    $rootScope.appBusy(false)
   }
   
   $scope.doneQuantity = 0;
@@ -52,12 +63,11 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
     dataGet('teams');
     dataGet('units');
     dataGet('vehicles');
-    percentStatus();
   };
 
   var percentStatus = function () {
     var formData = $scope.formData;
-    if (areAllFiltersSet) {
+    if (areAllFiltersSet()) {
 	    var runSvcDate = dateTimeHelper.truncateDateTime(formData.date)
       connectorService.getData(connectorService.ep.execPercent, '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone + '&date=' + runSvcDate)
         .then(
@@ -151,7 +161,6 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
           $scope.tableParams.reload();
           $scope.tableParams.$params.page = 1;
         });
-        percentStatus();
       }
   };
 
@@ -306,6 +315,7 @@ monteverde.controller('runSvcCtrl', function ($state, $scope, $timeout, $modal, 
     $scope.submittedData = JrfService.parseRunService(data, editing);
 
     if (files.length ) {
+      $scope.openLoadingModal();
       $scope.images.flow.upload()
     } else {
       processform();

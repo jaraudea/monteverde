@@ -112,11 +112,11 @@
       </div>
     </div>
 
-    <div class="form-group row"  
-          flow-init="uploader" 
-          flow-name="images.flow" 
-          flow-complete="uploader.controllerFn($flow, $file, $message)"
-          >
+    <div class="form-group row"
+         flow-init="uploader"
+         flow-name="images.flow"
+         flow-complete="closeLoadingModal(); uploader.controllerFn($flow, $file, $message);"
+         >
       <div class="col-sm-6">
         <label for="observations" class="control-label">Descripci&oacute;n: </label>
         <textarea id="observations" class="form-control" cols="30" rows="5" ng-model="formData.observations" required></textarea>

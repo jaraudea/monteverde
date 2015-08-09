@@ -125,10 +125,13 @@ app.delete('/api/trip/:_id', tripApi.delete);
 /* upload (testing porpouses) this is a basic oute, please move the components to the corect files */
 // Handle uploads through Flow.js
 app.post('/upload', multipartMiddleware, function(req, res) {
-  flow.post(req, function(status, filename, original_filename, identifier) {
-    console.log('POST', status, original_filename, identifier);
+  flow.post(req, function(status, filename, identifier) {
+    console.log('POST', status, identifier);
     if (ACCESS_CONTROLL_ALLOW_ORIGIN) {
       res.header("Access-Control-Allow-Origin", "*");
+    }
+    if (status == 'done') {
+      status = 200;
     }
     res.status(status).send();
   });
@@ -145,7 +148,7 @@ app.options('/upload', function(req, res){
 
 // Handle status checks on chunks through Flow.js
 app.get('/upload', function(req, res) {
-  flow.get(req, function(status, filename, original_filename, identifier) {
+  flow.get(req, function(status, filename, identifier) {
     console.log('GET', status);
     if (ACCESS_CONTROLL_ALLOW_ORIGIN) {
       res.header("Access-Control-Allow-Origin", "*");
