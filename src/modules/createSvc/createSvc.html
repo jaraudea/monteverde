@@ -2,7 +2,7 @@
   <div class="form-group row">
     <label for="contract" class="control-label col-sm-1">Contrato: </label>
     <div class="col-sm-3">
-      <select id="contract" name="contract" class="form-control" ng-model="formData.contract">
+      <select id="contract" name="contract" class="form-control" ng-model="formData.contract" ng-change="loadCodes()">
         <option value="" selected disabled>Seleccione</option>
         <option value="{{contract._id}}" ng-bind="contract.contractNumber"   ng-repeat="contract in controls.contracts"></option>
       </select>
@@ -10,7 +10,7 @@
 
     <label for="serviceType" class="control-label col-sm-1 double-line">Tipo de Servicio: </label>
     <div class="col-sm-3">
-      <select name="serviceType" id="serviceType" class="form-control" placeholder="seleccione" ng-model="formData.serviceType">
+      <select name="serviceType" id="serviceType" class="form-control" placeholder="seleccione" ng-model="formData.serviceType" ng-change="loadCodes()">
         <option value="" selected disabled>Seleccione</option>
         <option value="{{servTp._id}}" ng-bind="servTp.name" ng-repeat="servTp in controls.contracts.findById(formData.contract, 'serviceType')"></option>
       </select>
@@ -18,7 +18,7 @@
 
     <label for="zone" class="control-label col-sm-1">Zona: </label>
     <div class="col-sm-3">
-      <select name="zone" id="zone" class="form-control" ng-model="formData.zone">
+      <select name="zone" id="zone" class="form-control" ng-model="formData.zone" ng-change="loadCodes()">
         <option value="" disabled>Seleccione</option>
         <option value="{{zone._id}}" ng-bind="zone.name" ng-repeat="zone in controls.contracts.findById(formData.contract, 'zones')"></option>
       </select>

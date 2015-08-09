@@ -76,11 +76,13 @@ monteverde.controller('createSvcCtrl', function ($state, $scope, ngTableParams, 
   }
 
   $scope.getServiceConfig = function (_id) {
-    dataGet('serviceConf', _id, function (data) {
-      $scope.formData = data[0];
-      dataSpecieTable = data[0].treeSpeciesByTask;
-      $scope.tableParams.reload();
-    });
+    if (areAllFiltersSet()) {
+      dataGet('serviceConf', "?code="+_id+"&contract="+$scope.formData.contract+"&serviceType="+$scope.formData.serviceType+"&zone="+$scope.formData.zone, function (data) {
+        $scope.formData = data[0];
+        dataSpecieTable = data[0].treeSpeciesByTask;
+        $scope.tableParams.reload();
+      });
+    }
   };
 
   var init = function () {
@@ -91,11 +93,30 @@ monteverde.controller('createSvcCtrl', function ($state, $scope, ngTableParams, 
     dataGet('species');
     dataGet('tasks');
     dataGet('envAuths');
-    dataGet('codes', '', function (data) {
-      for (var ndx in data) {
-        $scope.codes.push(data[ndx].code);
-      };
-    });
+  }
+
+  $scope.loadCodes = function() {
+    $scope.codes=[];
+    if (areAllFiltersSet()) {
+      clearCodeField();
+      var formData = $scope.formData
+      dataGet('codes', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone, function (data) {
+        for (var ndx in data) {
+          $scope.codes.push(data[ndx].code);
+        };
+      });
+    }
+  }
+
+  var areAllFiltersSet = function() {
+    var formData = $scope.formData;
+    return typeof formData.contract !== 'undefined' && formData.contract != null
+        && typeof formData.serviceType !== 'undefined' && formData.serviceType != null
+        && typeof formData.zone !== 'undefined' && formData.zone != null
+  }
+
+  var clearCodeField = function() {
+    $scope.formData.code = undefined
   }
 
   // Method to GET data
