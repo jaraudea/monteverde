@@ -1,3 +1,9 @@
+require('./Contract')
+require('./ServiceType')
+require('./Zone')
+require('./Vehicle')
+require('./TripStatus')
+
 var mongoose = require('../data/db'),
   Schema = mongoose.Schema;
 

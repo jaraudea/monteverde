@@ -1,3 +1,12 @@
+require('./Contract')
+require('./ServiceType')
+require('./Zone')
+require('./Team')
+require('./Unit')
+require('./EnvironmentalAuthority')
+require('./Specie')
+require('./Task')
+
 var mongoose = require('../data/db'),
   Schema = mongoose.Schema;
 

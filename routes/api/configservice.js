@@ -1,4 +1,5 @@
-var ConfigService = require('../../models/ConfigService');
+var ConfigService = require('../../models/ConfigService'),
+    auditHelper = require('../../helpers/AuditHelper')
 
 var grassService = function(data) {
   var configService = {
@@ -74,9 +75,12 @@ exports.getByCode = function(req, res, next) {
 exports.create = function(req, res, next) {
   var data = req.body;
   var confSvc = configService(data);
-  ConfigService.create(confSvc, function(err, next) {
+  ConfigService.create(confSvc, function(err, newConfService) {
     if (err) next(err);
-    res.sendStatus(200);
+    auditHelper.createAudit(auditHelper.CREATED_TYPE, req.user._id, newConfService._id, function(err) {
+      if(err) next(err)
+      res.sendStatus(200);
+    });
   });
 };
 
@@ -85,7 +89,10 @@ exports.update = function(req, res, next) {
   ConfigService.update({_id: req.body._id}, confSvc, function(err, response) {
     // response should be { ok: 1, nModified: 1, n: 1 }
     if (err) next(err);
-    res.sendStatus(200);
+    auditHelper.createAudit(auditHelper.MODIFIED_TYPE, req.user._id, req.body._id, function(err) {
+      if(err) next(err)
+      res.sendStatus(200);
+    });
   });
 };
 

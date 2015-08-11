@@ -14,7 +14,6 @@ monteverde.controller('runSvcCtrl', function ($rootScope, $state, $scope, $timeo
 
   var updateData = function (data) {
     updateServicesTable();
-    percentStatus();
   }; 
 
   $scope.isEditing = false;
@@ -161,6 +160,7 @@ monteverde.controller('runSvcCtrl', function ($rootScope, $state, $scope, $timeo
           $scope.tableParams.reload();
           $scope.tableParams.$params.page = 1;
         });
+        percentStatus();
       }
   };
 

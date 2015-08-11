@@ -3,7 +3,7 @@ var mongoose = require('../data/db'),
 
 var tripStatusSchema = new Schema({
   code: String,
-  name: String,
+  name: String
 }, {collection: 'tripstatus'});
 
 module.exports = mongoose.model('TripStatus', tripStatusSchema);

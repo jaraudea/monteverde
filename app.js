@@ -110,7 +110,7 @@ app.post('/api/trip', tripApi.create);
 
 /*PUT*/
 app.put('/api/service/configservice/:code', configServiceApi.update);
-app.put('/api/service/scheduleService/:_id', serviceApi.updateScheduledService);
+//app.put('/api/service/scheduleService/:_id', serviceApi.updateScheduledService);
 app.put('/api/service/executeService/:_id', serviceApi.updateExecutedService);
 app.put('/api/service/approveService/:_id', serviceApi.approveService);
 app.put('/api/service/disapproveService/:_id', serviceApi.disapproveService);

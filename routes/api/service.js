@@ -1,7 +1,15 @@
-var Service = require('../../models/Service');
-var ServiceStatus = require('../../models/ServiceStatus');
-var ConfigService = require('../../models/ConfigService');
-var dateTimeHelper = require('../../helpers/DateTimeHelper');
+var Service = require('../../models/Service'),
+    ConfigService = require('../../models/ConfigService'),
+    auditHelper = require('../../helpers/AuditHelper'),
+    dateTimeHelper = require('../../helpers/DateTimeHelper');
+
+//TODO move to constants
+const APPROVED_STATUS = '556fcd3f540893b44a2aef03'
+const DISAPPROVED_STATUS = '556fcd8f540893b44a2aef06'
+const EXECUTED_STATUS = '556fcd97540893b44a2aef07'
+const SCHEDULED_STATUS = '556fcda1540893b44a2aef08'
+const CORRECTED_STATUS = '556fcd73540893b44a2aef04'
+const REMOVED_STATUS = '55c982e3905e1eb799be2501'
 
 var executedService = function(data, svc) {
   var service = {};
@@ -17,7 +25,6 @@ var executedService = function(data, svc) {
   service.unit =  data.unit
   service.configService = data.configService
   service.executedDate = data.date
-  console.log(data.vehicle);
   service.vehicle = data.vehicle;
   if (data.trips === null) {
     service.trips = undefined;
@@ -27,7 +34,7 @@ var executedService = function(data, svc) {
   service.quantity = data.quantity
   service.description = data.description
   service.photos =data.photos
-  service.status = '556fcd97540893b44a2aef07'
+  service.status = EXECUTED_STATUS
 
   return service;
 }
@@ -46,7 +53,7 @@ var scheduledService = function(data, svc) {
   service.unit =  data.unit
   service.configService = data.configService
   service.scheduledDate = data.date
-  service.status = '556fcda1540893b44a2aef08'
+  service.status = SCHEDULED_STATUS
 
   return service;
 }
@@ -66,6 +73,7 @@ exports.getExecutedServices = function(req, res, next) {
     delete query['date'];
     query['$or'] = [{scheduledDate: queryDate, executedDate: null}, {executedDate: queryDate}];
   }
+  query['status'] = {$ne: REMOVED_STATUS}
 
   Service
     .find(query)
@@ -89,21 +97,33 @@ exports.scheduleService = function(req, res, next) {
   var lastDay = new Date(queryDate.getFullYear(), queryDate.getMonth() + 1, 0);
   var query = { 
     configService: req.body.configService,
-    $or: [{scheduledDate: {$gte: new Date(firstDay), $lte: new Date(lastDay)}}, {executedDate: {$gte: new Date(firstDay), $lte: new Date(lastDay)}}]
+    $or: [{scheduledDate: {$gte: new Date(firstDay), $lte: new Date(lastDay)}}, {executedDate: {$gte: new Date(firstDay), $lte: new Date(lastDay)}}],
+    status: {$ne: REMOVED_STATUS}
   };
   Service.findOne(query, function(err, svc) {
     if (err) next(err);
+    var auditType;
+    var serviceId;
     if (svc) {
       var service = scheduledService(req.body, svc);
-      service.save();
-      res.sendStatus(200);
+      service.save(function(err) {
+        if(err) next(err)
+        auditHelper.createAudit(auditHelper.MODIFIED_TYPE, req.user._id, service._id, function(err) {
+          if(err) next(err)
+          res.sendStatus(200);
+        });
+      });
     } else {
       var service = scheduledService(req.body);
-      Service.create(service, function(err, response) {
+      Service.create(service, function(err, newService) {
         if (err) next(err);
-        res.sendStatus(200);
+        auditHelper.createAudit(auditHelper.SCHEDULED_TYPE, req.user._id, newService._id, function(err) {
+          if(err) next(err)
+          res.sendStatus(200);
+        });
       });
     }
+
   });
 };
 
@@ -113,19 +133,28 @@ exports.executeService = function(req, res, next) {
   var lastDay = new Date(queryDate.getFullYear(), queryDate.getMonth() + 1, 0);
   var query = { 
     configService: req.body.configService,
-    $or: [{scheduledDate: {$gte: new Date(firstDay), $lte: new Date(lastDay)}}, {executedDate: {$gte: new Date(firstDay), $lte: new Date(lastDay)}}]
+    $or: [{scheduledDate: {$gte: new Date(firstDay), $lte: new Date(lastDay)}}, {executedDate: {$gte: new Date(firstDay), $lte: new Date(lastDay)}}],
+    status: {$ne: REMOVED_STATUS}
   };
   Service.findOne(query, function(err, svc) {
     if (err) next(err);
     if (svc) {
       var service = executedService(req.body, svc);
-      service.save();
-      res.sendStatus(200);
+      service.save(function(err) {
+        if(err) next(err)
+        auditHelper.createAudit(auditHelper.MODIFIED_TYPE, req.user._id, service._id, function(err) {
+          if(err) next(err)
+          res.sendStatus(200);
+        });
+      });
     } else {
       var service = executedService(req.body);
-      Service.create(service, function(err, response) {
+      Service.create(service, function(err, newService) {
         if (err) next(err);
-        res.sendStatus(200);
+        auditHelper.createAudit(auditHelper.EXECUTED_TYPE, req.user._id, newService._id, function(err) {
+          if(err) next(err)
+          res.sendStatus(200);
+        });
       });
     }
   });
@@ -133,10 +162,13 @@ exports.executeService = function(req, res, next) {
 
 exports.approveService = function(req, res, next) {
   var approvedDate = dateTimeHelper.truncateDateTime(new Date());
-  Service.update({_id: req.params._id}, {status: '556fcd3f540893b44a2aef03', approvedDate: approvedDate}, function(err, response) {
+  Service.update({_id: req.params._id}, {status: APPROVED_STATUS, approvedDate: approvedDate}, function(err, response) {
     // response should be { ok: 1, nModified: 1, n: 1 }
     if (err) next(err);
-    res.sendStatus(200);
+    auditHelper.createAudit(auditHelper.APPROVED_TYPE, req.user._id, req.params._id, function(err) {
+      if(err) next(err)
+      res.sendStatus(200);
+    });
   });
 };
 
@@ -145,21 +177,21 @@ exports.disapproveService = function(req, res, next) {
   Service.findOne({_id: req.params._id}, function(err, service) {
     if (err) next(err);
     if (!service) res.sendStatus(400, 'Servicio no encontrado');
-    service.status = '556fcd8f540893b44a2aef06';
+    service.status = DISAPPROVED_STATUS;
     service.disapprovedDate = disapprovedDate;
     if (typeof service.disapprovalReason != 'undefined') {
       service.disapprovalReason = disapprovedDate.toISOString().substr(0, 10) + ': ' + req.body.reason + '\n' + service.disapprovalReason;
     } else {
       service.disapprovalReason = req.body.reason;
     }
-    service.save();
-    res.sendStatus(200);
+    service.save(function (err) {
+      if (err) next(err);
+      auditHelper.createAudit(auditHelper.DISAPPROVED_TYPE, req.user._id, req.params._id, function(err) {
+        if(err) next(err)
+        res.sendStatus(200);
+      });
+    });
   });
-};
-
-exports.updateScheduledService = function(req, res, next) {
-  console.log(req);
-  res.sendStatus(200);
 };
 
 exports.updateExecutedService = function(req, res, next) {
@@ -168,22 +200,32 @@ exports.updateExecutedService = function(req, res, next) {
     if (!service) res.sendStatus(400, 'Servicio no encontrado');
     var oldStatus = service.status
     var svc = executedService(req.body, service);
-    
-    if (oldStatus == '556fcd8f540893b44a2aef06' || oldStatus == '556fcd73540893b44a2aef04') { // if status is disapproved or corrected, then define status as corrected
-      svc.status = '556fcd73540893b44a2aef04'; 
+    if (oldStatus == DISAPPROVED_STATUS || oldStatus == CORRECTED_STATUS) {
+      svc.status = CORRECTED_STATUS;
     }
     svc.save(function(err, data) {
       if (err) next(err);
-      res.sendStatus(200);
+      var auditType = oldStatus == DISAPPROVED_STATUS ? auditHelper.CORRECTED_TYPE : auditHelper.MODIFIED_TYPE
+      auditHelper.createAudit(auditType, req.user._id, service._id, function(err) {
+        if(err) next(err)
+        res.sendStatus(200);
+      });
     });
   });
 };
 
 exports.deleteExecutedService = function(req, res, next) {
   var serviceId = req.params._id;
-  Service.remove({_id: serviceId}, function(err, response) {
+  Service.findOne({_id: serviceId}, function(err, service) {
     if (err) next(err);
-    res.sendStatus(200);
+    if (!service) res.sendStatus(400, 'Servicio no encontrado');
+    service.status = REMOVED_STATUS
+    service.save(function(err) {
+      auditHelper.createAudit(auditHelper.REMOVED_TYPE, req.user._id, serviceId, function(err) {
+        if(err) next(err)
+        res.sendStatus(200);
+      });
+    });
   });
 };
 
@@ -192,7 +234,8 @@ exports.getServices = function(req, res, next) {
     contract: req.query.contract,
     serviceType: req.query.serviceType,
     zone: req.query.zone,
-    $or: [ {executedDate: null, scheduledDate: {$gte: req.query.startDate, $lte: req.query.endDate}}, {executedDate: {$gte: req.query.startDate, $lte: req.query.endDate}}]
+    $or: [ {executedDate: null, scheduledDate: {$gte: req.query.startDate, $lte: req.query.endDate}}, {executedDate: {$gte: req.query.startDate, $lte: req.query.endDate}}],
+    status: {$ne: REMOVED_STATUS}
   }
 
   Service
@@ -217,13 +260,14 @@ exports.getExecutionPercentage = function(req, res, next) {
   };
   var allScheduledQuery = query;
   allScheduledQuery['scheduledDate'] = {$lte: dateFilter.endDate, $gte: dateFilter.startDate};
+  allScheduledQuery['status'] = {$ne: REMOVED_STATUS};
   Service.count(allScheduledQuery , function(err, response) {
     if (response === 0) {
       res.json({executionPercentage: ""});
     } else {
       var allExecutedQuery = query;
       allExecutedQuery['executedDate'] = {$lte: dateFilter.endDate, $gte: dateFilter.startDate };
-      allExecutedQuery['status'] = {$ne: '556fcda1540893b44a2aef08'};
+      allExecutedQuery['status'] = {$ne: SCHEDULED_STATUS, $ne: REMOVED_STATUS};
       Service.count(allExecutedQuery, function(err, response1) {
         var result = ((response1 / response) * 100)
         res.json({executionPercentage: result.toFixed(2)});
@@ -241,6 +285,8 @@ exports.getServiceInMonth = function(req, res, next) {
     delete query['date'];
     query['$or'] = [{scheduledDate: {$gte: new Date(firstDay), $lte: new Date(lastDay)}}, {executedDate: {$gte: new Date(firstDay), $lte: new Date(lastDay)}}];
   }
+  query['status'] = {$ne: REMOVED_STATUS}
+
   Service.findOne(query).populate('configService').exec(function(err, service) {
     if (err) next(err);
     res.json(service);
@@ -264,7 +310,7 @@ var getDateFilter = function(date) {
 exports.getScheduledServicesWithoutExecution = function(req, res, next) {
   var currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 2);
-  Service.find({scheduledDate: {$lt: currentDate}, executedDate: null}, 'scheduledDate configService')
+  Service.find({scheduledDate: {$lt: currentDate}, executedDate: null, status: {$ne: REMOVED_STATUS}}, 'scheduledDate configService')
     .populate('configService', 'code')
     .exec(function(err, services) {
       if (err) next(err);
@@ -275,7 +321,7 @@ exports.getScheduledServicesWithoutExecution = function(req, res, next) {
 exports.getScheduledServicesWithoutApprobation = function(req, res, next) {
   var currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 3);
-  Service.find({scheduledDate: {$lt: currentDate}, executedDate: {$ne: null} ,approvedDate: null}, 'scheduledDate configService')
+  Service.find({scheduledDate: {$lt: currentDate}, executedDate: {$ne: null} ,approvedDate: null, status: {$ne: REMOVED_STATUS}}, 'scheduledDate configService')
     .populate('configService', 'code')
     .exec(function(err, services) {
       if (err) next(err);
@@ -286,7 +332,7 @@ exports.getScheduledServicesWithoutApprobation = function(req, res, next) {
 exports.getOldDisapprovedServices = function(req, res, next) {
   var currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 1);
-  Service.find({disapprovedDate: {$lt: currentDate}, status: '556fcd8f540893b44a2aef06'}, 'disapprovedDate configService')
+  Service.find({disapprovedDate: {$lt: currentDate}, status: DISAPPROVED_STATUS, status: {$ne: REMOVED_STATUS}}, 'disapprovedDate configService')
     .populate('configService', 'code')
     .exec(function(err, services) {
       if (err) next(err);
@@ -309,6 +355,7 @@ exports.getScheduledServices = function(req, res, next) {
     delete query['date'];
     query['$or'] = [{scheduledDate: queryDate}];
   }
+  query['status'] = {$ne: REMOVED_STATUS}
 
   Service
     .find(query)
@@ -337,6 +384,7 @@ exports.getSchedulingPercentage = function(req, res, next) {
 		zone: req.query.zone
 	};
 	svcsInPeriodQuery['period'] = period;
+  svcsInPeriodQuery['status'] = {$ne: REMOVED_STATUS}
 
 	ConfigService.count(svcsInPeriodQuery, function(err, response) {
 		if (response === 0) {
@@ -348,6 +396,7 @@ exports.getSchedulingPercentage = function(req, res, next) {
 				zone: req.query.zone
 			};
 			query['scheduledDate'] = {$lte: dateFilter.endDate, $gte: dateFilter.startDate };
+      query['status'] = {$ne: REMOVED_STATUS}
 			Service.count(query, function(err, response1) {
 				var result = ((response1 / response) * 100)
 				res.json({schedulingPercentage: result.toFixed(2)});

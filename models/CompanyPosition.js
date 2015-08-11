@@ -6,4 +6,4 @@ var positionSchema = new Schema({
   active: Boolean
 }, {collection: 'companypositions'});
 
-module.exports = mongoose.model('CompanyPosition', taskSchema);
+module.exports = mongoose.model('CompanyPosition', positionSchema);

@@ -1,3 +1,6 @@
+require('./ServiceType')
+require('./Zone')
+
 var mongoose = require('../data/db'),
   Schema = mongoose.Schema;
 

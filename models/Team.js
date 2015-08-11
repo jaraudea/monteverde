@@ -1,3 +1,5 @@
+require('./Employee')
+
 var mongoose = require('../data/db'),
   Schema = mongoose.Schema;
 
