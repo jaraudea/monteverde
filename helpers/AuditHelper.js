@@ -1,5 +1,4 @@
-var dateTimeHelper = require('./DateTimeHelper'),
-    Audit = require('../models/Audit')
+var Audit = require('../models/Audit')
 
 //TODO move to constants
 exports.APPROVED_TYPE = '55c96cf6905e1eb799be24f8'
@@ -16,7 +15,7 @@ var populateAudit = function(type, userId, entity) {
     type: type,
     user: userId,
     entity: entity,
-    date: dateTimeHelper.truncateDateTime(new Date())
+    date: new Date()
   }
   return audit
 }

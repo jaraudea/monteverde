@@ -3,6 +3,7 @@ var mongoose = require('../data/db'),
 
 var specieSchema = new Schema({
   name: String,
+  scientificName: String,
   active: Boolean
 });
 

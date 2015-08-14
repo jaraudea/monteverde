@@ -381,10 +381,10 @@ exports.getSchedulingPercentage = function(req, res, next) {
 	var svcsInPeriodQuery = {
 		contract: req.query.contract,
 		serviceType: req.query.serviceType,
-		zone: req.query.zone
+		zone: req.query.zone,
+    active: true
 	};
 	svcsInPeriodQuery['period'] = period;
-  svcsInPeriodQuery['status'] = {$ne: REMOVED_STATUS}
 
 	ConfigService.count(svcsInPeriodQuery, function(err, response) {
 		if (response === 0) {

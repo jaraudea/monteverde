@@ -29,7 +29,7 @@
     <label for="code" class="control-label col-sm-1" ng-hide="formData.serviceType == '5563efe645051764c2e3da13'">C&oacute;digo: </label>
     <label for="code" class="control-label col-sm-1" ng-show="formData.serviceType == '5563efe645051764c2e3da13'">Radicado: </label>
     <div class="col-sm-3">
-      <input id="code" class="form-control" type="text" typeahead-on-select="getServiceConfig(formData.code)" ng-model="formData.code" typeahead="field for field in codes | filter:$viewValue | limitTo:8" >
+      <input id="code" class="form-control" type="text" typeahead-on-select="getServiceConfig(formData.code)" ng-model="formData.code" typeahead="field for field in codes | filter:$viewValue | limitTo:9" >
     </div>
 
     <label for="team" class="control-label col-sm-1">Cuadrilla: </label>

@@ -12,6 +12,8 @@ monteverde.controller('scheduleSvcCtrl', function ($state, $scope, $filter, $mod
 
   $scope.percent = "";
 
+  $scope.codes = [];
+
   // Socket IO
   socketFactory.on('notifyChanges', function (data) {
     uptadeData(data);
@@ -82,7 +84,13 @@ monteverde.controller('scheduleSvcCtrl', function ($state, $scope, $filter, $mod
     $scope.clearForm();
 
     if (areAllFiltersSet())  {
-      dataGet('codes', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone);
+      $scope.codes = [];
+      dataGet('codes', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone + '&active=true', function (data) {
+        for (var ndx in data) {
+          $scope.codes.push(data[ndx].code);
+        }
+        ;
+      });
       updateServicesTable();
     };
   };

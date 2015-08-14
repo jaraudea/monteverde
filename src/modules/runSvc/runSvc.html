@@ -79,7 +79,7 @@
       <label for="code" class="control-label col-sm-2 double-line" ng-hide="formData.serviceType == '5563efe645051764c2e3da13'">C&oacute;digo: </label>
       <label for="code" class="control-label col-sm-2 double-line" ng-show="formData.serviceType == '5563efe645051764c2e3da13'">Radicado: </label>
       <div class="col-sm-4">
-        <input id="code" class="form-control" type="text" typeahead-editable="false" typeahead-on-select="getServiceConfig(formData.code.code)" ng-model="formData.code" typeahead="code as code.code for code in controls.codes | filter:$viewValue | limitTo:8" required>
+        <input id="code" class="form-control" type="text" typeahead-on-select="getServiceConfig(formData.code)" ng-model="formData.code" typeahead="field for field in codes | filter:$viewValue | limitTo:9" required>
       </div>
 
       <label for="team" class="control-label col-sm-2">Cuadrilla: </label>

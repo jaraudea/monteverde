@@ -146,7 +146,13 @@ monteverde.controller('runSvcCtrl', function ($rootScope, $state, $scope, $timeo
     $scope.clearForm();
 
     if (areAllFiltersSet())  {
-      dataGet('codes', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone);
+      $scope.codes = [];
+      dataGet('codes', '?contract=' + formData.contract + '&serviceType=' + formData.serviceType + '&zone=' + formData.zone + '&active=true', function (data) {
+        for (var ndx in data) {
+          $scope.codes.push(data[ndx].code);
+        }
+        ;
+      });
       updateServicesTable();
     };
   };
