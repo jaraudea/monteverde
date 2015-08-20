@@ -9,11 +9,12 @@ monteverde.controller('runSvcCtrl', function ($rootScope, $state, $scope, $timeo
 
 // Socket IO
   socketFactory.on('notifyChanges', function (data) {
-    updateData(data);
+    updateData();
   });  
 
-  var updateData = function (data) {
+  var updateData = function () {
     updateServicesTable();
+    percentStatus();
   }; 
 
   $scope.isEditing = false;
@@ -153,7 +154,7 @@ monteverde.controller('runSvcCtrl', function ($rootScope, $state, $scope, $timeo
         }
         ;
       });
-      updateServicesTable();
+      updateData();
     };
   };
 
@@ -166,7 +167,6 @@ monteverde.controller('runSvcCtrl', function ($rootScope, $state, $scope, $timeo
           $scope.tableParams.reload();
           $scope.tableParams.$params.page = 1;
         });
-        percentStatus();
       }
   };
 
@@ -220,7 +220,7 @@ monteverde.controller('runSvcCtrl', function ($rootScope, $state, $scope, $timeo
       .then(
         function (data) {
           AlertsFactory.addAlert('warning', 'Ejecucion del servicio eliminada', true);
-          updateServicesTable();
+          updateData();
         },
         function (err) {
           AlertsFactory.addAlert('danger', 'Error al eliminar servicio, contacte al servicio tecnico error:' + err, true);
@@ -342,7 +342,7 @@ monteverde.controller('runSvcCtrl', function ($rootScope, $state, $scope, $timeo
             AlertsFactory.addAlert('success', 'Servicio Actualizado', true);
             $scope.isEditing = false;
             $scope.clearForm();
-            updateServicesTable();
+            updateData();
           },
           function (err) {
             AlertsFactory.addAlert('danger', 'Error al actualizar el servicio');
@@ -354,7 +354,7 @@ monteverde.controller('runSvcCtrl', function ($rootScope, $state, $scope, $timeo
         .then (
           function (data) {
             AlertsFactory.addAlert('success', 'Ejecucion del servicio creada', true);
-            updateServicesTable();
+            updateData();
             $scope.clearForm();
           },
           function (err) {
