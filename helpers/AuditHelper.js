@@ -26,3 +26,25 @@ exports.createAudit = function(auditType, userId, entityId, callback) {
     callback()
   })
 }
+
+exports.populateAudit = function(service, callback) {
+  Audit.find({entity: service._id})
+      .populate('user')
+      .exec(function(err, audits) {
+        if(err) callback(err)
+        audits.forEach(function(audit) {
+          if(audit.type == "55c96d3f905e1eb799be24fd") {
+            service['_doc']['schedulerUser'] = audit.user.name
+          } else if(audit.type == "55c96cfd905e1eb799be24f9") {
+            service['_doc']['executerUser'] = audit.user.name
+          } else if(audit.type == "55c96cf6905e1eb799be24f8") {
+            service['_doc']['approverUser'] = audit.user.name
+          } else if(audit.type == "55c96d1a905e1eb799be24fb") {
+            service['_doc']['disapproverUser'] = audit.user.name
+          } else if(audit.type == "55c96d12905e1eb799be24fa") {
+            service['_doc']['correctorUser'] = audit.user.name
+          }
+        })
+        callback(null,service)
+  })
+}

@@ -245,9 +245,14 @@ exports.getServices = function(req, res, next) {
     .populate('contract')
     .populate('unit', 'name')
     .populate('status', 'name')
-    .exec(function(err, service) {
+    .exec(function(err, services) {
       if (err) next(err);
-      res.json(service);
+      //services.forEach(function (service) {
+      //  auditHelper.populateAudit(service, function(err, svc) {
+      //    //TODO uses async https://github.com/caolan/async
+      //  })
+      //})
+      res.json(services);
   });
 };
 
