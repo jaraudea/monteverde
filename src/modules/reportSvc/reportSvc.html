@@ -116,6 +116,27 @@
             {{service.disapprovalReason}}
           </span>
         </td>
+        <td data-title="'Razón de Desaprobaci&oacute;n'" sortable="'disapprovalReason'">
+          <span style="white-space: pre-line">
+            {{service.disapprovalReason}}
+          </span>
+        </td>
+        <!-- Only show when exports the info-->
+        <td data-title="'Programador'" ng-show="false">
+          {{service.schedulerUser}}
+        </td>
+        <td data-title="'Realizador'" ng-show="false">
+          {{service.executerUser}}
+        </td>
+        <td data-title="'Desaprobador'" ng-show="false">
+          {{service.disapproverUser}}
+        </td>
+        <td data-title="'Corregidor'" ng-show="false">
+          {{service.correctorUser}}
+        </td>
+        <td data-title="'Aprobador'" ng-show="false">
+          {{service.approverUser}}
+        </td>
         <td width="30" style="text-align: left" header="'ng-table/headers/checkbox.html'">
           <input type="checkbox" ng-model="checkboxes.items[service._id]" ng-show="isCheckboxShowedByStatus(service.status._id)"/>
         </td>

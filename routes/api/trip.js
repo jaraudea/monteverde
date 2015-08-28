@@ -110,7 +110,7 @@ exports.disapproveTrip = function(req, res, next) {
 		}
 		trip.save(function(err) {
 			if(err) next(err)
-			auditHelper.createAudit(auditHelper.DISAPPROVED_TYPE, req.user._id, tripId, function(err) {
+			auditHelper.createAudit(auditHelper.DISAPPROVED_TYPE, req.user._id, req.params._id, function(err) {
 				if(err) next(err)
 				res.sendStatus(200)
 			})

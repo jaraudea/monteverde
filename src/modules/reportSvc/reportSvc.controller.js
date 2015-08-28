@@ -40,7 +40,8 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
   }
 
   $scope.$watch("filter.$", function () {
-    $scope.loadtabledata();
+    $scope.tableParams.reload();
+    $scope.tableParams.$params.page = 1;
   });
 
   $scope.tableParams = new ngTableParams({

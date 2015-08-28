@@ -250,7 +250,7 @@ monteverde.controller('runSvcCtrl', function ($rootScope, $state, $scope, $timeo
         data = $scope.formData,
         valid = form.$valid;
     if (valid) {
-      // Validates if service exist in month in order to don't duplicate it, only modify extisting one
+      // Validates if service exist in month in order to don't duplicate it, only modify existing one
 	    var runSvcDate = dateTimeHelper.truncateDateTime(data.date)
       dataGet('serviceInMonth', '?configService=' + data.configService._id + '&date=' + runSvcDate, function(service) {
         if (service && isScheduledService(service.status) == false) {

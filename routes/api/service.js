@@ -139,10 +139,13 @@ exports.executeService = function(req, res, next) {
   Service.findOne(query, function(err, svc) {
     if (err) next(err);
     if (svc) {
+      var auditType = auditHelper.EXECUTED_TYPE
+      if (typeof svc.executedDate !== 'undefined') auditType = auditHelper.MODIFIED_TYPE
+
       var service = executedService(req.body, svc);
       service.save(function(err) {
         if(err) next(err)
-        auditHelper.createAudit(auditHelper.MODIFIED_TYPE, req.user._id, service._id, function(err) {
+        auditHelper.createAudit(auditType, req.user._id, service._id, function(err) {
           if(err) next(err)
           res.sendStatus(200);
         });
@@ -151,7 +154,7 @@ exports.executeService = function(req, res, next) {
       var service = executedService(req.body);
       Service.create(service, function(err, newService) {
         if (err) next(err);
-        auditHelper.createAudit(auditHelper.EXECUTED_TYPE, req.user._id, newService._id, function(err) {
+        auditHelper.createAudit(auditType, req.user._id, newService._id, function(err) {
           if(err) next(err)
           res.sendStatus(200);
         });
@@ -247,12 +250,16 @@ exports.getServices = function(req, res, next) {
     .populate('status', 'name')
     .exec(function(err, services) {
       if (err) next(err);
-      //services.forEach(function (service) {
-      //  auditHelper.populateAudit(service, function(err, svc) {
-      //    //TODO uses async https://github.com/caolan/async
-      //  })
-      //})
-      res.json(services);
+      var modifiedServices = []
+      if (services.length <= 0) res.json(services);
+      services.forEach(function (service) {
+        auditHelper.populateAudit(service, function(err, svc) {
+          modifiedServices.push(svc)
+          if (services.length == modifiedServices.length) {
+            res.json(modifiedServices);
+          }
+        })
+      })
   });
 };
 
