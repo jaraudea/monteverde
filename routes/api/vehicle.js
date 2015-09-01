@@ -6,3 +6,10 @@ exports.getAll = function(req, res, next) {
     res.json(vehicle)
   });
 };
+
+exports.get = function(req, res, next) {
+  Vehicle.findOne({_id: req.params.id}, function(err, vehicle) {
+    if (err) return next(err);
+    res.json(vehicle)
+  });
+};

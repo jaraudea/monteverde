@@ -106,6 +106,9 @@ monteverde.controller('tripReportCtrl', function ($state, $scope, $modal, $filte
         + '&startDate=' + startDate
         + '&endDate=' + endDate,
         function(trips) {
+          trips.forEach(function (trip) {
+            trip.quantity = Math.round((trip.tripsNumber * trip.vehicle.cubicMeters) * 100) / 100
+          });
           $scope.tableData = trips;
           $scope.tableParams.reload();
           $scope.tableParams.$params.page = 1;
@@ -115,13 +118,13 @@ monteverde.controller('tripReportCtrl', function ($state, $scope, $modal, $filte
 
   $scope.approveTrips = function() {
     var changed = false;
-    for (item in $scope.checkboxes.items){
+    $scope.checkboxes.items.forEach( function(item)  {
       if ($scope.checkboxes.items[item]) {
         connectorService.editData(connectorService.ep.approveTrip, item);
         $scope.checkboxes.items[item] = false;
         changed =  true;
       }
-    }
+    });
     if (changed) {
       $scope.loaddatatable()
     }
@@ -130,13 +133,13 @@ monteverde.controller('tripReportCtrl', function ($state, $scope, $modal, $filte
   $scope.disapprovalTrips = function () {
     $scope.modalInstance.close($scope.disapproval.reason);
     var changed = false;
-    for (item in $scope.checkboxes.items){
+    $scope.checkboxes.items.forEach(function (item) {
       if ($scope.checkboxes.items[item]) {
         connectorService.editData(connectorService.ep.disapproveTrip, item, $scope.disapproval);
         $scope.checkboxes.items[item] = false;
         changed =  true;
       }
-    }
+    })
     if (changed) {
       $scope.loaddatatable()
     }

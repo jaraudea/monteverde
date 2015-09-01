@@ -60,7 +60,7 @@ exports.delete = function(req, res, next) {
 exports.getTrip = function(req, res, next) {
 	var query = req.query
 	query['status'] = {$ne: REMOVED_TRIP_STATUS}
-	Trip.findOne(query, function(err, trip) {
+	Trip.findOne(query).populate('vehicle').exec( function(err, trip) {
 		if (err) next(err);
 		res.json(trip);
 	})
@@ -76,7 +76,7 @@ exports.getTrips = function(req, res, next) {
 	}
 
 	Trip.find(query)
-		.populate('vehicle', 'plate')
+		.populate('vehicle', 'plate cubicMeters')
 		.populate('status', 'name')
 		.exec(function(err, trips) {
 			if (err) next(err)

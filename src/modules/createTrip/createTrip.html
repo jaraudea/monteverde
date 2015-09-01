@@ -34,7 +34,7 @@
   <div class="form-group row">
     <label for="vehicle" class="control-label col-sm-1">Veh&iacute;culo: </label>
     <div class="col-sm-4">
-      <select id="vehicle" name="vehicle" class="form-control" ng-model="formData.vehicle" ng-change="clearTripNumber();loadTripInfo()" required>
+      <select id="vehicle" name="vehicle" class="form-control" ng-model="formData.vehicle" ng-change="clearTripNumber();loadVehicleInfo();calculateQuantity();loadTripInfo();" required>
         <option value="" selected disabled>Seleccione</option>
         <option value="{{vehicle._id}}" ng-bind="vehicle.plate"  ng-repeat="vehicle in controls.vehicles"></option>
       </select>
@@ -42,14 +42,21 @@
 
     <label for="tripNumber" class="control-label col-sm-1">Viajes: </label>
     <div class="col-sm-4">
-      <input id="tripNumber" class="form-control" type="number" ng-model="formData.tripsNumber" required>
+      <input id="tripNumber" class="form-control" type="number" ng-model="formData.tripsNumber" ng-change="calculateQuantity()" required>
+    </div>
+  </div>
+
+  <div class="form-group row text-right">
+    <label for="quantity" class="control-label col-sm-1">Cantidad: </label>
+    <div class="col-sm-4">
+      <h2 id="quantity" ng-bind="formData.quantity"></h2>
     </div>
   </div>
 
   <div class="form-group row">
     <div class="col-sm-12 text-center">
       <input class="btn btn-primary" type="submit" value="Guardar">
-      <input class="btn btn-warning" type="reset" value="Cancelar">
+      <input class="btn btn-warning" type="button" ng-click="reset()" value="Cancelar">
     </div>
   </div>
 </form>

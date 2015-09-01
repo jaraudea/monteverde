@@ -13,6 +13,15 @@ monteverde.controller('createTripCtrl', function ($state, $scope, ngTableParams,
 		$scope.formData.date = dateTimeHelper.truncateDateTime(new Date())
 	}
 
+	$scope.loadVehicleInfo = function() {
+		var vehicleId = $scope.formData.vehicle
+		if (typeof vehicleId !== 'undefined' && vehicleId != null) {
+			dataGet('vehicle', vehicleId, function (vehicle) {
+				$scope.vehicleObj = vehicle
+			});
+		}
+	}
+
 	$scope.loadTripInfo = function() {
 		var data =  $scope.formData
 		if (typeof data.contract !== 'undefined' && typeof data.serviceType !== 'undefined'
@@ -25,11 +34,23 @@ monteverde.controller('createTripCtrl', function ($state, $scope, ngTableParams,
 						$scope.formData.serviceType = trip.serviceType
 						$scope.formData.zone = trip.zone
 						$scope.formData.date = new Date(trip.tripDate)
-						$scope.formData.vehicle = trip.vehicle
+						$scope.formData.vehicle = trip.vehicle._id
 						$scope.formData.tripsNumber = trip.tripsNumber
 						$scope.formData.id = trip._id
+						$scope.formData.quantity = roundToTwoDecimals(trip.vehicle.cubicMeters * trip.tripsNumber)
 					}
 			})
+		}
+	}
+
+	$scope.calculateQuantity = function() {
+		var trips = $scope.formData.tripsNumber
+		var vehicle = $scope.vehicleObj
+		if (typeof trips !== 'undefined' && trips != null
+				&& typeof vehicle !== 'undefined' && vehicle != null) {
+			$scope.formData.quantity = roundToTwoDecimals(vehicle.cubicMeters * trips)
+		} else {
+			$scope.formData.quantity = ''
 		}
 	}
 
@@ -76,6 +97,10 @@ monteverde.controller('createTripCtrl', function ($state, $scope, ngTableParams,
       });    
   }
 
+  var roundToTwoDecimals = function(num) {
+    return Math.round(num * 100) / 100
+  }
+
 	$scope.clearTripNumber = function() {
 		$scope.formData.tripsNumber = ''
 		$scope.formData.id = undefined
@@ -83,9 +108,9 @@ monteverde.controller('createTripCtrl', function ($state, $scope, ngTableParams,
 
   $scope.reset = function() {
     contractId = null
-    $scope.controls = {}
     $scope.formData = {}
     $scope.formData.date = dateTimeHelper.truncateDateTime(new Date())
+		$scope.vehicleObj = undefined
   };
 
   $scope.reset()

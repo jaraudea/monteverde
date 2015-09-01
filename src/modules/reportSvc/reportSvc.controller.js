@@ -130,9 +130,9 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
 
   $scope.openPhotosModal = function(photos) {
     $scope.slides = [];
-    for (i = 0, len = photos.length; i < len; i++) {
-      $scope.addSlide(photos[i]);
-    }
+    photos.forEach( function (photo) {
+      $scope.addSlide(photo);
+    })
     $modal.open({
       animation: $scope.animationsEnabled,
 	    templateUrl: 'photosModal',
@@ -142,13 +142,13 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
 
   $scope.approveServices = function() {
     var changed = false;
-    for (item in $scope.checkboxes.items){
+    $scope.checkboxes.items.forEach( function(item) {
       if ($scope.checkboxes.items[item]) {
         connectorService.editData(connectorService.ep.approveSvc, item);
         $scope.checkboxes.items[item] = false;
         changed =  true;
       }
-    }
+    })
     if (changed) {
       $scope.loadtabledata()
     }
@@ -157,13 +157,13 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
   $scope.disapprovalServices = function () {
     $scope.modalInstance.close($scope.disapproval.reason);
     var changed = false;
-    for (item in $scope.checkboxes.items){
+    $scope.checkboxes.items.forEach( function(item) {
       if ($scope.checkboxes.items[item]) {
         connectorService.editData(connectorService.ep.disapproveSvc, item, $scope.disapproval);
         $scope.checkboxes.items[item] = false;
         changed =  true;
       }
-    }
+    })
     if (changed) {
       $scope.loadtabledata()
     }

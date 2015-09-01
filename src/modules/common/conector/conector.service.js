@@ -19,6 +19,7 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
     codes : "/api/service/configservice/codes",
     serviceConf : "/api/service/configservice/",
     vehicles : "api/service/vehicles",
+    vehicle : "api/service/vehicle/",
     executeService : "api/service/executeService",
     executeServiceById : '/api/service/executeService',
     services : "/api/service/services",

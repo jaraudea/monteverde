@@ -87,6 +87,7 @@ app.get('/api/service/contracts', contractApi.getAll);
 app.get('/api/service/employees', employeeApi.getAll);
 app.get('/api/service/teams', teamApi.getAll);
 app.get('/api/service/vehicles', vehicleApi.getAll);
+app.get('/api/service/vehicle/:id', vehicleApi.get);
 app.get('/api/service/units', unitApi.getAll);
 app.get('/api/service/configservice/codes', configServiceApi.getAllConfigCodes);
 app.get('/api/service/configservice/:code?', configServiceApi.getByCode);
