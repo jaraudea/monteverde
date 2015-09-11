@@ -142,13 +142,13 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
 
   $scope.approveServices = function() {
     var changed = false;
-    $scope.checkboxes.items.forEach( function(item) {
+    for (item in $scope.checkboxes.items) {
       if ($scope.checkboxes.items[item]) {
         connectorService.editData(connectorService.ep.approveSvc, item);
         $scope.checkboxes.items[item] = false;
         changed =  true;
       }
-    })
+    }
     if (changed) {
       $scope.loadtabledata()
     }
@@ -157,13 +157,13 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
   $scope.disapprovalServices = function () {
     $scope.modalInstance.close($scope.disapproval.reason);
     var changed = false;
-    $scope.checkboxes.items.forEach( function(item) {
+    for (item in $scope.checkboxes.items) {
       if ($scope.checkboxes.items[item]) {
         connectorService.editData(connectorService.ep.disapproveSvc, item, $scope.disapproval);
         $scope.checkboxes.items[item] = false;
         changed =  true;
       }
-    })
+    }
     if (changed) {
       $scope.loadtabledata()
     }

@@ -14,9 +14,7 @@ var monteverde = angular.module('monteverde', [
 // app configuration
 monteverde.config(function ( $urlRouterProvider, $stateProvider, $authProvider, $httpProvider) {
     // setup the Auth
-     $authProvider.baseUrl = "http://localhost:3000"
-    //$authProvider.baseUrl = "http://localhost:8080"
-    //$authProvider.baseUrl = "http://181.137.197.33:8080"
+    $authProvider.baseUrl = "/"
     $authProvider.loginUrl = "/login";
     $authProvider.signupUrl = "api/signup";
      //$authProvider.tokenName = "Bearer";

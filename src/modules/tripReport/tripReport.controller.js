@@ -118,13 +118,13 @@ monteverde.controller('tripReportCtrl', function ($state, $scope, $modal, $filte
 
   $scope.approveTrips = function() {
     var changed = false;
-    $scope.checkboxes.items.forEach( function(item)  {
+    for (item in $scope.checkboxes.items) {
       if ($scope.checkboxes.items[item]) {
         connectorService.editData(connectorService.ep.approveTrip, item);
         $scope.checkboxes.items[item] = false;
         changed =  true;
       }
-    });
+    }
     if (changed) {
       $scope.loaddatatable()
     }
@@ -133,13 +133,13 @@ monteverde.controller('tripReportCtrl', function ($state, $scope, $modal, $filte
   $scope.disapprovalTrips = function () {
     $scope.modalInstance.close($scope.disapproval.reason);
     var changed = false;
-    $scope.checkboxes.items.forEach(function (item) {
+    for (item in $scope.checkboxes.items) {
       if ($scope.checkboxes.items[item]) {
         connectorService.editData(connectorService.ep.disapproveTrip, item, $scope.disapproval);
         $scope.checkboxes.items[item] = false;
         changed =  true;
       }
-    })
+    }
     if (changed) {
       $scope.loaddatatable()
     }
