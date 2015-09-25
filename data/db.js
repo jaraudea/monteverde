@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var dbName = "Monteverde";
+var dbName = "pruebas_monteverde";
 
 mongoose.connect('mongodb://localhost/' + dbName, function (err) {
   if (err) throw err;
