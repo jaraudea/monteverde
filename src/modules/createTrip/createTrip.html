@@ -2,7 +2,7 @@
   <div class="form-group row">
     <label for="contract" class="control-label col-sm-1">Contrato: </label>
     <div class="col-sm-4">
-      <select id="contract" name="contract" class="form-control" ng-model="formData.contract" ng-change="loadTripInfo()" required>
+      <select id="contract" name="contract" class="form-control" ng-model="formData.contract" ng-change="clearContractData();loadTripInfo()" required>
         <option value="" selected disabled>Seleccione</option>
         <option value="{{contract._id}}" ng-bind="contract.contractNumber"   ng-repeat="contract in controls.contracts"></option>
       </select>

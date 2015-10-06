@@ -68,10 +68,10 @@ monteverde.controller('monteverdeCtrl', function ($rootScope, $scope, $auth, $lo
 
   var convertServicesToAlertInfo = function(services) {
     var data = [];
-    for (i=0; i < services.length; i++) {
+    for (var i=0; i < services.length; i++) {
       var svc = services[i];
       var dateStr = (typeof svc.scheduledDate !== 'undefined') && svc.scheduledDate !== null ? svc.scheduledDate.substr(0,10) : "";
-      data.push(svc.configService.code + ': ' + dateStr);
+      data.push(svc.contract.contractNumber + '_' + svc.configService.code + ': ' + dateStr);
     }
     return data;
   }

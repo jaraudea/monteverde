@@ -13,9 +13,6 @@ var src = './src',
   path = require('path'),
   sass = require('gulp-sass'),
   minifyCSS = require('gulp-minify-css'),
-  // app = express(),
-  // express = require('express'),
-  hbsRender = require('gulp-handlebars-render'),
   livereload = require('gulp-livereload'),
   tasks;
 
@@ -46,7 +43,6 @@ tasks = {
           .pipe(sourcemaps.init())
           .pipe(concat('all.min.js'))
           .pipe(annotate({single_quotes: true}))
-          // .pipe(uglify())
           .pipe(sourcemaps.write())
           .pipe(gulp.dest(dist + '/javascripts/'))
           .pipe(livereload());
@@ -57,23 +53,21 @@ tasks = {
       },
       vendors: function () {
         gulp.src([
-          nodeModules + '/angular/*.min.js',
-          nodeModules + '/angular-bootstrap/dist/*.min.js',
-          nodeModules + '/ng-flow/dist/ng-flow-standalone.js',
-          nodeModules + '/angular-ui-switch/angular-ui-switch.js',
-          nodeModules + '/angular-ui-router/release/*.min.js',
-          nodeModules + '/satellizer/satellizer.min.js',
-          nodeModules + '/ng-dialog/js/*.min.js',
-          nodeModules + '/ng-table/dist/*.min.js',
-          bowerComponents + '/ng-table-export/ng-table-export.js'
+              nodeModules + '/angular/angular.min.js',
+              nodeModules + '/angular-ui-router/release/angular-ui-router.min.js',
+              nodeModules + '/angular-bootstrap/dist/ui-bootstrap.min.js',
+              nodeModules + '/angular-ui-switch/angular-ui-switch.min.js',
+              nodeModules + '/satellizer/satellizer.min.js',
+              nodeModules + '/ng-flow/dist/ng-flow-standalone.min.js',
+              nodeModules + '/ng-table/dist/ng-table.min.js',
+              bowerComponents + '/ng-table-export/ng-table-export.js'
         ])
           .pipe(concat('libraries.js'))
           .pipe(gulp.dest(dist + '/javascripts/vendors/'));
+
         // Copy the angular map
-        gulp.src(nodeModules + '/angular/*.map')
-          .pipe(gulp.dest(dist + '/javascripts/vendors/'));
-        gulp.src(bowerComponents + '/ng-table-export/ng-table-export.map')
-          .pipe(gulp.dest(dist + '/javascripts/vendors/'));  
+        gulp.src(nodeModules + '/angular/*.map').pipe(gulp.dest(dist + '/javascripts/vendors/'));
+        gulp.src(bowerComponents + '/ng-table-export/ng-table-export.map').pipe(gulp.dest(dist + '/javascripts/vendors/'));
       }
     },
     templates: function () {
@@ -105,7 +99,6 @@ tasks = {
           ])
           .pipe(sourcemaps.init())
           .pipe(concat('libraries.min.css'))
-          // .pipe(minifyCSS())
           .pipe(sourcemaps.write())
           .pipe(gulp.dest(dist + '/stylesheets/libs/'));
       },

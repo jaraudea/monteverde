@@ -9,7 +9,6 @@ var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 var flow = require('./flow/flow-node.js')('uploaded');
 var cors = require('cors');
-var FileStreamRotator = require('file-stream-rotator');
 var fs = require('fs');
 
 var restObserver = require('./middleware/restObserver');
@@ -38,17 +37,6 @@ var tokenConfig = require('./token/config');
 var ACCESS_CONTROLL_ALLOW_ORIGIN = false;
 
 var app = express();
-var logDirectory = __dirname + '/log'
-
-// ensure log directory exists
-fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
-
-// create a rotating write stream
-var accessLogStream = FileStreamRotator.getStream({
-	filename: logDirectory + '/access-%DATE%.log',
-	frequency: 'daily',
-	verbose: false
-})
 
 app.use(cors());
 

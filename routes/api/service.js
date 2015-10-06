@@ -138,8 +138,8 @@ exports.executeService = function(req, res, next) {
   };
   Service.findOne(query, function(err, svc) {
     if (err) next(err);
+    var auditType = auditHelper.EXECUTED_TYPE
     if (svc) {
-      var auditType = auditHelper.EXECUTED_TYPE
       if (typeof svc.executedDate !== 'undefined') auditType = auditHelper.MODIFIED_TYPE
 
       var service = executedService(req.body, svc);
@@ -322,8 +322,9 @@ var getDateFilter = function(date) {
 exports.getScheduledServicesWithoutExecution = function(req, res, next) {
   var currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 2);
-  Service.find({scheduledDate: {$lt: currentDate}, executedDate: null, status: {$ne: REMOVED_STATUS}}, 'scheduledDate configService')
+  Service.find({scheduledDate: {$lt: currentDate}, executedDate: null, status: {$ne: REMOVED_STATUS}}, 'scheduledDate configService contract')
     .populate('configService', 'code')
+    .populate('contract', 'contractNumber')
     .exec(function(err, services) {
       if (err) next(err);
       res.json(services);
@@ -333,8 +334,9 @@ exports.getScheduledServicesWithoutExecution = function(req, res, next) {
 exports.getScheduledServicesWithoutApprobation = function(req, res, next) {
   var currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 3);
-  Service.find({scheduledDate: {$lt: currentDate}, executedDate: {$ne: null} ,approvedDate: null, status: {$ne: REMOVED_STATUS}}, 'scheduledDate configService')
+  Service.find({scheduledDate: {$lt: currentDate}, executedDate: {$ne: null} ,approvedDate: null, status: {$ne: REMOVED_STATUS}}, 'scheduledDate configService contract')
     .populate('configService', 'code')
+    .populate('contract', 'contractNumber')
     .exec(function(err, services) {
       if (err) next(err);
       res.json(services);
@@ -344,8 +346,9 @@ exports.getScheduledServicesWithoutApprobation = function(req, res, next) {
 exports.getOldDisapprovedServices = function(req, res, next) {
   var currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 1);
-  Service.find({disapprovedDate: {$lt: currentDate}, status: DISAPPROVED_STATUS, status: {$ne: REMOVED_STATUS}}, 'disapprovedDate configService')
+  Service.find({disapprovedDate: {$lt: currentDate}, status: DISAPPROVED_STATUS, status: {$ne: REMOVED_STATUS}}, 'disapprovedDate configService contract')
     .populate('configService', 'code')
+    .populate('contract', 'contractNumber')
     .exec(function(err, services) {
       if (err) next(err);
       res.json(services);

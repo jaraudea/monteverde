@@ -3,11 +3,11 @@
 var monteverde = angular.module('monteverde', [
     'ui.router',
     'common.module',
-    'ngTable',
-    'ngTableExport',
     'satellizer',
     'uiSwitch',
-    'flow'
+    'flow',
+    'ngTable',
+    'ngTableExport'
   ]
 );
 
@@ -17,7 +17,6 @@ monteverde.config(function ( $urlRouterProvider, $stateProvider, $authProvider, 
     $authProvider.baseUrl = "/"
     $authProvider.loginUrl = "/login";
     $authProvider.signupUrl = "api/signup";
-     //$authProvider.tokenName = "Bearer";
     $authProvider.tokenPrefix = "monteverde";
 
     // When no url finds a match redirect to /

@@ -1,7 +1,7 @@
 // create service controller
 'use strict';
 
-monteverde.controller('createTripCtrl', function ($state, $scope, ngTableParams, AlertsFactory, connectorService, dateTimeHelper) {
+monteverde.controller('createTripCtrl', function ($rootScope, $state, $scope, ngTableParams, AlertsFactory, connectorService, dateTimeHelper) {
   var contractId = null
 
   $scope.controls = {}
@@ -20,6 +20,11 @@ monteverde.controller('createTripCtrl', function ($state, $scope, ngTableParams,
 				$scope.vehicleObj = vehicle
 			});
 		}
+	}
+
+	$scope.clearContractData = function() {
+		$scope.formData.serviceType = undefined
+		$scope.formData.zone = undefined
 	}
 
 	$scope.loadTripInfo = function() {
@@ -73,6 +78,7 @@ monteverde.controller('createTripCtrl', function ($state, $scope, ngTableParams,
 		    connectorService.editData(connectorService.ep.updateTrip, data.id, data)
 			    .then(function (data) {
 				    AlertsFactory.addAlert('success', 'Viaje actualizado.', true);
+						$rootScope.tripFormData = $scope.formData
 				    $state.go($state.current, {}, {reload: true});
 			    },
 			    function (err) {
@@ -114,6 +120,17 @@ monteverde.controller('createTripCtrl', function ($state, $scope, ngTableParams,
   };
 
   $scope.reset()
+
+	$scope.relodaData = function() {
+		if (typeof $rootScope.tripFormData !== 'undefined') {
+			$scope.formData.contract = $rootScope.tripFormData.contract
+			$scope.formData.serviceType = $rootScope.tripFormData.serviceType
+			$scope.formData.zone = $rootScope.tripFormData.zone
+			$scope.formData.date = $rootScope.tripFormData.date
+		}
+	};
+
+	$scope.relodaData()
 
   init()
 });
