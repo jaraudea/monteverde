@@ -31,5 +31,15 @@ build/Release
 # Dependency directory
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
 node_modules/*
-!/angular-bootstrap
+!node_modules/angular-bootstrap
 
+bower_components
+!bower_components/ng-table-export
+
+public/javascripts/
+public/stylesheets/
+public/template/
+public/views/
+uploaded
+
+*.iml
