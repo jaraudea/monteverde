@@ -65,7 +65,7 @@
 </div>
 
 <div ng-show="formData.contract && formData.serviceType && formData.zone && formData.date">
-  <form class="form-horizontal container-fluid" name="addSchedSvcForm" ng-submit="submitaddSched()" novalidate>
+  <form class="form-horizontal container-fluid" name="addSchedSvcForm" ng-submit="submitaddSched()" autocomplete='off' novalidate>
     <div class="form-group row">
       <div class="col-sm-1">
         <h2 ng-bind="percent + '%'"></h2>

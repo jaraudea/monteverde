@@ -74,7 +74,7 @@
 
 <div ng-show="formData.contract && formData.serviceType && formData.zone && formData.date">
   
-  <form class="form-horizontal container-fluid" name="addExecSvcForm" ng-submit="submitaddExec()" novalidate>
+  <form class="form-horizontal container-fluid" name="addExecSvcForm" ng-submit="submitaddExec()" autocomplete='off' novalidate>
     <div class="form-group row">
       <label for="code" class="control-label col-sm-2 double-line" ng-hide="formData.serviceType == '5563efe645051764c2e3da13'">C&oacute;digo: </label>
       <label for="code" class="control-label col-sm-2 double-line" ng-show="formData.serviceType == '5563efe645051764c2e3da13'">Radicado: </label>
