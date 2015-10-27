@@ -52,6 +52,7 @@ var scheduledService = function(data, svc) {
   service.team = data.team
   service.unit =  data.unit
   service.configService = data.configService
+  service.quantity = data.quantity
   service.scheduledDate = data.date
   service.status = SCHEDULED_STATUS
 

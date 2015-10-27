@@ -82,12 +82,13 @@ common.service ('JrfService', function () {
   };
 
   this.parseScheduleService = function(data) {
-    parsedData = {
+    var parsedData = {
       configService : data.configService._id,
       contract: data.contract,
       serviceType : data.serviceType,
       team : data.team,
       zone : data.zone,
+      quantity: data.configService.area,
       unit: data.configService.unit,
       date: data.date
     };

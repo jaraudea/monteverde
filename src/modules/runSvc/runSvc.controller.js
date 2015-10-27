@@ -253,25 +253,34 @@ monteverde.controller('runSvcCtrl', function ($rootScope, $state, $scope, $timeo
       // Validates if service exist in month in order to don't duplicate it, only modify existing one
 	    var runSvcDate = dateTimeHelper.truncateDateTime(data.date)
       dataGet('serviceInMonth', '?configService=' + data.configService._id + '&date=' + runSvcDate, function(service) {
-        if (service && isScheduledService(service.status) == false) {
-          $scope.duplicateService = service;
-          if($scope.isApprovedService(service.status)) { 
-            $scope.modalInstance = $modal.open({
-              animation: true,
-              templateUrl: 'existingApprovedServiceModal',
-              scope: $scope,
-              size: 100
-            });
+        if (service) {
+          if (isScheduledService(service.status) == false) {
+            $scope.duplicateService = service;
+            if ($scope.isApprovedService(service.status)) {
+              $scope.modalInstance = $modal.open({
+                animation: true,
+                templateUrl: 'existingApprovedServiceModal',
+                scope: $scope,
+                size: 100
+              });
+            } else {
+              $scope.modalInstance = $modal.open({
+                animation: true,
+                templateUrl: 'existingServiceModal',
+                scope: $scope,
+                size: 100
+              });
+            }
           } else {
-            $scope.modalInstance = $modal.open({
-              animation: true,
-              templateUrl: 'existingServiceModal',
-              scope: $scope,
-              size: 100
-            });
+            $scope.executeService();
           }
         } else {
-          $scope.executeService();
+          $scope.modalInstance = $modal.open({
+            animation: true,
+            templateUrl: 'noScheduledServiceFound',
+            scope: $scope,
+            size: 100
+          });
         }
       });
     } else {
