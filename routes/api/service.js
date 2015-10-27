@@ -323,9 +323,9 @@ var getDateFilter = function(date) {
 exports.getScheduledServicesWithoutExecution = function(req, res, next) {
   var currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 2);
-  Service.find({scheduledDate: {$lt: currentDate}, executedDate: null, status: {$ne: REMOVED_STATUS}}, 'scheduledDate configService contract')
+  Service.find({scheduledDate: {$lt: currentDate}, executedDate: null, status: {$ne: REMOVED_STATUS}}, 'scheduledDate configService zone')
     .populate('configService', 'code')
-    .populate('contract', 'contractNumber')
+    .populate('zone', 'code')
     .exec(function(err, services) {
       if (err) next(err);
       res.json(services);
@@ -335,9 +335,9 @@ exports.getScheduledServicesWithoutExecution = function(req, res, next) {
 exports.getScheduledServicesWithoutApprobation = function(req, res, next) {
   var currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 3);
-  Service.find({scheduledDate: {$lt: currentDate}, executedDate: {$ne: null} ,approvedDate: null, status: {$ne: REMOVED_STATUS}}, 'scheduledDate configService contract')
+  Service.find({scheduledDate: {$lt: currentDate}, executedDate: {$ne: null} ,approvedDate: null, status: {$ne: REMOVED_STATUS}}, 'scheduledDate configService zone')
     .populate('configService', 'code')
-    .populate('contract', 'contractNumber')
+    .populate('zone', 'code')
     .exec(function(err, services) {
       if (err) next(err);
       res.json(services);
@@ -347,9 +347,9 @@ exports.getScheduledServicesWithoutApprobation = function(req, res, next) {
 exports.getOldDisapprovedServices = function(req, res, next) {
   var currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 1);
-  Service.find({disapprovedDate: {$lt: currentDate}, status: DISAPPROVED_STATUS, status: {$ne: REMOVED_STATUS}}, 'disapprovedDate configService contract')
+  Service.find({disapprovedDate: {$lt: currentDate}, status: DISAPPROVED_STATUS, status: {$ne: REMOVED_STATUS}}, 'disapprovedDate configService zone')
     .populate('configService', 'code')
-    .populate('contract', 'contractNumber')
+    .populate('zone', 'code')
     .exec(function(err, services) {
       if (err) next(err);
       res.json(services);

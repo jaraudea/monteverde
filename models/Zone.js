@@ -4,7 +4,8 @@ var mongoose = require('../data/db'),
 var zoneSchema = new Schema({
   name: String,
   city: String,
-  active: Boolean
+  active: Boolean,
+  code: String
 });
 
 module.exports = mongoose.model('Zone', zoneSchema);
