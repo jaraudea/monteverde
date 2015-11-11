@@ -51,7 +51,7 @@
     <a class="btn btn-danger" ng-href="" title="Desaprobar" ng-click='openDisapprovalReasonModal()'>
       <i class="fa fa-thumbs-o-down fa-fw"></i>
     </a>
-    <a class="btn btn-info" ng-mousedown="csv.generate()" ng-href="{{ csv.link() }}" download="trips.csv" title="Exportar">
+    <a class="btn btn-info" ng-href="{{ csv.link() }}" title="Exportar" ng-mousedown="csv.generate()" download="trips.csv">
       <i class="fa fa-list-alt fa-fw"></i>
     </a>
   </div>
@@ -60,9 +60,7 @@
   <div class="col-sm-12">
     <table ng-table="tableParams" class="table table-bordered" export-csv="csv">
       <tr ng-repeat="trip in $data">
-        <td data-title="'Veh&iacute;culo'" sortable="'vehicle.plate'">
-            {{trip.vehicle.plate}}
-        </td>
+        <td data-title="'Veh&iacute;culo'" sortable="'vehicle.plate'" ng-bind="trip.vehicle.plate"></td>
         <td data-title="'Fechas'" sortable="'tripDate'">
 	        <p>
 		        <b>Viaje:</b> {{ trip.tripDate | date : 'mediumDate'}}
@@ -74,20 +72,20 @@
 		        <b>Aprobaci&oacute;n:</b> {{ trip.approvedDate | date : 'mediumDate'}}
 	        </p>
         </td>
-        <td data-title="'Viajes'" sortable="'tripsNumber'">
-	        {{trip.tripsNumber}}
+        <td data-title="'Viajes'" sortable="'tripsNumber'" ng-bind="trip.tripsNumber"></td>
+        <td data-title="'Cantidad'" ng-bind="trip.quantity"></td>
+	      <td data-title="'Estado'" sortable="'status'" ng-bind="trip.status.name"></td>
+	      <td data-title="'Razón de Desaprobaci&oacute;n'" sortable="'disapprovalReason'" ng-bind="trip.disapprovalReason"></td>
+        <td data-title="'Opciones'" class="text-center">
+          <div class="btn-group" role="group" aria-label="" ng-if="trip.status.name != 'Aprobado'">
+            <a href="" class="btn btn-primary" ng-click="editTrip(trip);">
+              <i class="fa fa-pencil fa-fw"></i>
+            </a>
+            <a href="" class="btn btn-danger" ng-click="removeTrip(trip._id)">
+              <i class="fa fa-trash-o fa-fw"></i>
+            </a>
+          </div>
         </td>
-        <td data-title="'Cantidad'">
-          {{trip.quantity}}
-        </td>
-	      <td data-title="'Estado'" sortable="'status'">
-		      {{trip.status.name}}
-	      </td>
-	      <td data-title="'Razón de Desaprobaci&oacute;n'" sortable="'disapprovalReason'">
-          <span style="white-space: pre-line">
-            {{trip.disapprovalReason}}
-          </span>
-	      </td>
         <td width="30" style="text-align: left" header="'ng-table/headers/checkbox.html'">
           <input type="checkbox" ng-model="checkboxes.items[trip._id]" ng-show="isCheckboxShowedByStatus(trip.status._id)"/>
         </td>

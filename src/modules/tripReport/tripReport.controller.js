@@ -2,7 +2,7 @@
 
 'use strict';
 
-monteverde.controller('tripReportCtrl', function ($state, $scope, $modal, $filter, $q, ngTableParams, $sce, connectorService, socketFactory, dateTimeHelper) {
+monteverde.controller('tripReportCtrl', function ($state, $scope, $rootScope, $modal, $filter, $q, ngTableParams, $sce, $location, connectorService, socketFactory, dateTimeHelper, tripService) {
   var contractId = null;
 
   // Socket IO
@@ -107,7 +107,7 @@ monteverde.controller('tripReportCtrl', function ($state, $scope, $modal, $filte
         + '&endDate=' + endDate,
         function(trips) {
           trips.forEach(function (trip) {
-            trip.quantity = Math.round((trip.tripsNumber * trip.vehicle.cubicMeters) * 100) / 100
+            trip.quantity = Math.round((trip.tripsNumber * trip.vehicle.cubicMeters) * 100) / 100;
           });
           $scope.tableData = trips;
           $scope.tableParams.reload();
@@ -118,7 +118,7 @@ monteverde.controller('tripReportCtrl', function ($state, $scope, $modal, $filte
 
   $scope.approveTrips = function() {
     var changed = false;
-    for (item in $scope.checkboxes.items) {
+    for (var item in $scope.checkboxes.items) {
       if ($scope.checkboxes.items[item]) {
         connectorService.editData(connectorService.ep.approveTrip, item);
         $scope.checkboxes.items[item] = false;
@@ -126,14 +126,14 @@ monteverde.controller('tripReportCtrl', function ($state, $scope, $modal, $filte
       }
     }
     if (changed) {
-      $scope.loaddatatable()
+      $scope.loaddatatable();
     }
   };
 
   $scope.disapprovalTrips = function () {
     $scope.modalInstance.close($scope.disapproval.reason);
     var changed = false;
-    for (item in $scope.checkboxes.items) {
+    for (var item in $scope.checkboxes.items) {
       if ($scope.checkboxes.items[item]) {
         connectorService.editData(connectorService.ep.disapproveTrip, item, $scope.disapproval);
         $scope.checkboxes.items[item] = false;
@@ -141,9 +141,19 @@ monteverde.controller('tripReportCtrl', function ($state, $scope, $modal, $filte
       }
     }
     if (changed) {
-      $scope.loaddatatable()
+      $scope.loaddatatable();
     }
-  };
+  }
+
+  $scope.editTrip = function(trip) {
+    tripService.setTrip(trip);
+    $location.path('/createTrip');
+  }
+
+  $scope.removeTrip = function(tripId) {
+    connectorService.editData(connectorService.ep.removeTrip, tripId);
+    $scope.loaddatatable();
+  }
 
   $scope.cancelDisapproval = function () {
     $scope.modalInstance.dismiss('cancel');

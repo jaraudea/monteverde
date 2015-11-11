@@ -60,21 +60,11 @@
   <div class="col-sm-12">
     <table ng-table="tableParams" class="table table-bordered" export-csv="csv">
       <tr ng-repeat="service in $data">
-        <td data-title="'Lote'" sortable="'configService.code'" ng-show="tableParams.isGrassService">
-            {{service.configService.code}}
-        </td>
-        <td data-title="'Radicado'" sortable="'configService.code'" ng-show="tableParams.isPrunningService">
-              {{service.configService.code}}
-        </td>
-        <td data-title="'Nombres y Descripción'" sortable="'configService.description'">
-            {{service.configService.description}}
-        </td>
-        <td data-title="'Direcci&oacute;n'" sortable="'configService.location'">
-            {{service.configService.location}}
-        </td>
-        <td data-title="'Cuadrilla'" sortable="'team.name'">
-            {{service.team.name}}
-        </td>
+        <td data-title="'Lote'" sortable="'configService.code'" ng-show="tableParams.isGrassService" ng-bind="service.configService.code"></td>
+        <td data-title="'Radicado'" sortable="'configService.code'" ng-show="tableParams.isPrunningService" ng-bind="service.configService.code"></td>
+        <td data-title="'Nombres y Descripción'" sortable="'configService.description'" ng-bind="service.configService.description"></td>
+        <td data-title="'Direcci&oacute;n'" sortable="'configService.location'" ng-bind="service.configService.location"></td>
+        <td data-title="'Cuadrilla'" sortable="'team.name'" ng-bind="service.team.name"></td>
         <td data-title="'Fechas'" sortable="'executedDate'">
             <p ng-if="service.scheduledDate">
               <b>Programaci&oacute;n:</b> {{ service.scheduledDate | date : 'mediumDate'}}
@@ -95,48 +85,21 @@
         <td data-title="'Cantidad Ejecutada'" sortable="'quantity'">
             {{service.quantity}} {{service.unit.name}}
         </td>
-        <td data-title="'Especie'" sortable="'specie'" ng-show="tableParams.isPrunningService">
-            {{service.configService.specie}}
-        </td>
-        <td data-title="'Tarea'" sortable="'task'" ng-show="tableParams.isPrunningService">
-            {{service.task}}
+        <td data-title="'Especie'" sortable="'specie'" ng-show="tableParams.isPrunningService" ng-bind="service.configService.specie"></td>
+        <td data-title="'Tarea'" sortable="'task'" ng-show="tableParams.isPrunningService" ng-bind="service.task">
         </td>
         <td data-title="'Fotos de Respaldo'" class="text-center">
 	        <a ng-click="openPhotosModal(service.photos)" ng-show="!isPhotosEmpty(service.photos)"><i class="fa fa-camera fa-2x"></i></a>
-            <!--<a ng-repeat="photo in service.photos" ng-click="open(photo.identifier)">{{photo.name}}<br/></a>-->
         </td>
-        <td data-title="'Estado'" sortable="'status.name'">
-            {{service.status.name}}
-        </td>
-        <td data-title="'Observaciones'" sortable="'description'">
-            {{service.description}}
-        </td>
-        <td data-title="'Razón de Desaprobaci&oacute;n'" sortable="'disapprovalReason'">
-          <span style="white-space: pre-line">
-            {{service.disapprovalReason}}
-          </span>
-        </td>
-        <td data-title="'Razón de Desaprobaci&oacute;n'" sortable="'disapprovalReason'">
-          <span style="white-space: pre-line">
-            {{service.disapprovalReason}}
-          </span>
-        </td>
+        <td data-title="'Estado'" sortable="'status.name'" ng-bind="service.status.name"></td>
+        <td data-title="'Observaciones'" sortable="'description'" ng-bind="service.description"></td>
+        <td data-title="'Razón de Desaprobaci&oacute;n'" sortable="'disapprovalReason'" ng-bind="service.disapprovalReason"></td>
         <!-- Only show when exports the info-->
-        <td data-title="'Programador'" ng-show="false">
-          {{service.schedulerUser}}
-        </td>
-        <td data-title="'Realizador'" ng-show="false">
-          {{service.executerUser}}
-        </td>
-        <td data-title="'Desaprobador'" ng-show="false">
-          {{service.disapproverUser}}
-        </td>
-        <td data-title="'Corregidor'" ng-show="false">
-          {{service.correctorUser}}
-        </td>
-        <td data-title="'Aprobador'" ng-show="false">
-          {{service.approverUser}}
-        </td>
+        <td data-title="'Programador'" ng-show="false" ng-bind="service.schedulerUser"></td>
+        <td data-title="'Realizador'" ng-show="false" ng-bind="service.executerUser"></td>
+        <td data-title="'Desaprobador'" ng-show="false" ng-bind="service.disapproverUser"></td>
+        <td data-title="'Corregidor'" ng-show="false" ng-bind="service.correctorUser"></td>
+        <td data-title="'Aprobador'" ng-show="false" ng-bind="service.approverUser"></td>
         <td width="30" style="text-align: left" header="'ng-table/headers/checkbox.html'">
           <input type="checkbox" ng-model="checkboxes.items[service._id]" ng-show="isCheckboxShowedByStatus(service.status._id)"/>
         </td>

@@ -46,17 +46,6 @@ exports.update = function(req, res, next) {
   })
 }
 
-exports.delete = function(req, res, next) {
-  var tripId = req.params._id;
-  Trip.remove({_id: tripId}, function(err, response) {
-    if (err) next(err)
-		auditHelper.createAudit(auditHelper.MODIFIED_TYPE, req.user._id, tripId, function(err) {
-			if(err) next(err)
-			res.sendStatus(200)
-		})
-  })
-}
-
 exports.getTrip = function(req, res, next) {
 	var query = req.query
 	query['status'] = {$ne: REMOVED_TRIP_STATUS}
@@ -111,6 +100,21 @@ exports.disapproveTrip = function(req, res, next) {
 		trip.save(function(err) {
 			if(err) next(err)
 			auditHelper.createAudit(auditHelper.DISAPPROVED_TYPE, req.user._id, req.params._id, function(err) {
+				if(err) next(err)
+				res.sendStatus(200)
+			})
+		})
+	})
+}
+
+exports.removeTrip = function(req, res, next) {
+	Trip.findOne({_id: req.params._id}, function(err, trip) {
+		if (err) next(err)
+		if (!trip) res.sendStatus(400, 'Viaje no encontrado')
+		trip.status = REMOVED_TRIP_STATUS
+		trip.save(function(err) {
+			if(err) next(err)
+			auditHelper.createAudit(auditHelper.REMOVED_TYPE, req.user._id, req.params._id, function(err) {
 				if(err) next(err)
 				res.sendStatus(200)
 			})

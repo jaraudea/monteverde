@@ -41,6 +41,7 @@ common.service ('connectorService', function ($http, $q, $log, $timeout, socketF
 		createTrip: "/api/trip",
 	  approveTrip : "/api/trip/approve/",
 	  disapproveTrip : "/api/trip/disapprove/",
+    removeTrip : "/api/trip/remove/",
     // PUT
     updateExecution : "/api/service/executeService/",
 	  updateTrip: "/api/trip/",

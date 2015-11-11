@@ -109,7 +109,7 @@ app.put('/api/trip/disapprove/:_id', tripApi.disapproveTrip);
 
 /*DELETE*/
 app.delete('/api/service/executeService/:_id', serviceApi.deleteExecutedService);
-app.delete('/api/trip/:_id', tripApi.delete);
+app.delete('/api/trip/remove/:_id', tripApi.removeTrip);
 
 /* upload (testing porpouses) this is a basic oute, please move the components to the corect files */
 // Handle uploads through Flow.js
