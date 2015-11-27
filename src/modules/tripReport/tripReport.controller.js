@@ -151,7 +151,7 @@ monteverde.controller('tripReportCtrl', function ($state, $scope, $rootScope, $m
   }
 
   $scope.removeTrip = function(tripId) {
-    connectorService.editData(connectorService.ep.removeTrip, tripId);
+    connectorService.removeData(connectorService.ep.removeTrip, tripId);
     $scope.loaddatatable();
   }
 
