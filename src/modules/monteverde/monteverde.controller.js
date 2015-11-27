@@ -29,24 +29,26 @@ monteverde.controller('monteverdeCtrl', function ($rootScope, $scope, $auth, $lo
   $scope.logout = $auth.logout; 
 
   var showServicesAlert = function() {
-    dataGet('scheduledSvcsWoExecution', '', function(services) {
-      var data = convertServicesToAlertInfo(services);
-      if (data.length > 0) {
-        AlertsFactory.addAlert('warning', 'Los siguientes servicios "Programados" aun no han sido ejecutados:\n' + data.join(", "));  
-      }
-    });
-    dataGet('scheduledSvcsWoApprobation', '', function(services) {
-      var data = convertServicesToAlertInfo(services);
-      if (data.length > 0) {
-        AlertsFactory.addAlert('danger', 'Los siguientes servicios "Programados" y "Ejecutados" aun no han sido aprobados:\n' + data.join(", "));  
-      }
-    });
-    dataGet('oldDisapprovedSvcs', '', function(services) {
-      var data = convertServicesToAlertInfo(services);
-      if (data.length > 0) {
-        AlertsFactory.addAlert('danger', 'Los siguientes servicios "En Corrección" y aun no han sido corregidos:\n' + data.join(", "));  
-      }
-    });
+    if (isExternalRol() === false) {
+      dataGet('scheduledSvcsWoExecution', '', function (services) {
+        var data = convertServicesToAlertInfo(services);
+        if (data.length > 0) {
+          AlertsFactory.addAlert('warning', 'Los siguientes servicios "Programados" aun no han sido ejecutados:\n' + data.join(", "));
+        }
+      });
+      dataGet('scheduledSvcsWoApprobation', '', function (services) {
+        var data = convertServicesToAlertInfo(services);
+        if (data.length > 0) {
+          AlertsFactory.addAlert('danger', 'Los siguientes servicios "Programados" y "Ejecutados" aun no han sido aprobados:\n' + data.join(", "));
+        }
+      });
+      dataGet('oldDisapprovedSvcs', '', function (services) {
+        var data = convertServicesToAlertInfo(services);
+        if (data.length > 0) {
+          AlertsFactory.addAlert('danger', 'Los siguientes servicios "En Corrección" y aun no han sido corregidos:\n' + data.join(", "));
+        }
+      });
+    }
   }
 
   $scope.clearAlerts = function() {
@@ -83,6 +85,11 @@ monteverde.controller('monteverdeCtrl', function ($rootScope, $scope, $auth, $lo
   $scope.showTabByStateRol = function(stateName) {
     var statesByRol = $rootScope.statesAllowedByRol[$scope.user.rol.name]
     return statesByRol == 'All' || statesByRol.split(',').indexOf(stateName) > -1
+  }
+
+  var isExternalRol = function() {
+    var userRol = $auth.getPayload().rol
+    return userRol.name === 'Interventor'
   }
 
 });
