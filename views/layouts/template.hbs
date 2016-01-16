@@ -52,9 +52,10 @@
                 <li ng-class="{ active: isActive('/createSvc')}" ng-if="showTabByStateRol('createSvc')"><a href ui-sref="createSvc">Configurar Servicio</a></li>
                 <li ng-class="{ active: isActive('/scheduleSvc')}" ng-if="showTabByStateRol('scheduleSvc')"><a href ui-sref="scheduleSvc">Programar Servicio</a></li>
                 <li ng-class="{ active: isActive('/runSvc')}" ng-if="showTabByStateRol('runSvc')"><a href ui-sref="runSvc">Ejecutar Servicio</a></li>
-                <li ng-class="{ active: isActive('/reportSvc')}" ng-if="showTabByStateRol('reportSvc')"><a href ui-sref="reportSvc">Reporte de Servicios</a></li>
+                <li ng-class="{ active: isActive('/reportSvc')}" ng-if="showTabByStateRol('reportSvc')"><a href ui-sref="reportSvc">Informe General</a></li>
+                <li ng-class="{ active: isActive('/reportScheduledSvc')}" ng-if="showTabByStateRol('reportScheduledSvc')"><a href ui-sref="reportScheduledSvc">Informe Programado</a></li>
                 <li ng-class="{ active: isActive('/createTrip')}" ng-if="showTabByStateRol('createTrip')"><a href ui-sref="createTrip">Crear Viaje</a></li>
-	              <li ng-class="{ active: isActive('/tripReport')}" ng-if="showTabByStateRol('tripReport')"><a href ui-sref="tripReport">Reporte de Viajes</a></li>
+                <li ng-class="{ active: isActive('/tripReport')}" ng-if="showTabByStateRol('tripReport')"><a href ui-sref="tripReport">Informe de Viajes</a></li>
               </ul>
             </nav>
         </div>

@@ -2,7 +2,7 @@
 
 'use strict';
 
-monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter, $q, ngTableParams, $sce, connectorService, socketFactory, dateTimeHelper, serviceTypeHelper) {
+monteverde.controller('reportScheduledSvcCtrl', function ($state, $scope, $modal, $filter, $q, ngTableParams, $sce, connectorService, socketFactory, dateTimeHelper, serviceTypeHelper) {
   var contractId = null;
 
   // Socket IO
@@ -24,10 +24,10 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
 
   var init = function () {
     dataGet('contracts');
-  };
+  };  
 
   // Method to GET data
-  var dataGet = function (type, param, callback) {
+var dataGet = function (type, param, callback) {
     var url = (typeof param !== 'undefined') ? connectorService.ep[type] + param : connectorService.ep[type];
     connectorService.getData(url)
       .then(function (data) {
@@ -101,19 +101,20 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
   $scope.loadtabledata = function () {
     var formData = $scope.formData;
     if (areAllFiltersSet())  {
-	    var startDate = dateTimeHelper.truncateDateTime(formData.startDate)
-	    var endDate = dateTimeHelper.truncateDateTime(formData.endDate)
-	    dataGet('services',
+      var startDate = dateTimeHelper.truncateDateTime(formData.startDate)
+      var endDate = dateTimeHelper.truncateDateTime(formData.endDate)
+      dataGet('services',
         '?contract=' + formData.contract 
         + '&serviceType=' + formData.serviceType 
         + '&zone=' + formData.zone 
         + '&startDate=' + startDate
         + '&endDate=' + endDate
-        + '&queryType=ALL',
+        + '&queryType=SCHED',
         function(svcs) {
           $scope.tableData = svcs;
           $scope.tableParams.reload();
           $scope.tableParams.$params.page = 1;
+          
       });
     }
   };
@@ -136,14 +137,14 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
     })
     $modal.open({
       animation: $scope.animationsEnabled,
-	    templateUrl: 'photosModal',
-	    scope: $scope
+      templateUrl: 'photosModal',
+      scope: $scope
     });
   };
 
   $scope.approveServices = function() {
     var changed = false;
-    for (var item in $scope.checkboxes.items) {
+    for (item in $scope.checkboxes.items) {
       if ($scope.checkboxes.items[item]) {
         connectorService.editData(connectorService.ep.approveSvc, item);
         $scope.checkboxes.items[item] = false;
@@ -158,7 +159,7 @@ monteverde.controller('reportSvcCtrl', function ($state, $scope, $modal, $filter
   $scope.disapprovalServices = function () {
     $scope.modalInstance.close($scope.disapproval.reason);
     var changed = false;
-    for (var item in $scope.checkboxes.items) {
+    for (item in $scope.checkboxes.items) {
       if ($scope.checkboxes.items[item]) {
         connectorService.editData(connectorService.ep.disapproveSvc, item, $scope.disapproval);
         $scope.checkboxes.items[item] = false;

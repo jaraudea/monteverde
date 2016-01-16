@@ -3,13 +3,15 @@ var Service = require('../../models/Service'),
     auditHelper = require('../../helpers/AuditHelper'),
     dateTimeHelper = require('../../helpers/DateTimeHelper');
 
-//TODO move to constants
 const APPROVED_STATUS = '556fcd3f540893b44a2aef03'
 const DISAPPROVED_STATUS = '556fcd8f540893b44a2aef06'
 const EXECUTED_STATUS = '556fcd97540893b44a2aef07'
 const SCHEDULED_STATUS = '556fcda1540893b44a2aef08'
 const CORRECTED_STATUS = '556fcd73540893b44a2aef04'
 const REMOVED_STATUS = '55c982e3905e1eb799be2501'
+
+const ALL_QUERY_TYPE = 'ALL'
+const SCHEDULED_QUERY_TYPE = 'SCHED'
 
 var executedService = function(data, svc) {
   var service = {};
@@ -238,8 +240,22 @@ exports.getServices = function(req, res, next) {
     contract: req.query.contract,
     serviceType: req.query.serviceType,
     zone: req.query.zone,
-    $or: [ {executedDate: null, scheduledDate: {$gte: req.query.startDate, $lte: req.query.endDate}}, {executedDate: {$gte: req.query.startDate, $lte: req.query.endDate}}],
-    status: {$ne: REMOVED_STATUS}
+  }
+
+  var queryType = req.query.queryType
+  switch (queryType) {
+    case ALL_QUERY_TYPE:
+      query["$or"] = [ {executedDate: null, scheduledDate: {$gte: req.query.startDate, $lte: req.query.endDate}}, {executedDate: {$gte: req.query.startDate, $lte: req.query.endDate}}],
+      query["status"] = {$ne: REMOVED_STATUS}
+      break
+    case SCHEDULED_QUERY_TYPE:
+      query["scheduledDate"] = {$gte: req.query.startDate, $lte: req.query.endDate}
+      query["status"] = SCHEDULED_STATUS
+      break
+    //case EXECUTED_QUERY_TYPE:
+    //  query["executedDate"] = {$gte: req.query.startDate, $lte: req.query.endDate}
+    //  query["status"] = EXECUTED_STATUS
+    //  break
   }
 
   Service

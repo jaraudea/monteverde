@@ -73,7 +73,14 @@ monteverde.config(function ( $urlRouterProvider, $stateProvider, $authProvider, 
 		    controllerAs : 'tripReport',
 		    templateUrl : 'views/tripReport/tripReport.html',
 		    url : '/tripReport'
-	    });
+	    })
+      .state('reportScheduledSvc', {
+        controller : 'reportScheduledSvcCtrl',
+        controllerAs : 'reportScheduledSvc',
+        templateUrl : 'views/reportScheduledSvc/reportScheduledSvc.html',
+        url : '/reportScheduledSvc'
+      })
+    ;
 
   $httpProvider.interceptors.push("httpInterceptor");
 });
@@ -84,7 +91,7 @@ monteverde.run(function ($rootScope, $location, $state, $auth, $modal) {
   $rootScope.statesAllowedByRol = {
     'Administrador': 'All',
     'Coordinador' : 'scheduleSvc,runSvc,createTrip',
-    'Interventor' : 'reportSvc,tripReport'
+    'Interventor' : 'reportSvc,reportScheduledSvc,tripReport'
   };
 
   //some helpers
